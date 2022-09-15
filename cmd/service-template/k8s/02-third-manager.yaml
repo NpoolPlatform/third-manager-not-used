@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: third-manager
+  namespace: kube-system
+  annotations:
+    "sidecar.jaegertracing.io/inject": "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: third-manager
+  template:
+    metadata:
+      labels:
+        app: third-manager
+    spec:
+      containers:
+        - name: third-manager
+          image: uhub.service.ucloud.cn/entropypool/third-manager:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: service-config
+              mountPath: /etc/ServiceTemplate
+          env:
+            - name: ENV_ENVIRONMENT_TARGET
+              valueFrom:
+                configMapKeyRef:
+                  name: system-environment
+                  key: environment.target
+            - name: ENV_CONSUL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: system-environment
+                  key: environment.consul_host
+            - name: ENV_CONSUL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: system-environment
+                  key: environment.consul_port
+            - name: ENV_CLUSTER_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+      volumes:
+        - name: service-config
+          configMap:
+            name: third-manager-config
+            items:
+              - key: service-conf
+                path: ServiceTemplate.viper.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: third-manager
+  namespace: kube-system
+spec:
+  ports:
+    - name: http
+      port: 50510
+      targetPort: 50510
+    - name: grpc
+      port: 50511
+      targetPort: 50511
+    - name: healthz
+      port: 50512
+      targetPort: 50512
+    - name: prometheus
+      port: 50513
+      targetPort: 50513
+  selector:
+    app: third-manager
