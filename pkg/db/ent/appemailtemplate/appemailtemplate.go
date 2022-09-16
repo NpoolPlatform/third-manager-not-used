@@ -3,6 +3,7 @@
 package appemailtemplate
 
 import (
+	"entgo.io/ent"
 	"github.com/google/uuid"
 )
 
@@ -11,6 +12,12 @@ const (
 	Label = "app_email_template"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
+	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
+	FieldDeletedAt = "deleted_at"
 	// FieldAppID holds the string denoting the app_id field in the database.
 	FieldAppID = "app_id"
 	// FieldLangID holds the string denoting the lang_id field in the database.
@@ -29,10 +36,6 @@ const (
 	FieldSubject = "subject"
 	// FieldBody holds the string denoting the body field in the database.
 	FieldBody = "body"
-	// FieldCreateAt holds the string denoting the create_at field in the database.
-	FieldCreateAt = "create_at"
-	// FieldUpdateAt holds the string denoting the update_at field in the database.
-	FieldUpdateAt = "update_at"
 	// Table holds the table name of the appemailtemplate in the database.
 	Table = "app_email_templates"
 )
@@ -40,6 +43,9 @@ const (
 // Columns holds all SQL columns for appemailtemplate fields.
 var Columns = []string{
 	FieldID,
+	FieldCreatedAt,
+	FieldUpdatedAt,
+	FieldDeletedAt,
 	FieldAppID,
 	FieldLangID,
 	FieldDefaultToUsername,
@@ -49,8 +55,6 @@ var Columns = []string{
 	FieldCcTos,
 	FieldSubject,
 	FieldBody,
-	FieldCreateAt,
-	FieldUpdateAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -63,15 +67,25 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "github.com/NpoolPlatform/third-manager/pkg/db/ent/runtime"
+//
 var (
+	Hooks  [1]ent.Hook
+	Policy ent.Policy
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt func() uint32
+	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
+	DefaultUpdatedAt func() uint32
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() uint32
+	// DefaultDeletedAt holds the default value on creation for the "deleted_at" field.
+	DefaultDeletedAt func() uint32
 	// BodyValidator is a validator for the "body" field. It is called by the builders before save.
 	BodyValidator func(string) error
-	// DefaultCreateAt holds the default value on creation for the "create_at" field.
-	DefaultCreateAt func() uint32
-	// DefaultUpdateAt holds the default value on creation for the "update_at" field.
-	DefaultUpdateAt func() uint32
-	// UpdateDefaultUpdateAt holds the default value on update for the "update_at" field.
-	UpdateDefaultUpdateAt func() uint32
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

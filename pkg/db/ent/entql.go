@@ -48,6 +48,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "AppEmailTemplate",
 		Fields: map[string]*sqlgraph.FieldSpec{
+			appemailtemplate.FieldCreatedAt:         {Type: field.TypeUint32, Column: appemailtemplate.FieldCreatedAt},
+			appemailtemplate.FieldUpdatedAt:         {Type: field.TypeUint32, Column: appemailtemplate.FieldUpdatedAt},
+			appemailtemplate.FieldDeletedAt:         {Type: field.TypeUint32, Column: appemailtemplate.FieldDeletedAt},
 			appemailtemplate.FieldAppID:             {Type: field.TypeUUID, Column: appemailtemplate.FieldAppID},
 			appemailtemplate.FieldLangID:            {Type: field.TypeUUID, Column: appemailtemplate.FieldLangID},
 			appemailtemplate.FieldDefaultToUsername: {Type: field.TypeString, Column: appemailtemplate.FieldDefaultToUsername},
@@ -57,8 +60,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			appemailtemplate.FieldCcTos:             {Type: field.TypeJSON, Column: appemailtemplate.FieldCcTos},
 			appemailtemplate.FieldSubject:           {Type: field.TypeString, Column: appemailtemplate.FieldSubject},
 			appemailtemplate.FieldBody:              {Type: field.TypeString, Column: appemailtemplate.FieldBody},
-			appemailtemplate.FieldCreateAt:          {Type: field.TypeUint32, Column: appemailtemplate.FieldCreateAt},
-			appemailtemplate.FieldUpdateAt:          {Type: field.TypeUint32, Column: appemailtemplate.FieldUpdateAt},
 		},
 	}
 	graph.Nodes[2] = &sqlgraph.Node{
@@ -72,13 +73,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "AppSMSTemplate",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			appsmstemplate.FieldAppID:    {Type: field.TypeUUID, Column: appsmstemplate.FieldAppID},
-			appsmstemplate.FieldLangID:   {Type: field.TypeUUID, Column: appsmstemplate.FieldLangID},
-			appsmstemplate.FieldUsedFor:  {Type: field.TypeString, Column: appsmstemplate.FieldUsedFor},
-			appsmstemplate.FieldSubject:  {Type: field.TypeString, Column: appsmstemplate.FieldSubject},
-			appsmstemplate.FieldMessage:  {Type: field.TypeString, Column: appsmstemplate.FieldMessage},
-			appsmstemplate.FieldCreateAt: {Type: field.TypeUint32, Column: appsmstemplate.FieldCreateAt},
-			appsmstemplate.FieldUpdateAt: {Type: field.TypeUint32, Column: appsmstemplate.FieldUpdateAt},
+			appsmstemplate.FieldCreatedAt: {Type: field.TypeUint32, Column: appsmstemplate.FieldCreatedAt},
+			appsmstemplate.FieldUpdatedAt: {Type: field.TypeUint32, Column: appsmstemplate.FieldUpdatedAt},
+			appsmstemplate.FieldDeletedAt: {Type: field.TypeUint32, Column: appsmstemplate.FieldDeletedAt},
+			appsmstemplate.FieldAppID:     {Type: field.TypeUUID, Column: appsmstemplate.FieldAppID},
+			appsmstemplate.FieldLangID:    {Type: field.TypeUUID, Column: appsmstemplate.FieldLangID},
+			appsmstemplate.FieldUsedFor:   {Type: field.TypeString, Column: appsmstemplate.FieldUsedFor},
+			appsmstemplate.FieldSubject:   {Type: field.TypeString, Column: appsmstemplate.FieldSubject},
+			appsmstemplate.FieldMessage:   {Type: field.TypeString, Column: appsmstemplate.FieldMessage},
 		},
 	}
 	return graph
@@ -210,6 +212,21 @@ func (f *AppEmailTemplateFilter) WhereID(p entql.ValueP) {
 	f.Where(p.Field(appemailtemplate.FieldID))
 }
 
+// WhereCreatedAt applies the entql uint32 predicate on the created_at field.
+func (f *AppEmailTemplateFilter) WhereCreatedAt(p entql.Uint32P) {
+	f.Where(p.Field(appemailtemplate.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql uint32 predicate on the updated_at field.
+func (f *AppEmailTemplateFilter) WhereUpdatedAt(p entql.Uint32P) {
+	f.Where(p.Field(appemailtemplate.FieldUpdatedAt))
+}
+
+// WhereDeletedAt applies the entql uint32 predicate on the deleted_at field.
+func (f *AppEmailTemplateFilter) WhereDeletedAt(p entql.Uint32P) {
+	f.Where(p.Field(appemailtemplate.FieldDeletedAt))
+}
+
 // WhereAppID applies the entql [16]byte predicate on the app_id field.
 func (f *AppEmailTemplateFilter) WhereAppID(p entql.ValueP) {
 	f.Where(p.Field(appemailtemplate.FieldAppID))
@@ -255,16 +272,6 @@ func (f *AppEmailTemplateFilter) WhereBody(p entql.StringP) {
 	f.Where(p.Field(appemailtemplate.FieldBody))
 }
 
-// WhereCreateAt applies the entql uint32 predicate on the create_at field.
-func (f *AppEmailTemplateFilter) WhereCreateAt(p entql.Uint32P) {
-	f.Where(p.Field(appemailtemplate.FieldCreateAt))
-}
-
-// WhereUpdateAt applies the entql uint32 predicate on the update_at field.
-func (f *AppEmailTemplateFilter) WhereUpdateAt(p entql.Uint32P) {
-	f.Where(p.Field(appemailtemplate.FieldUpdateAt))
-}
-
 // addPredicate implements the predicateAdder interface.
 func (astq *AppSMSTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
 	astq.predicates = append(astq.predicates, pred)
@@ -305,6 +312,21 @@ func (f *AppSMSTemplateFilter) WhereID(p entql.ValueP) {
 	f.Where(p.Field(appsmstemplate.FieldID))
 }
 
+// WhereCreatedAt applies the entql uint32 predicate on the created_at field.
+func (f *AppSMSTemplateFilter) WhereCreatedAt(p entql.Uint32P) {
+	f.Where(p.Field(appsmstemplate.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql uint32 predicate on the updated_at field.
+func (f *AppSMSTemplateFilter) WhereUpdatedAt(p entql.Uint32P) {
+	f.Where(p.Field(appsmstemplate.FieldUpdatedAt))
+}
+
+// WhereDeletedAt applies the entql uint32 predicate on the deleted_at field.
+func (f *AppSMSTemplateFilter) WhereDeletedAt(p entql.Uint32P) {
+	f.Where(p.Field(appsmstemplate.FieldDeletedAt))
+}
+
 // WhereAppID applies the entql [16]byte predicate on the app_id field.
 func (f *AppSMSTemplateFilter) WhereAppID(p entql.ValueP) {
 	f.Where(p.Field(appsmstemplate.FieldAppID))
@@ -328,14 +350,4 @@ func (f *AppSMSTemplateFilter) WhereSubject(p entql.StringP) {
 // WhereMessage applies the entql string predicate on the message field.
 func (f *AppSMSTemplateFilter) WhereMessage(p entql.StringP) {
 	f.Where(p.Field(appsmstemplate.FieldMessage))
-}
-
-// WhereCreateAt applies the entql uint32 predicate on the create_at field.
-func (f *AppSMSTemplateFilter) WhereCreateAt(p entql.Uint32P) {
-	f.Where(p.Field(appsmstemplate.FieldCreateAt))
-}
-
-// WhereUpdateAt applies the entql uint32 predicate on the update_at field.
-func (f *AppSMSTemplateFilter) WhereUpdateAt(p entql.Uint32P) {
-	f.Where(p.Field(appsmstemplate.FieldUpdateAt))
 }

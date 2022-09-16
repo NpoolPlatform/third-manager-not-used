@@ -316,7 +316,8 @@ func (c *AppEmailTemplateClient) GetX(ctx context.Context, id uuid.UUID) *AppEma
 
 // Hooks returns the client hooks.
 func (c *AppEmailTemplateClient) Hooks() []Hook {
-	return c.hooks.AppEmailTemplate
+	hooks := c.hooks.AppEmailTemplate
+	return append(hooks[:len(hooks):len(hooks)], appemailtemplate.Hooks[:]...)
 }
 
 // AppSMSTemplateClient is a client for the AppSMSTemplate schema.
@@ -406,5 +407,6 @@ func (c *AppSMSTemplateClient) GetX(ctx context.Context, id uuid.UUID) *AppSMSTe
 
 // Hooks returns the client hooks.
 func (c *AppSMSTemplateClient) Hooks() []Hook {
-	return c.hooks.AppSMSTemplate
+	hooks := c.hooks.AppSMSTemplate
+	return append(hooks[:len(hooks):len(hooks)], appsmstemplate.Hooks[:]...)
 }

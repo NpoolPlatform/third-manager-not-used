@@ -834,6 +834,12 @@ type AppEmailTemplateMutation struct {
 	op                  Op
 	typ                 string
 	id                  *uuid.UUID
+	created_at          *uint32
+	addcreated_at       *int32
+	updated_at          *uint32
+	addupdated_at       *int32
+	deleted_at          *uint32
+	adddeleted_at       *int32
 	app_id              *uuid.UUID
 	lang_id             *uuid.UUID
 	default_to_username *string
@@ -843,10 +849,6 @@ type AppEmailTemplateMutation struct {
 	cc_tos              *[]string
 	subject             *string
 	body                *string
-	create_at           *uint32
-	addcreate_at        *int32
-	update_at           *uint32
-	addupdate_at        *int32
 	clearedFields       map[string]struct{}
 	done                bool
 	oldValue            func(context.Context) (*AppEmailTemplate, error)
@@ -955,6 +957,174 @@ func (m *AppEmailTemplateMutation) IDs(ctx context.Context) ([]uuid.UUID, error)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *AppEmailTemplateMutation) SetCreatedAt(u uint32) {
+	m.created_at = &u
+	m.addcreated_at = nil
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *AppEmailTemplateMutation) CreatedAt() (r uint32, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the AppEmailTemplate entity.
+// If the AppEmailTemplate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppEmailTemplateMutation) OldCreatedAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// AddCreatedAt adds u to the "created_at" field.
+func (m *AppEmailTemplateMutation) AddCreatedAt(u int32) {
+	if m.addcreated_at != nil {
+		*m.addcreated_at += u
+	} else {
+		m.addcreated_at = &u
+	}
+}
+
+// AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
+func (m *AppEmailTemplateMutation) AddedCreatedAt() (r int32, exists bool) {
+	v := m.addcreated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *AppEmailTemplateMutation) ResetCreatedAt() {
+	m.created_at = nil
+	m.addcreated_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *AppEmailTemplateMutation) SetUpdatedAt(u uint32) {
+	m.updated_at = &u
+	m.addupdated_at = nil
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *AppEmailTemplateMutation) UpdatedAt() (r uint32, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the AppEmailTemplate entity.
+// If the AppEmailTemplate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppEmailTemplateMutation) OldUpdatedAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// AddUpdatedAt adds u to the "updated_at" field.
+func (m *AppEmailTemplateMutation) AddUpdatedAt(u int32) {
+	if m.addupdated_at != nil {
+		*m.addupdated_at += u
+	} else {
+		m.addupdated_at = &u
+	}
+}
+
+// AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
+func (m *AppEmailTemplateMutation) AddedUpdatedAt() (r int32, exists bool) {
+	v := m.addupdated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *AppEmailTemplateMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	m.addupdated_at = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *AppEmailTemplateMutation) SetDeletedAt(u uint32) {
+	m.deleted_at = &u
+	m.adddeleted_at = nil
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *AppEmailTemplateMutation) DeletedAt() (r uint32, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the AppEmailTemplate entity.
+// If the AppEmailTemplate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppEmailTemplateMutation) OldDeletedAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// AddDeletedAt adds u to the "deleted_at" field.
+func (m *AppEmailTemplateMutation) AddDeletedAt(u int32) {
+	if m.adddeleted_at != nil {
+		*m.adddeleted_at += u
+	} else {
+		m.adddeleted_at = &u
+	}
+}
+
+// AddedDeletedAt returns the value that was added to the "deleted_at" field in this mutation.
+func (m *AppEmailTemplateMutation) AddedDeletedAt() (r int32, exists bool) {
+	v := m.adddeleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *AppEmailTemplateMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	m.adddeleted_at = nil
 }
 
 // SetAppID sets the "app_id" field.
@@ -1281,118 +1451,6 @@ func (m *AppEmailTemplateMutation) ResetBody() {
 	m.body = nil
 }
 
-// SetCreateAt sets the "create_at" field.
-func (m *AppEmailTemplateMutation) SetCreateAt(u uint32) {
-	m.create_at = &u
-	m.addcreate_at = nil
-}
-
-// CreateAt returns the value of the "create_at" field in the mutation.
-func (m *AppEmailTemplateMutation) CreateAt() (r uint32, exists bool) {
-	v := m.create_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreateAt returns the old "create_at" field's value of the AppEmailTemplate entity.
-// If the AppEmailTemplate object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AppEmailTemplateMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreateAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreateAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
-	}
-	return oldValue.CreateAt, nil
-}
-
-// AddCreateAt adds u to the "create_at" field.
-func (m *AppEmailTemplateMutation) AddCreateAt(u int32) {
-	if m.addcreate_at != nil {
-		*m.addcreate_at += u
-	} else {
-		m.addcreate_at = &u
-	}
-}
-
-// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
-func (m *AppEmailTemplateMutation) AddedCreateAt() (r int32, exists bool) {
-	v := m.addcreate_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetCreateAt resets all changes to the "create_at" field.
-func (m *AppEmailTemplateMutation) ResetCreateAt() {
-	m.create_at = nil
-	m.addcreate_at = nil
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (m *AppEmailTemplateMutation) SetUpdateAt(u uint32) {
-	m.update_at = &u
-	m.addupdate_at = nil
-}
-
-// UpdateAt returns the value of the "update_at" field in the mutation.
-func (m *AppEmailTemplateMutation) UpdateAt() (r uint32, exists bool) {
-	v := m.update_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdateAt returns the old "update_at" field's value of the AppEmailTemplate entity.
-// If the AppEmailTemplate object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AppEmailTemplateMutation) OldUpdateAt(ctx context.Context) (v uint32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdateAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdateAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdateAt: %w", err)
-	}
-	return oldValue.UpdateAt, nil
-}
-
-// AddUpdateAt adds u to the "update_at" field.
-func (m *AppEmailTemplateMutation) AddUpdateAt(u int32) {
-	if m.addupdate_at != nil {
-		*m.addupdate_at += u
-	} else {
-		m.addupdate_at = &u
-	}
-}
-
-// AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
-func (m *AppEmailTemplateMutation) AddedUpdateAt() (r int32, exists bool) {
-	v := m.addupdate_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetUpdateAt resets all changes to the "update_at" field.
-func (m *AppEmailTemplateMutation) ResetUpdateAt() {
-	m.update_at = nil
-	m.addupdate_at = nil
-}
-
 // Where appends a list predicates to the AppEmailTemplateMutation builder.
 func (m *AppEmailTemplateMutation) Where(ps ...predicate.AppEmailTemplate) {
 	m.predicates = append(m.predicates, ps...)
@@ -1412,7 +1470,16 @@ func (m *AppEmailTemplateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AppEmailTemplateMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
+	if m.created_at != nil {
+		fields = append(fields, appemailtemplate.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, appemailtemplate.FieldUpdatedAt)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, appemailtemplate.FieldDeletedAt)
+	}
 	if m.app_id != nil {
 		fields = append(fields, appemailtemplate.FieldAppID)
 	}
@@ -1440,12 +1507,6 @@ func (m *AppEmailTemplateMutation) Fields() []string {
 	if m.body != nil {
 		fields = append(fields, appemailtemplate.FieldBody)
 	}
-	if m.create_at != nil {
-		fields = append(fields, appemailtemplate.FieldCreateAt)
-	}
-	if m.update_at != nil {
-		fields = append(fields, appemailtemplate.FieldUpdateAt)
-	}
 	return fields
 }
 
@@ -1454,6 +1515,12 @@ func (m *AppEmailTemplateMutation) Fields() []string {
 // schema.
 func (m *AppEmailTemplateMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case appemailtemplate.FieldCreatedAt:
+		return m.CreatedAt()
+	case appemailtemplate.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case appemailtemplate.FieldDeletedAt:
+		return m.DeletedAt()
 	case appemailtemplate.FieldAppID:
 		return m.AppID()
 	case appemailtemplate.FieldLangID:
@@ -1472,10 +1539,6 @@ func (m *AppEmailTemplateMutation) Field(name string) (ent.Value, bool) {
 		return m.Subject()
 	case appemailtemplate.FieldBody:
 		return m.Body()
-	case appemailtemplate.FieldCreateAt:
-		return m.CreateAt()
-	case appemailtemplate.FieldUpdateAt:
-		return m.UpdateAt()
 	}
 	return nil, false
 }
@@ -1485,6 +1548,12 @@ func (m *AppEmailTemplateMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *AppEmailTemplateMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case appemailtemplate.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case appemailtemplate.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case appemailtemplate.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
 	case appemailtemplate.FieldAppID:
 		return m.OldAppID(ctx)
 	case appemailtemplate.FieldLangID:
@@ -1503,10 +1572,6 @@ func (m *AppEmailTemplateMutation) OldField(ctx context.Context, name string) (e
 		return m.OldSubject(ctx)
 	case appemailtemplate.FieldBody:
 		return m.OldBody(ctx)
-	case appemailtemplate.FieldCreateAt:
-		return m.OldCreateAt(ctx)
-	case appemailtemplate.FieldUpdateAt:
-		return m.OldUpdateAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown AppEmailTemplate field %s", name)
 }
@@ -1516,6 +1581,27 @@ func (m *AppEmailTemplateMutation) OldField(ctx context.Context, name string) (e
 // type.
 func (m *AppEmailTemplateMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case appemailtemplate.FieldCreatedAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case appemailtemplate.FieldUpdatedAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case appemailtemplate.FieldDeletedAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
 	case appemailtemplate.FieldAppID:
 		v, ok := value.(uuid.UUID)
 		if !ok {
@@ -1579,20 +1665,6 @@ func (m *AppEmailTemplateMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetBody(v)
 		return nil
-	case appemailtemplate.FieldCreateAt:
-		v, ok := value.(uint32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreateAt(v)
-		return nil
-	case appemailtemplate.FieldUpdateAt:
-		v, ok := value.(uint32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdateAt(v)
-		return nil
 	}
 	return fmt.Errorf("unknown AppEmailTemplate field %s", name)
 }
@@ -1601,11 +1673,14 @@ func (m *AppEmailTemplateMutation) SetField(name string, value ent.Value) error 
 // this mutation.
 func (m *AppEmailTemplateMutation) AddedFields() []string {
 	var fields []string
-	if m.addcreate_at != nil {
-		fields = append(fields, appemailtemplate.FieldCreateAt)
+	if m.addcreated_at != nil {
+		fields = append(fields, appemailtemplate.FieldCreatedAt)
 	}
-	if m.addupdate_at != nil {
-		fields = append(fields, appemailtemplate.FieldUpdateAt)
+	if m.addupdated_at != nil {
+		fields = append(fields, appemailtemplate.FieldUpdatedAt)
+	}
+	if m.adddeleted_at != nil {
+		fields = append(fields, appemailtemplate.FieldDeletedAt)
 	}
 	return fields
 }
@@ -1615,10 +1690,12 @@ func (m *AppEmailTemplateMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *AppEmailTemplateMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case appemailtemplate.FieldCreateAt:
-		return m.AddedCreateAt()
-	case appemailtemplate.FieldUpdateAt:
-		return m.AddedUpdateAt()
+	case appemailtemplate.FieldCreatedAt:
+		return m.AddedCreatedAt()
+	case appemailtemplate.FieldUpdatedAt:
+		return m.AddedUpdatedAt()
+	case appemailtemplate.FieldDeletedAt:
+		return m.AddedDeletedAt()
 	}
 	return nil, false
 }
@@ -1628,19 +1705,26 @@ func (m *AppEmailTemplateMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *AppEmailTemplateMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case appemailtemplate.FieldCreateAt:
+	case appemailtemplate.FieldCreatedAt:
 		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddCreateAt(v)
+		m.AddCreatedAt(v)
 		return nil
-	case appemailtemplate.FieldUpdateAt:
+	case appemailtemplate.FieldUpdatedAt:
 		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddUpdateAt(v)
+		m.AddUpdatedAt(v)
+		return nil
+	case appemailtemplate.FieldDeletedAt:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeletedAt(v)
 		return nil
 	}
 	return fmt.Errorf("unknown AppEmailTemplate numeric field %s", name)
@@ -1669,6 +1753,15 @@ func (m *AppEmailTemplateMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *AppEmailTemplateMutation) ResetField(name string) error {
 	switch name {
+	case appemailtemplate.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case appemailtemplate.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case appemailtemplate.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
 	case appemailtemplate.FieldAppID:
 		m.ResetAppID()
 		return nil
@@ -1695,12 +1788,6 @@ func (m *AppEmailTemplateMutation) ResetField(name string) error {
 		return nil
 	case appemailtemplate.FieldBody:
 		m.ResetBody()
-		return nil
-	case appemailtemplate.FieldCreateAt:
-		m.ResetCreateAt()
-		return nil
-	case appemailtemplate.FieldUpdateAt:
-		m.ResetUpdateAt()
 		return nil
 	}
 	return fmt.Errorf("unknown AppEmailTemplate field %s", name)
@@ -1760,15 +1847,17 @@ type AppSMSTemplateMutation struct {
 	op            Op
 	typ           string
 	id            *uuid.UUID
+	created_at    *uint32
+	addcreated_at *int32
+	updated_at    *uint32
+	addupdated_at *int32
+	deleted_at    *uint32
+	adddeleted_at *int32
 	app_id        *uuid.UUID
 	lang_id       *uuid.UUID
 	used_for      *string
 	subject       *string
 	message       *string
-	create_at     *uint32
-	addcreate_at  *int32
-	update_at     *uint32
-	addupdate_at  *int32
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*AppSMSTemplate, error)
@@ -1877,6 +1966,174 @@ func (m *AppSMSTemplateMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *AppSMSTemplateMutation) SetCreatedAt(u uint32) {
+	m.created_at = &u
+	m.addcreated_at = nil
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *AppSMSTemplateMutation) CreatedAt() (r uint32, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the AppSMSTemplate entity.
+// If the AppSMSTemplate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppSMSTemplateMutation) OldCreatedAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// AddCreatedAt adds u to the "created_at" field.
+func (m *AppSMSTemplateMutation) AddCreatedAt(u int32) {
+	if m.addcreated_at != nil {
+		*m.addcreated_at += u
+	} else {
+		m.addcreated_at = &u
+	}
+}
+
+// AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
+func (m *AppSMSTemplateMutation) AddedCreatedAt() (r int32, exists bool) {
+	v := m.addcreated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *AppSMSTemplateMutation) ResetCreatedAt() {
+	m.created_at = nil
+	m.addcreated_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *AppSMSTemplateMutation) SetUpdatedAt(u uint32) {
+	m.updated_at = &u
+	m.addupdated_at = nil
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *AppSMSTemplateMutation) UpdatedAt() (r uint32, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the AppSMSTemplate entity.
+// If the AppSMSTemplate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppSMSTemplateMutation) OldUpdatedAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// AddUpdatedAt adds u to the "updated_at" field.
+func (m *AppSMSTemplateMutation) AddUpdatedAt(u int32) {
+	if m.addupdated_at != nil {
+		*m.addupdated_at += u
+	} else {
+		m.addupdated_at = &u
+	}
+}
+
+// AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
+func (m *AppSMSTemplateMutation) AddedUpdatedAt() (r int32, exists bool) {
+	v := m.addupdated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *AppSMSTemplateMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	m.addupdated_at = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *AppSMSTemplateMutation) SetDeletedAt(u uint32) {
+	m.deleted_at = &u
+	m.adddeleted_at = nil
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *AppSMSTemplateMutation) DeletedAt() (r uint32, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the AppSMSTemplate entity.
+// If the AppSMSTemplate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppSMSTemplateMutation) OldDeletedAt(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// AddDeletedAt adds u to the "deleted_at" field.
+func (m *AppSMSTemplateMutation) AddDeletedAt(u int32) {
+	if m.adddeleted_at != nil {
+		*m.adddeleted_at += u
+	} else {
+		m.adddeleted_at = &u
+	}
+}
+
+// AddedDeletedAt returns the value that was added to the "deleted_at" field in this mutation.
+func (m *AppSMSTemplateMutation) AddedDeletedAt() (r int32, exists bool) {
+	v := m.adddeleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *AppSMSTemplateMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	m.adddeleted_at = nil
 }
 
 // SetAppID sets the "app_id" field.
@@ -2059,118 +2316,6 @@ func (m *AppSMSTemplateMutation) ResetMessage() {
 	m.message = nil
 }
 
-// SetCreateAt sets the "create_at" field.
-func (m *AppSMSTemplateMutation) SetCreateAt(u uint32) {
-	m.create_at = &u
-	m.addcreate_at = nil
-}
-
-// CreateAt returns the value of the "create_at" field in the mutation.
-func (m *AppSMSTemplateMutation) CreateAt() (r uint32, exists bool) {
-	v := m.create_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreateAt returns the old "create_at" field's value of the AppSMSTemplate entity.
-// If the AppSMSTemplate object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AppSMSTemplateMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreateAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreateAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
-	}
-	return oldValue.CreateAt, nil
-}
-
-// AddCreateAt adds u to the "create_at" field.
-func (m *AppSMSTemplateMutation) AddCreateAt(u int32) {
-	if m.addcreate_at != nil {
-		*m.addcreate_at += u
-	} else {
-		m.addcreate_at = &u
-	}
-}
-
-// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
-func (m *AppSMSTemplateMutation) AddedCreateAt() (r int32, exists bool) {
-	v := m.addcreate_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetCreateAt resets all changes to the "create_at" field.
-func (m *AppSMSTemplateMutation) ResetCreateAt() {
-	m.create_at = nil
-	m.addcreate_at = nil
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (m *AppSMSTemplateMutation) SetUpdateAt(u uint32) {
-	m.update_at = &u
-	m.addupdate_at = nil
-}
-
-// UpdateAt returns the value of the "update_at" field in the mutation.
-func (m *AppSMSTemplateMutation) UpdateAt() (r uint32, exists bool) {
-	v := m.update_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdateAt returns the old "update_at" field's value of the AppSMSTemplate entity.
-// If the AppSMSTemplate object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AppSMSTemplateMutation) OldUpdateAt(ctx context.Context) (v uint32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdateAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdateAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdateAt: %w", err)
-	}
-	return oldValue.UpdateAt, nil
-}
-
-// AddUpdateAt adds u to the "update_at" field.
-func (m *AppSMSTemplateMutation) AddUpdateAt(u int32) {
-	if m.addupdate_at != nil {
-		*m.addupdate_at += u
-	} else {
-		m.addupdate_at = &u
-	}
-}
-
-// AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
-func (m *AppSMSTemplateMutation) AddedUpdateAt() (r int32, exists bool) {
-	v := m.addupdate_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetUpdateAt resets all changes to the "update_at" field.
-func (m *AppSMSTemplateMutation) ResetUpdateAt() {
-	m.update_at = nil
-	m.addupdate_at = nil
-}
-
 // Where appends a list predicates to the AppSMSTemplateMutation builder.
 func (m *AppSMSTemplateMutation) Where(ps ...predicate.AppSMSTemplate) {
 	m.predicates = append(m.predicates, ps...)
@@ -2190,7 +2335,16 @@ func (m *AppSMSTemplateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AppSMSTemplateMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
+	if m.created_at != nil {
+		fields = append(fields, appsmstemplate.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, appsmstemplate.FieldUpdatedAt)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, appsmstemplate.FieldDeletedAt)
+	}
 	if m.app_id != nil {
 		fields = append(fields, appsmstemplate.FieldAppID)
 	}
@@ -2206,12 +2360,6 @@ func (m *AppSMSTemplateMutation) Fields() []string {
 	if m.message != nil {
 		fields = append(fields, appsmstemplate.FieldMessage)
 	}
-	if m.create_at != nil {
-		fields = append(fields, appsmstemplate.FieldCreateAt)
-	}
-	if m.update_at != nil {
-		fields = append(fields, appsmstemplate.FieldUpdateAt)
-	}
 	return fields
 }
 
@@ -2220,6 +2368,12 @@ func (m *AppSMSTemplateMutation) Fields() []string {
 // schema.
 func (m *AppSMSTemplateMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case appsmstemplate.FieldCreatedAt:
+		return m.CreatedAt()
+	case appsmstemplate.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case appsmstemplate.FieldDeletedAt:
+		return m.DeletedAt()
 	case appsmstemplate.FieldAppID:
 		return m.AppID()
 	case appsmstemplate.FieldLangID:
@@ -2230,10 +2384,6 @@ func (m *AppSMSTemplateMutation) Field(name string) (ent.Value, bool) {
 		return m.Subject()
 	case appsmstemplate.FieldMessage:
 		return m.Message()
-	case appsmstemplate.FieldCreateAt:
-		return m.CreateAt()
-	case appsmstemplate.FieldUpdateAt:
-		return m.UpdateAt()
 	}
 	return nil, false
 }
@@ -2243,6 +2393,12 @@ func (m *AppSMSTemplateMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *AppSMSTemplateMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case appsmstemplate.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case appsmstemplate.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case appsmstemplate.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
 	case appsmstemplate.FieldAppID:
 		return m.OldAppID(ctx)
 	case appsmstemplate.FieldLangID:
@@ -2253,10 +2409,6 @@ func (m *AppSMSTemplateMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldSubject(ctx)
 	case appsmstemplate.FieldMessage:
 		return m.OldMessage(ctx)
-	case appsmstemplate.FieldCreateAt:
-		return m.OldCreateAt(ctx)
-	case appsmstemplate.FieldUpdateAt:
-		return m.OldUpdateAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown AppSMSTemplate field %s", name)
 }
@@ -2266,6 +2418,27 @@ func (m *AppSMSTemplateMutation) OldField(ctx context.Context, name string) (ent
 // type.
 func (m *AppSMSTemplateMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case appsmstemplate.FieldCreatedAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case appsmstemplate.FieldUpdatedAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case appsmstemplate.FieldDeletedAt:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
 	case appsmstemplate.FieldAppID:
 		v, ok := value.(uuid.UUID)
 		if !ok {
@@ -2301,20 +2474,6 @@ func (m *AppSMSTemplateMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMessage(v)
 		return nil
-	case appsmstemplate.FieldCreateAt:
-		v, ok := value.(uint32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreateAt(v)
-		return nil
-	case appsmstemplate.FieldUpdateAt:
-		v, ok := value.(uint32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdateAt(v)
-		return nil
 	}
 	return fmt.Errorf("unknown AppSMSTemplate field %s", name)
 }
@@ -2323,11 +2482,14 @@ func (m *AppSMSTemplateMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *AppSMSTemplateMutation) AddedFields() []string {
 	var fields []string
-	if m.addcreate_at != nil {
-		fields = append(fields, appsmstemplate.FieldCreateAt)
+	if m.addcreated_at != nil {
+		fields = append(fields, appsmstemplate.FieldCreatedAt)
 	}
-	if m.addupdate_at != nil {
-		fields = append(fields, appsmstemplate.FieldUpdateAt)
+	if m.addupdated_at != nil {
+		fields = append(fields, appsmstemplate.FieldUpdatedAt)
+	}
+	if m.adddeleted_at != nil {
+		fields = append(fields, appsmstemplate.FieldDeletedAt)
 	}
 	return fields
 }
@@ -2337,10 +2499,12 @@ func (m *AppSMSTemplateMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *AppSMSTemplateMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case appsmstemplate.FieldCreateAt:
-		return m.AddedCreateAt()
-	case appsmstemplate.FieldUpdateAt:
-		return m.AddedUpdateAt()
+	case appsmstemplate.FieldCreatedAt:
+		return m.AddedCreatedAt()
+	case appsmstemplate.FieldUpdatedAt:
+		return m.AddedUpdatedAt()
+	case appsmstemplate.FieldDeletedAt:
+		return m.AddedDeletedAt()
 	}
 	return nil, false
 }
@@ -2350,19 +2514,26 @@ func (m *AppSMSTemplateMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *AppSMSTemplateMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case appsmstemplate.FieldCreateAt:
+	case appsmstemplate.FieldCreatedAt:
 		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddCreateAt(v)
+		m.AddCreatedAt(v)
 		return nil
-	case appsmstemplate.FieldUpdateAt:
+	case appsmstemplate.FieldUpdatedAt:
 		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddUpdateAt(v)
+		m.AddUpdatedAt(v)
+		return nil
+	case appsmstemplate.FieldDeletedAt:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeletedAt(v)
 		return nil
 	}
 	return fmt.Errorf("unknown AppSMSTemplate numeric field %s", name)
@@ -2391,6 +2562,15 @@ func (m *AppSMSTemplateMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *AppSMSTemplateMutation) ResetField(name string) error {
 	switch name {
+	case appsmstemplate.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case appsmstemplate.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case appsmstemplate.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
 	case appsmstemplate.FieldAppID:
 		m.ResetAppID()
 		return nil
@@ -2405,12 +2585,6 @@ func (m *AppSMSTemplateMutation) ResetField(name string) error {
 		return nil
 	case appsmstemplate.FieldMessage:
 		m.ResetMessage()
-		return nil
-	case appsmstemplate.FieldCreateAt:
-		m.ResetCreateAt()
-		return nil
-	case appsmstemplate.FieldUpdateAt:
-		m.ResetUpdateAt()
 		return nil
 	}
 	return fmt.Errorf("unknown AppSMSTemplate field %s", name)

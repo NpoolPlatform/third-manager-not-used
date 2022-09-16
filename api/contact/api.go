@@ -2,7 +2,6 @@ package contact
 
 import (
 	"github.com/NpoolPlatform/message/npool/third/mgr/v1/contact"
-	_ "github.com/NpoolPlatform/message/npool/third/mgr/v1/contact"
 	"google.golang.org/grpc"
 )
 

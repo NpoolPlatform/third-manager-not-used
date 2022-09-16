@@ -16,6 +16,12 @@ type AppSMSTemplate struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt uint32 `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt uint32 `json:"updated_at,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt uint32 `json:"deleted_at,omitempty"`
 	// AppID holds the value of the "app_id" field.
 	AppID uuid.UUID `json:"app_id,omitempty"`
 	// LangID holds the value of the "lang_id" field.
@@ -26,10 +32,6 @@ type AppSMSTemplate struct {
 	Subject string `json:"subject,omitempty"`
 	// Message holds the value of the "message" field.
 	Message string `json:"message,omitempty"`
-	// CreateAt holds the value of the "create_at" field.
-	CreateAt uint32 `json:"create_at,omitempty"`
-	// UpdateAt holds the value of the "update_at" field.
-	UpdateAt uint32 `json:"update_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -37,7 +39,7 @@ func (*AppSMSTemplate) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case appsmstemplate.FieldCreateAt, appsmstemplate.FieldUpdateAt:
+		case appsmstemplate.FieldCreatedAt, appsmstemplate.FieldUpdatedAt, appsmstemplate.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
 		case appsmstemplate.FieldUsedFor, appsmstemplate.FieldSubject, appsmstemplate.FieldMessage:
 			values[i] = new(sql.NullString)
@@ -63,6 +65,24 @@ func (ast *AppSMSTemplate) assignValues(columns []string, values []interface{}) 
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				ast.ID = *value
+			}
+		case appsmstemplate.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				ast.CreatedAt = uint32(value.Int64)
+			}
+		case appsmstemplate.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				ast.UpdatedAt = uint32(value.Int64)
+			}
+		case appsmstemplate.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				ast.DeletedAt = uint32(value.Int64)
 			}
 		case appsmstemplate.FieldAppID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -94,18 +114,6 @@ func (ast *AppSMSTemplate) assignValues(columns []string, values []interface{}) 
 			} else if value.Valid {
 				ast.Message = value.String
 			}
-		case appsmstemplate.FieldCreateAt:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field create_at", values[i])
-			} else if value.Valid {
-				ast.CreateAt = uint32(value.Int64)
-			}
-		case appsmstemplate.FieldUpdateAt:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field update_at", values[i])
-			} else if value.Valid {
-				ast.UpdateAt = uint32(value.Int64)
-			}
 		}
 	}
 	return nil
@@ -134,6 +142,15 @@ func (ast *AppSMSTemplate) String() string {
 	var builder strings.Builder
 	builder.WriteString("AppSMSTemplate(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", ast.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(fmt.Sprintf("%v", ast.CreatedAt))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(fmt.Sprintf("%v", ast.UpdatedAt))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(fmt.Sprintf("%v", ast.DeletedAt))
+	builder.WriteString(", ")
 	builder.WriteString("app_id=")
 	builder.WriteString(fmt.Sprintf("%v", ast.AppID))
 	builder.WriteString(", ")
@@ -148,12 +165,6 @@ func (ast *AppSMSTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("message=")
 	builder.WriteString(ast.Message)
-	builder.WriteString(", ")
-	builder.WriteString("create_at=")
-	builder.WriteString(fmt.Sprintf("%v", ast.CreateAt))
-	builder.WriteString(", ")
-	builder.WriteString("update_at=")
-	builder.WriteString(fmt.Sprintf("%v", ast.UpdateAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

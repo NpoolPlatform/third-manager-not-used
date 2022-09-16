@@ -17,6 +17,12 @@ type AppEmailTemplate struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt uint32 `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt uint32 `json:"updated_at,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt uint32 `json:"deleted_at,omitempty"`
 	// AppID holds the value of the "app_id" field.
 	AppID uuid.UUID `json:"app_id,omitempty"`
 	// LangID holds the value of the "lang_id" field.
@@ -35,10 +41,6 @@ type AppEmailTemplate struct {
 	Subject string `json:"subject,omitempty"`
 	// Body holds the value of the "body" field.
 	Body string `json:"body,omitempty"`
-	// CreateAt holds the value of the "create_at" field.
-	CreateAt uint32 `json:"create_at,omitempty"`
-	// UpdateAt holds the value of the "update_at" field.
-	UpdateAt uint32 `json:"update_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -48,7 +50,7 @@ func (*AppEmailTemplate) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case appemailtemplate.FieldReplyTos, appemailtemplate.FieldCcTos:
 			values[i] = new([]byte)
-		case appemailtemplate.FieldCreateAt, appemailtemplate.FieldUpdateAt:
+		case appemailtemplate.FieldCreatedAt, appemailtemplate.FieldUpdatedAt, appemailtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
 		case appemailtemplate.FieldDefaultToUsername, appemailtemplate.FieldUsedFor, appemailtemplate.FieldSender, appemailtemplate.FieldSubject, appemailtemplate.FieldBody:
 			values[i] = new(sql.NullString)
@@ -74,6 +76,24 @@ func (aet *AppEmailTemplate) assignValues(columns []string, values []interface{}
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				aet.ID = *value
+			}
+		case appemailtemplate.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				aet.CreatedAt = uint32(value.Int64)
+			}
+		case appemailtemplate.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				aet.UpdatedAt = uint32(value.Int64)
+			}
+		case appemailtemplate.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				aet.DeletedAt = uint32(value.Int64)
 			}
 		case appemailtemplate.FieldAppID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -133,18 +153,6 @@ func (aet *AppEmailTemplate) assignValues(columns []string, values []interface{}
 			} else if value.Valid {
 				aet.Body = value.String
 			}
-		case appemailtemplate.FieldCreateAt:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field create_at", values[i])
-			} else if value.Valid {
-				aet.CreateAt = uint32(value.Int64)
-			}
-		case appemailtemplate.FieldUpdateAt:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field update_at", values[i])
-			} else if value.Valid {
-				aet.UpdateAt = uint32(value.Int64)
-			}
 		}
 	}
 	return nil
@@ -173,6 +181,15 @@ func (aet *AppEmailTemplate) String() string {
 	var builder strings.Builder
 	builder.WriteString("AppEmailTemplate(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", aet.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(fmt.Sprintf("%v", aet.CreatedAt))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(fmt.Sprintf("%v", aet.UpdatedAt))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(fmt.Sprintf("%v", aet.DeletedAt))
+	builder.WriteString(", ")
 	builder.WriteString("app_id=")
 	builder.WriteString(fmt.Sprintf("%v", aet.AppID))
 	builder.WriteString(", ")
@@ -199,12 +216,6 @@ func (aet *AppEmailTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("body=")
 	builder.WriteString(aet.Body)
-	builder.WriteString(", ")
-	builder.WriteString("create_at=")
-	builder.WriteString(fmt.Sprintf("%v", aet.CreateAt))
-	builder.WriteString(", ")
-	builder.WriteString("update_at=")
-	builder.WriteString(fmt.Sprintf("%v", aet.UpdateAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

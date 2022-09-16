@@ -36,6 +36,9 @@ var (
 	// AppEmailTemplatesColumns holds the columns for the "app_email_templates" table.
 	AppEmailTemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeUint32},
+		{Name: "updated_at", Type: field.TypeUint32},
+		{Name: "deleted_at", Type: field.TypeUint32},
 		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "lang_id", Type: field.TypeUUID},
 		{Name: "default_to_username", Type: field.TypeString},
@@ -44,9 +47,7 @@ var (
 		{Name: "reply_tos", Type: field.TypeJSON},
 		{Name: "cc_tos", Type: field.TypeJSON},
 		{Name: "subject", Type: field.TypeString},
-		{Name: "body", Type: field.TypeString, Size: 8192},
-		{Name: "create_at", Type: field.TypeUint32},
-		{Name: "update_at", Type: field.TypeUint32},
+		{Name: "body", Type: field.TypeString, Size: 3072},
 	}
 	// AppEmailTemplatesTable holds the schema information for the "app_email_templates" table.
 	AppEmailTemplatesTable = &schema.Table{
@@ -57,20 +58,21 @@ var (
 			{
 				Name:    "appemailtemplate_app_id_lang_id_used_for",
 				Unique:  true,
-				Columns: []*schema.Column{AppEmailTemplatesColumns[1], AppEmailTemplatesColumns[2], AppEmailTemplatesColumns[4]},
+				Columns: []*schema.Column{AppEmailTemplatesColumns[4], AppEmailTemplatesColumns[5], AppEmailTemplatesColumns[7]},
 			},
 		},
 	}
 	// AppSmsTemplatesColumns holds the columns for the "app_sms_templates" table.
 	AppSmsTemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeUint32},
+		{Name: "updated_at", Type: field.TypeUint32},
+		{Name: "deleted_at", Type: field.TypeUint32},
 		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "lang_id", Type: field.TypeUUID},
 		{Name: "used_for", Type: field.TypeString, Default: ""},
 		{Name: "subject", Type: field.TypeString, Default: ""},
 		{Name: "message", Type: field.TypeString, Default: ""},
-		{Name: "create_at", Type: field.TypeUint32},
-		{Name: "update_at", Type: field.TypeUint32},
 	}
 	// AppSmsTemplatesTable holds the schema information for the "app_sms_templates" table.
 	AppSmsTemplatesTable = &schema.Table{
@@ -81,7 +83,7 @@ var (
 			{
 				Name:    "appsmstemplate_app_id_lang_id_used_for",
 				Unique:  true,
-				Columns: []*schema.Column{AppSmsTemplatesColumns[1], AppSmsTemplatesColumns[2], AppSmsTemplatesColumns[3]},
+				Columns: []*schema.Column{AppSmsTemplatesColumns[4], AppSmsTemplatesColumns[5], AppSmsTemplatesColumns[6]},
 			},
 		},
 	}

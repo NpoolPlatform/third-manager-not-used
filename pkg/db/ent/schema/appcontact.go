@@ -24,19 +24,18 @@ func (AppContact) Mixin() []ent.Mixin {
 
 // Fields of the AppContact.
 func (AppContact) Fields() []ent.Field {
+	var maxLen = 32
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New).
 			Unique(),
 		field.UUID("app_id", uuid.UUID{}),
 		field.String("used_for").
+			MaxLen(maxLen).
 			Default(usedfor.UsedFor_DefaultUsedFor.String()),
-		field.String("sender").
-			Default(""),
-		field.String("account").
-			Default(""),
-		field.String("account_type").
-			Default(""),
+		field.String("sender").Default(""),
+		field.String("account").Default(""),
+		field.String("account_type").Default(""),
 	}
 }
 

@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -256,12 +257,12 @@ func (astq *AppSMSTemplateQuery) Clone() *AppSMSTemplateQuery {
 // Example:
 //
 //	var v []struct {
-//		AppID uuid.UUID `json:"app_id,omitempty"`
+//		CreatedAt uint32 `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.AppSMSTemplate.Query().
-//		GroupBy(appsmstemplate.FieldAppID).
+//		GroupBy(appsmstemplate.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -285,11 +286,11 @@ func (astq *AppSMSTemplateQuery) GroupBy(field string, fields ...string) *AppSMS
 // Example:
 //
 //	var v []struct {
-//		AppID uuid.UUID `json:"app_id,omitempty"`
+//		CreatedAt uint32 `json:"created_at,omitempty"`
 //	}
 //
 //	client.AppSMSTemplate.Query().
-//		Select(appsmstemplate.FieldAppID).
+//		Select(appsmstemplate.FieldCreatedAt).
 //		Scan(ctx, &v)
 //
 func (astq *AppSMSTemplateQuery) Select(fields ...string) *AppSMSTemplateSelect {
@@ -312,6 +313,12 @@ func (astq *AppSMSTemplateQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		astq.sql = prev
+	}
+	if appsmstemplate.Policy == nil {
+		return errors.New("ent: uninitialized appsmstemplate.Policy (forgotten import ent/runtime?)")
+	}
+	if err := appsmstemplate.Policy.EvalQuery(ctx, astq); err != nil {
+		return err
 	}
 	return nil
 }

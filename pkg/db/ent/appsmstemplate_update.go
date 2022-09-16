@@ -29,6 +29,61 @@ func (astu *AppSMSTemplateUpdate) Where(ps ...predicate.AppSMSTemplate) *AppSMST
 	return astu
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (astu *AppSMSTemplateUpdate) SetCreatedAt(u uint32) *AppSMSTemplateUpdate {
+	astu.mutation.ResetCreatedAt()
+	astu.mutation.SetCreatedAt(u)
+	return astu
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (astu *AppSMSTemplateUpdate) SetNillableCreatedAt(u *uint32) *AppSMSTemplateUpdate {
+	if u != nil {
+		astu.SetCreatedAt(*u)
+	}
+	return astu
+}
+
+// AddCreatedAt adds u to the "created_at" field.
+func (astu *AppSMSTemplateUpdate) AddCreatedAt(u int32) *AppSMSTemplateUpdate {
+	astu.mutation.AddCreatedAt(u)
+	return astu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (astu *AppSMSTemplateUpdate) SetUpdatedAt(u uint32) *AppSMSTemplateUpdate {
+	astu.mutation.ResetUpdatedAt()
+	astu.mutation.SetUpdatedAt(u)
+	return astu
+}
+
+// AddUpdatedAt adds u to the "updated_at" field.
+func (astu *AppSMSTemplateUpdate) AddUpdatedAt(u int32) *AppSMSTemplateUpdate {
+	astu.mutation.AddUpdatedAt(u)
+	return astu
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (astu *AppSMSTemplateUpdate) SetDeletedAt(u uint32) *AppSMSTemplateUpdate {
+	astu.mutation.ResetDeletedAt()
+	astu.mutation.SetDeletedAt(u)
+	return astu
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (astu *AppSMSTemplateUpdate) SetNillableDeletedAt(u *uint32) *AppSMSTemplateUpdate {
+	if u != nil {
+		astu.SetDeletedAt(*u)
+	}
+	return astu
+}
+
+// AddDeletedAt adds u to the "deleted_at" field.
+func (astu *AppSMSTemplateUpdate) AddDeletedAt(u int32) *AppSMSTemplateUpdate {
+	astu.mutation.AddDeletedAt(u)
+	return astu
+}
+
 // SetAppID sets the "app_id" field.
 func (astu *AppSMSTemplateUpdate) SetAppID(u uuid.UUID) *AppSMSTemplateUpdate {
 	astu.mutation.SetAppID(u)
@@ -83,40 +138,6 @@ func (astu *AppSMSTemplateUpdate) SetNillableMessage(s *string) *AppSMSTemplateU
 	return astu
 }
 
-// SetCreateAt sets the "create_at" field.
-func (astu *AppSMSTemplateUpdate) SetCreateAt(u uint32) *AppSMSTemplateUpdate {
-	astu.mutation.ResetCreateAt()
-	astu.mutation.SetCreateAt(u)
-	return astu
-}
-
-// SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (astu *AppSMSTemplateUpdate) SetNillableCreateAt(u *uint32) *AppSMSTemplateUpdate {
-	if u != nil {
-		astu.SetCreateAt(*u)
-	}
-	return astu
-}
-
-// AddCreateAt adds u to the "create_at" field.
-func (astu *AppSMSTemplateUpdate) AddCreateAt(u int32) *AppSMSTemplateUpdate {
-	astu.mutation.AddCreateAt(u)
-	return astu
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (astu *AppSMSTemplateUpdate) SetUpdateAt(u uint32) *AppSMSTemplateUpdate {
-	astu.mutation.ResetUpdateAt()
-	astu.mutation.SetUpdateAt(u)
-	return astu
-}
-
-// AddUpdateAt adds u to the "update_at" field.
-func (astu *AppSMSTemplateUpdate) AddUpdateAt(u int32) *AppSMSTemplateUpdate {
-	astu.mutation.AddUpdateAt(u)
-	return astu
-}
-
 // Mutation returns the AppSMSTemplateMutation object of the builder.
 func (astu *AppSMSTemplateUpdate) Mutation() *AppSMSTemplateMutation {
 	return astu.mutation
@@ -128,7 +149,9 @@ func (astu *AppSMSTemplateUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
-	astu.defaults()
+	if err := astu.defaults(); err != nil {
+		return 0, err
+	}
 	if len(astu.hooks) == 0 {
 		affected, err = astu.sqlSave(ctx)
 	} else {
@@ -178,11 +201,15 @@ func (astu *AppSMSTemplateUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (astu *AppSMSTemplateUpdate) defaults() {
-	if _, ok := astu.mutation.UpdateAt(); !ok {
-		v := appsmstemplate.UpdateDefaultUpdateAt()
-		astu.mutation.SetUpdateAt(v)
+func (astu *AppSMSTemplateUpdate) defaults() error {
+	if _, ok := astu.mutation.UpdatedAt(); !ok {
+		if appsmstemplate.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized appsmstemplate.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := appsmstemplate.UpdateDefaultUpdatedAt()
+		astu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -208,6 +235,48 @@ func (astu *AppSMSTemplateUpdate) sqlSave(ctx context.Context) (n int, err error
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := astu.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldCreatedAt,
+		})
+	}
+	if value, ok := astu.mutation.AddedCreatedAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldCreatedAt,
+		})
+	}
+	if value, ok := astu.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldUpdatedAt,
+		})
+	}
+	if value, ok := astu.mutation.AddedUpdatedAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldUpdatedAt,
+		})
+	}
+	if value, ok := astu.mutation.DeletedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldDeletedAt,
+		})
+	}
+	if value, ok := astu.mutation.AddedDeletedAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldDeletedAt,
+		})
 	}
 	if value, ok := astu.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
@@ -244,34 +313,6 @@ func (astu *AppSMSTemplateUpdate) sqlSave(ctx context.Context) (n int, err error
 			Column: appsmstemplate.FieldMessage,
 		})
 	}
-	if value, ok := astu.mutation.CreateAt(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appsmstemplate.FieldCreateAt,
-		})
-	}
-	if value, ok := astu.mutation.AddedCreateAt(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appsmstemplate.FieldCreateAt,
-		})
-	}
-	if value, ok := astu.mutation.UpdateAt(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appsmstemplate.FieldUpdateAt,
-		})
-	}
-	if value, ok := astu.mutation.AddedUpdateAt(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appsmstemplate.FieldUpdateAt,
-		})
-	}
 	_spec.Modifiers = astu.modifiers
 	if n, err = sqlgraph.UpdateNodes(ctx, astu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -291,6 +332,61 @@ type AppSMSTemplateUpdateOne struct {
 	hooks     []Hook
 	mutation  *AppSMSTemplateMutation
 	modifiers []func(*sql.UpdateBuilder)
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (astuo *AppSMSTemplateUpdateOne) SetCreatedAt(u uint32) *AppSMSTemplateUpdateOne {
+	astuo.mutation.ResetCreatedAt()
+	astuo.mutation.SetCreatedAt(u)
+	return astuo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (astuo *AppSMSTemplateUpdateOne) SetNillableCreatedAt(u *uint32) *AppSMSTemplateUpdateOne {
+	if u != nil {
+		astuo.SetCreatedAt(*u)
+	}
+	return astuo
+}
+
+// AddCreatedAt adds u to the "created_at" field.
+func (astuo *AppSMSTemplateUpdateOne) AddCreatedAt(u int32) *AppSMSTemplateUpdateOne {
+	astuo.mutation.AddCreatedAt(u)
+	return astuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (astuo *AppSMSTemplateUpdateOne) SetUpdatedAt(u uint32) *AppSMSTemplateUpdateOne {
+	astuo.mutation.ResetUpdatedAt()
+	astuo.mutation.SetUpdatedAt(u)
+	return astuo
+}
+
+// AddUpdatedAt adds u to the "updated_at" field.
+func (astuo *AppSMSTemplateUpdateOne) AddUpdatedAt(u int32) *AppSMSTemplateUpdateOne {
+	astuo.mutation.AddUpdatedAt(u)
+	return astuo
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (astuo *AppSMSTemplateUpdateOne) SetDeletedAt(u uint32) *AppSMSTemplateUpdateOne {
+	astuo.mutation.ResetDeletedAt()
+	astuo.mutation.SetDeletedAt(u)
+	return astuo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (astuo *AppSMSTemplateUpdateOne) SetNillableDeletedAt(u *uint32) *AppSMSTemplateUpdateOne {
+	if u != nil {
+		astuo.SetDeletedAt(*u)
+	}
+	return astuo
+}
+
+// AddDeletedAt adds u to the "deleted_at" field.
+func (astuo *AppSMSTemplateUpdateOne) AddDeletedAt(u int32) *AppSMSTemplateUpdateOne {
+	astuo.mutation.AddDeletedAt(u)
+	return astuo
 }
 
 // SetAppID sets the "app_id" field.
@@ -347,40 +443,6 @@ func (astuo *AppSMSTemplateUpdateOne) SetNillableMessage(s *string) *AppSMSTempl
 	return astuo
 }
 
-// SetCreateAt sets the "create_at" field.
-func (astuo *AppSMSTemplateUpdateOne) SetCreateAt(u uint32) *AppSMSTemplateUpdateOne {
-	astuo.mutation.ResetCreateAt()
-	astuo.mutation.SetCreateAt(u)
-	return astuo
-}
-
-// SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (astuo *AppSMSTemplateUpdateOne) SetNillableCreateAt(u *uint32) *AppSMSTemplateUpdateOne {
-	if u != nil {
-		astuo.SetCreateAt(*u)
-	}
-	return astuo
-}
-
-// AddCreateAt adds u to the "create_at" field.
-func (astuo *AppSMSTemplateUpdateOne) AddCreateAt(u int32) *AppSMSTemplateUpdateOne {
-	astuo.mutation.AddCreateAt(u)
-	return astuo
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (astuo *AppSMSTemplateUpdateOne) SetUpdateAt(u uint32) *AppSMSTemplateUpdateOne {
-	astuo.mutation.ResetUpdateAt()
-	astuo.mutation.SetUpdateAt(u)
-	return astuo
-}
-
-// AddUpdateAt adds u to the "update_at" field.
-func (astuo *AppSMSTemplateUpdateOne) AddUpdateAt(u int32) *AppSMSTemplateUpdateOne {
-	astuo.mutation.AddUpdateAt(u)
-	return astuo
-}
-
 // Mutation returns the AppSMSTemplateMutation object of the builder.
 func (astuo *AppSMSTemplateUpdateOne) Mutation() *AppSMSTemplateMutation {
 	return astuo.mutation
@@ -399,7 +461,9 @@ func (astuo *AppSMSTemplateUpdateOne) Save(ctx context.Context) (*AppSMSTemplate
 		err  error
 		node *AppSMSTemplate
 	)
-	astuo.defaults()
+	if err := astuo.defaults(); err != nil {
+		return nil, err
+	}
 	if len(astuo.hooks) == 0 {
 		node, err = astuo.sqlSave(ctx)
 	} else {
@@ -455,11 +519,15 @@ func (astuo *AppSMSTemplateUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (astuo *AppSMSTemplateUpdateOne) defaults() {
-	if _, ok := astuo.mutation.UpdateAt(); !ok {
-		v := appsmstemplate.UpdateDefaultUpdateAt()
-		astuo.mutation.SetUpdateAt(v)
+func (astuo *AppSMSTemplateUpdateOne) defaults() error {
+	if _, ok := astuo.mutation.UpdatedAt(); !ok {
+		if appsmstemplate.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized appsmstemplate.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := appsmstemplate.UpdateDefaultUpdatedAt()
+		astuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -503,6 +571,48 @@ func (astuo *AppSMSTemplateUpdateOne) sqlSave(ctx context.Context) (_node *AppSM
 			}
 		}
 	}
+	if value, ok := astuo.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldCreatedAt,
+		})
+	}
+	if value, ok := astuo.mutation.AddedCreatedAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldCreatedAt,
+		})
+	}
+	if value, ok := astuo.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldUpdatedAt,
+		})
+	}
+	if value, ok := astuo.mutation.AddedUpdatedAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldUpdatedAt,
+		})
+	}
+	if value, ok := astuo.mutation.DeletedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldDeletedAt,
+		})
+	}
+	if value, ok := astuo.mutation.AddedDeletedAt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldDeletedAt,
+		})
+	}
 	if value, ok := astuo.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
@@ -536,34 +646,6 @@ func (astuo *AppSMSTemplateUpdateOne) sqlSave(ctx context.Context) (_node *AppSM
 			Type:   field.TypeString,
 			Value:  value,
 			Column: appsmstemplate.FieldMessage,
-		})
-	}
-	if value, ok := astuo.mutation.CreateAt(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appsmstemplate.FieldCreateAt,
-		})
-	}
-	if value, ok := astuo.mutation.AddedCreateAt(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appsmstemplate.FieldCreateAt,
-		})
-	}
-	if value, ok := astuo.mutation.UpdateAt(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appsmstemplate.FieldUpdateAt,
-		})
-	}
-	if value, ok := astuo.mutation.AddedUpdateAt(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appsmstemplate.FieldUpdateAt,
 		})
 	}
 	_spec.Modifiers = astuo.modifiers

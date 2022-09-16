@@ -23,6 +23,48 @@ type AppSMSTemplateCreate struct {
 	conflict []sql.ConflictOption
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (astc *AppSMSTemplateCreate) SetCreatedAt(u uint32) *AppSMSTemplateCreate {
+	astc.mutation.SetCreatedAt(u)
+	return astc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (astc *AppSMSTemplateCreate) SetNillableCreatedAt(u *uint32) *AppSMSTemplateCreate {
+	if u != nil {
+		astc.SetCreatedAt(*u)
+	}
+	return astc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (astc *AppSMSTemplateCreate) SetUpdatedAt(u uint32) *AppSMSTemplateCreate {
+	astc.mutation.SetUpdatedAt(u)
+	return astc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (astc *AppSMSTemplateCreate) SetNillableUpdatedAt(u *uint32) *AppSMSTemplateCreate {
+	if u != nil {
+		astc.SetUpdatedAt(*u)
+	}
+	return astc
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (astc *AppSMSTemplateCreate) SetDeletedAt(u uint32) *AppSMSTemplateCreate {
+	astc.mutation.SetDeletedAt(u)
+	return astc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (astc *AppSMSTemplateCreate) SetNillableDeletedAt(u *uint32) *AppSMSTemplateCreate {
+	if u != nil {
+		astc.SetDeletedAt(*u)
+	}
+	return astc
+}
+
 // SetAppID sets the "app_id" field.
 func (astc *AppSMSTemplateCreate) SetAppID(u uuid.UUID) *AppSMSTemplateCreate {
 	astc.mutation.SetAppID(u)
@@ -77,34 +119,6 @@ func (astc *AppSMSTemplateCreate) SetNillableMessage(s *string) *AppSMSTemplateC
 	return astc
 }
 
-// SetCreateAt sets the "create_at" field.
-func (astc *AppSMSTemplateCreate) SetCreateAt(u uint32) *AppSMSTemplateCreate {
-	astc.mutation.SetCreateAt(u)
-	return astc
-}
-
-// SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (astc *AppSMSTemplateCreate) SetNillableCreateAt(u *uint32) *AppSMSTemplateCreate {
-	if u != nil {
-		astc.SetCreateAt(*u)
-	}
-	return astc
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (astc *AppSMSTemplateCreate) SetUpdateAt(u uint32) *AppSMSTemplateCreate {
-	astc.mutation.SetUpdateAt(u)
-	return astc
-}
-
-// SetNillableUpdateAt sets the "update_at" field if the given value is not nil.
-func (astc *AppSMSTemplateCreate) SetNillableUpdateAt(u *uint32) *AppSMSTemplateCreate {
-	if u != nil {
-		astc.SetUpdateAt(*u)
-	}
-	return astc
-}
-
 // SetID sets the "id" field.
 func (astc *AppSMSTemplateCreate) SetID(u uuid.UUID) *AppSMSTemplateCreate {
 	astc.mutation.SetID(u)
@@ -130,7 +144,9 @@ func (astc *AppSMSTemplateCreate) Save(ctx context.Context) (*AppSMSTemplate, er
 		err  error
 		node *AppSMSTemplate
 	)
-	astc.defaults()
+	if err := astc.defaults(); err != nil {
+		return nil, err
+	}
 	if len(astc.hooks) == 0 {
 		if err = astc.check(); err != nil {
 			return nil, err
@@ -195,7 +211,28 @@ func (astc *AppSMSTemplateCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (astc *AppSMSTemplateCreate) defaults() {
+func (astc *AppSMSTemplateCreate) defaults() error {
+	if _, ok := astc.mutation.CreatedAt(); !ok {
+		if appsmstemplate.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized appsmstemplate.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := appsmstemplate.DefaultCreatedAt()
+		astc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := astc.mutation.UpdatedAt(); !ok {
+		if appsmstemplate.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized appsmstemplate.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := appsmstemplate.DefaultUpdatedAt()
+		astc.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := astc.mutation.DeletedAt(); !ok {
+		if appsmstemplate.DefaultDeletedAt == nil {
+			return fmt.Errorf("ent: uninitialized appsmstemplate.DefaultDeletedAt (forgotten import ent/runtime?)")
+		}
+		v := appsmstemplate.DefaultDeletedAt()
+		astc.mutation.SetDeletedAt(v)
+	}
 	if _, ok := astc.mutation.UsedFor(); !ok {
 		v := appsmstemplate.DefaultUsedFor
 		astc.mutation.SetUsedFor(v)
@@ -208,22 +245,27 @@ func (astc *AppSMSTemplateCreate) defaults() {
 		v := appsmstemplate.DefaultMessage
 		astc.mutation.SetMessage(v)
 	}
-	if _, ok := astc.mutation.CreateAt(); !ok {
-		v := appsmstemplate.DefaultCreateAt()
-		astc.mutation.SetCreateAt(v)
-	}
-	if _, ok := astc.mutation.UpdateAt(); !ok {
-		v := appsmstemplate.DefaultUpdateAt()
-		astc.mutation.SetUpdateAt(v)
-	}
 	if _, ok := astc.mutation.ID(); !ok {
+		if appsmstemplate.DefaultID == nil {
+			return fmt.Errorf("ent: uninitialized appsmstemplate.DefaultID (forgotten import ent/runtime?)")
+		}
 		v := appsmstemplate.DefaultID()
 		astc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (astc *AppSMSTemplateCreate) check() error {
+	if _, ok := astc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "AppSMSTemplate.created_at"`)}
+	}
+	if _, ok := astc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "AppSMSTemplate.updated_at"`)}
+	}
+	if _, ok := astc.mutation.DeletedAt(); !ok {
+		return &ValidationError{Name: "deleted_at", err: errors.New(`ent: missing required field "AppSMSTemplate.deleted_at"`)}
+	}
 	if _, ok := astc.mutation.AppID(); !ok {
 		return &ValidationError{Name: "app_id", err: errors.New(`ent: missing required field "AppSMSTemplate.app_id"`)}
 	}
@@ -238,12 +280,6 @@ func (astc *AppSMSTemplateCreate) check() error {
 	}
 	if _, ok := astc.mutation.Message(); !ok {
 		return &ValidationError{Name: "message", err: errors.New(`ent: missing required field "AppSMSTemplate.message"`)}
-	}
-	if _, ok := astc.mutation.CreateAt(); !ok {
-		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "AppSMSTemplate.create_at"`)}
-	}
-	if _, ok := astc.mutation.UpdateAt(); !ok {
-		return &ValidationError{Name: "update_at", err: errors.New(`ent: missing required field "AppSMSTemplate.update_at"`)}
 	}
 	return nil
 }
@@ -281,6 +317,30 @@ func (astc *AppSMSTemplateCreate) createSpec() (*AppSMSTemplate, *sqlgraph.Creat
 	if id, ok := astc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := astc.mutation.CreatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldCreatedAt,
+		})
+		_node.CreatedAt = value
+	}
+	if value, ok := astc.mutation.UpdatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldUpdatedAt,
+		})
+		_node.UpdatedAt = value
+	}
+	if value, ok := astc.mutation.DeletedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appsmstemplate.FieldDeletedAt,
+		})
+		_node.DeletedAt = value
 	}
 	if value, ok := astc.mutation.AppID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -322,22 +382,6 @@ func (astc *AppSMSTemplateCreate) createSpec() (*AppSMSTemplate, *sqlgraph.Creat
 		})
 		_node.Message = value
 	}
-	if value, ok := astc.mutation.CreateAt(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appsmstemplate.FieldCreateAt,
-		})
-		_node.CreateAt = value
-	}
-	if value, ok := astc.mutation.UpdateAt(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appsmstemplate.FieldUpdateAt,
-		})
-		_node.UpdateAt = value
-	}
 	return _node, _spec
 }
 
@@ -345,7 +389,7 @@ func (astc *AppSMSTemplateCreate) createSpec() (*AppSMSTemplate, *sqlgraph.Creat
 // of the `INSERT` statement. For example:
 //
 //	client.AppSMSTemplate.Create().
-//		SetAppID(v).
+//		SetCreatedAt(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -354,7 +398,7 @@ func (astc *AppSMSTemplateCreate) createSpec() (*AppSMSTemplate, *sqlgraph.Creat
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.AppSMSTemplateUpsert) {
-//			SetAppID(v+v).
+//			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
 //
@@ -391,6 +435,60 @@ type (
 		*sql.UpdateSet
 	}
 )
+
+// SetCreatedAt sets the "created_at" field.
+func (u *AppSMSTemplateUpsert) SetCreatedAt(v uint32) *AppSMSTemplateUpsert {
+	u.Set(appsmstemplate.FieldCreatedAt, v)
+	return u
+}
+
+// UpdateCreatedAt sets the "created_at" field to the value that was provided on create.
+func (u *AppSMSTemplateUpsert) UpdateCreatedAt() *AppSMSTemplateUpsert {
+	u.SetExcluded(appsmstemplate.FieldCreatedAt)
+	return u
+}
+
+// AddCreatedAt adds v to the "created_at" field.
+func (u *AppSMSTemplateUpsert) AddCreatedAt(v uint32) *AppSMSTemplateUpsert {
+	u.Add(appsmstemplate.FieldCreatedAt, v)
+	return u
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *AppSMSTemplateUpsert) SetUpdatedAt(v uint32) *AppSMSTemplateUpsert {
+	u.Set(appsmstemplate.FieldUpdatedAt, v)
+	return u
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *AppSMSTemplateUpsert) UpdateUpdatedAt() *AppSMSTemplateUpsert {
+	u.SetExcluded(appsmstemplate.FieldUpdatedAt)
+	return u
+}
+
+// AddUpdatedAt adds v to the "updated_at" field.
+func (u *AppSMSTemplateUpsert) AddUpdatedAt(v uint32) *AppSMSTemplateUpsert {
+	u.Add(appsmstemplate.FieldUpdatedAt, v)
+	return u
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (u *AppSMSTemplateUpsert) SetDeletedAt(v uint32) *AppSMSTemplateUpsert {
+	u.Set(appsmstemplate.FieldDeletedAt, v)
+	return u
+}
+
+// UpdateDeletedAt sets the "deleted_at" field to the value that was provided on create.
+func (u *AppSMSTemplateUpsert) UpdateDeletedAt() *AppSMSTemplateUpsert {
+	u.SetExcluded(appsmstemplate.FieldDeletedAt)
+	return u
+}
+
+// AddDeletedAt adds v to the "deleted_at" field.
+func (u *AppSMSTemplateUpsert) AddDeletedAt(v uint32) *AppSMSTemplateUpsert {
+	u.Add(appsmstemplate.FieldDeletedAt, v)
+	return u
+}
 
 // SetAppID sets the "app_id" field.
 func (u *AppSMSTemplateUpsert) SetAppID(v uuid.UUID) *AppSMSTemplateUpsert {
@@ -452,42 +550,6 @@ func (u *AppSMSTemplateUpsert) UpdateMessage() *AppSMSTemplateUpsert {
 	return u
 }
 
-// SetCreateAt sets the "create_at" field.
-func (u *AppSMSTemplateUpsert) SetCreateAt(v uint32) *AppSMSTemplateUpsert {
-	u.Set(appsmstemplate.FieldCreateAt, v)
-	return u
-}
-
-// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
-func (u *AppSMSTemplateUpsert) UpdateCreateAt() *AppSMSTemplateUpsert {
-	u.SetExcluded(appsmstemplate.FieldCreateAt)
-	return u
-}
-
-// AddCreateAt adds v to the "create_at" field.
-func (u *AppSMSTemplateUpsert) AddCreateAt(v uint32) *AppSMSTemplateUpsert {
-	u.Add(appsmstemplate.FieldCreateAt, v)
-	return u
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (u *AppSMSTemplateUpsert) SetUpdateAt(v uint32) *AppSMSTemplateUpsert {
-	u.Set(appsmstemplate.FieldUpdateAt, v)
-	return u
-}
-
-// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
-func (u *AppSMSTemplateUpsert) UpdateUpdateAt() *AppSMSTemplateUpsert {
-	u.SetExcluded(appsmstemplate.FieldUpdateAt)
-	return u
-}
-
-// AddUpdateAt adds v to the "update_at" field.
-func (u *AppSMSTemplateUpsert) AddUpdateAt(v uint32) *AppSMSTemplateUpsert {
-	u.Add(appsmstemplate.FieldUpdateAt, v)
-	return u
-}
-
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -536,6 +598,69 @@ func (u *AppSMSTemplateUpsertOne) Update(set func(*AppSMSTemplateUpsert)) *AppSM
 		set(&AppSMSTemplateUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (u *AppSMSTemplateUpsertOne) SetCreatedAt(v uint32) *AppSMSTemplateUpsertOne {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.SetCreatedAt(v)
+	})
+}
+
+// AddCreatedAt adds v to the "created_at" field.
+func (u *AppSMSTemplateUpsertOne) AddCreatedAt(v uint32) *AppSMSTemplateUpsertOne {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.AddCreatedAt(v)
+	})
+}
+
+// UpdateCreatedAt sets the "created_at" field to the value that was provided on create.
+func (u *AppSMSTemplateUpsertOne) UpdateCreatedAt() *AppSMSTemplateUpsertOne {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.UpdateCreatedAt()
+	})
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *AppSMSTemplateUpsertOne) SetUpdatedAt(v uint32) *AppSMSTemplateUpsertOne {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.SetUpdatedAt(v)
+	})
+}
+
+// AddUpdatedAt adds v to the "updated_at" field.
+func (u *AppSMSTemplateUpsertOne) AddUpdatedAt(v uint32) *AppSMSTemplateUpsertOne {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.AddUpdatedAt(v)
+	})
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *AppSMSTemplateUpsertOne) UpdateUpdatedAt() *AppSMSTemplateUpsertOne {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.UpdateUpdatedAt()
+	})
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (u *AppSMSTemplateUpsertOne) SetDeletedAt(v uint32) *AppSMSTemplateUpsertOne {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.SetDeletedAt(v)
+	})
+}
+
+// AddDeletedAt adds v to the "deleted_at" field.
+func (u *AppSMSTemplateUpsertOne) AddDeletedAt(v uint32) *AppSMSTemplateUpsertOne {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.AddDeletedAt(v)
+	})
+}
+
+// UpdateDeletedAt sets the "deleted_at" field to the value that was provided on create.
+func (u *AppSMSTemplateUpsertOne) UpdateDeletedAt() *AppSMSTemplateUpsertOne {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.UpdateDeletedAt()
+	})
 }
 
 // SetAppID sets the "app_id" field.
@@ -605,48 +730,6 @@ func (u *AppSMSTemplateUpsertOne) SetMessage(v string) *AppSMSTemplateUpsertOne 
 func (u *AppSMSTemplateUpsertOne) UpdateMessage() *AppSMSTemplateUpsertOne {
 	return u.Update(func(s *AppSMSTemplateUpsert) {
 		s.UpdateMessage()
-	})
-}
-
-// SetCreateAt sets the "create_at" field.
-func (u *AppSMSTemplateUpsertOne) SetCreateAt(v uint32) *AppSMSTemplateUpsertOne {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.SetCreateAt(v)
-	})
-}
-
-// AddCreateAt adds v to the "create_at" field.
-func (u *AppSMSTemplateUpsertOne) AddCreateAt(v uint32) *AppSMSTemplateUpsertOne {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.AddCreateAt(v)
-	})
-}
-
-// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
-func (u *AppSMSTemplateUpsertOne) UpdateCreateAt() *AppSMSTemplateUpsertOne {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.UpdateCreateAt()
-	})
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (u *AppSMSTemplateUpsertOne) SetUpdateAt(v uint32) *AppSMSTemplateUpsertOne {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.SetUpdateAt(v)
-	})
-}
-
-// AddUpdateAt adds v to the "update_at" field.
-func (u *AppSMSTemplateUpsertOne) AddUpdateAt(v uint32) *AppSMSTemplateUpsertOne {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.AddUpdateAt(v)
-	})
-}
-
-// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
-func (u *AppSMSTemplateUpsertOne) UpdateUpdateAt() *AppSMSTemplateUpsertOne {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.UpdateUpdateAt()
 	})
 }
 
@@ -782,7 +865,7 @@ func (astcb *AppSMSTemplateCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.AppSMSTemplateUpsert) {
-//			SetAppID(v+v).
+//			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
 //
@@ -866,6 +949,69 @@ func (u *AppSMSTemplateUpsertBulk) Update(set func(*AppSMSTemplateUpsert)) *AppS
 	return u
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (u *AppSMSTemplateUpsertBulk) SetCreatedAt(v uint32) *AppSMSTemplateUpsertBulk {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.SetCreatedAt(v)
+	})
+}
+
+// AddCreatedAt adds v to the "created_at" field.
+func (u *AppSMSTemplateUpsertBulk) AddCreatedAt(v uint32) *AppSMSTemplateUpsertBulk {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.AddCreatedAt(v)
+	})
+}
+
+// UpdateCreatedAt sets the "created_at" field to the value that was provided on create.
+func (u *AppSMSTemplateUpsertBulk) UpdateCreatedAt() *AppSMSTemplateUpsertBulk {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.UpdateCreatedAt()
+	})
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *AppSMSTemplateUpsertBulk) SetUpdatedAt(v uint32) *AppSMSTemplateUpsertBulk {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.SetUpdatedAt(v)
+	})
+}
+
+// AddUpdatedAt adds v to the "updated_at" field.
+func (u *AppSMSTemplateUpsertBulk) AddUpdatedAt(v uint32) *AppSMSTemplateUpsertBulk {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.AddUpdatedAt(v)
+	})
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *AppSMSTemplateUpsertBulk) UpdateUpdatedAt() *AppSMSTemplateUpsertBulk {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.UpdateUpdatedAt()
+	})
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (u *AppSMSTemplateUpsertBulk) SetDeletedAt(v uint32) *AppSMSTemplateUpsertBulk {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.SetDeletedAt(v)
+	})
+}
+
+// AddDeletedAt adds v to the "deleted_at" field.
+func (u *AppSMSTemplateUpsertBulk) AddDeletedAt(v uint32) *AppSMSTemplateUpsertBulk {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.AddDeletedAt(v)
+	})
+}
+
+// UpdateDeletedAt sets the "deleted_at" field to the value that was provided on create.
+func (u *AppSMSTemplateUpsertBulk) UpdateDeletedAt() *AppSMSTemplateUpsertBulk {
+	return u.Update(func(s *AppSMSTemplateUpsert) {
+		s.UpdateDeletedAt()
+	})
+}
+
 // SetAppID sets the "app_id" field.
 func (u *AppSMSTemplateUpsertBulk) SetAppID(v uuid.UUID) *AppSMSTemplateUpsertBulk {
 	return u.Update(func(s *AppSMSTemplateUpsert) {
@@ -933,48 +1079,6 @@ func (u *AppSMSTemplateUpsertBulk) SetMessage(v string) *AppSMSTemplateUpsertBul
 func (u *AppSMSTemplateUpsertBulk) UpdateMessage() *AppSMSTemplateUpsertBulk {
 	return u.Update(func(s *AppSMSTemplateUpsert) {
 		s.UpdateMessage()
-	})
-}
-
-// SetCreateAt sets the "create_at" field.
-func (u *AppSMSTemplateUpsertBulk) SetCreateAt(v uint32) *AppSMSTemplateUpsertBulk {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.SetCreateAt(v)
-	})
-}
-
-// AddCreateAt adds v to the "create_at" field.
-func (u *AppSMSTemplateUpsertBulk) AddCreateAt(v uint32) *AppSMSTemplateUpsertBulk {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.AddCreateAt(v)
-	})
-}
-
-// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
-func (u *AppSMSTemplateUpsertBulk) UpdateCreateAt() *AppSMSTemplateUpsertBulk {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.UpdateCreateAt()
-	})
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (u *AppSMSTemplateUpsertBulk) SetUpdateAt(v uint32) *AppSMSTemplateUpsertBulk {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.SetUpdateAt(v)
-	})
-}
-
-// AddUpdateAt adds v to the "update_at" field.
-func (u *AppSMSTemplateUpsertBulk) AddUpdateAt(v uint32) *AppSMSTemplateUpsertBulk {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.AddUpdateAt(v)
-	})
-}
-
-// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
-func (u *AppSMSTemplateUpsertBulk) UpdateUpdateAt() *AppSMSTemplateUpsertBulk {
-	return u.Update(func(s *AppSMSTemplateUpsert) {
-		s.UpdateUpdateAt()
 	})
 }
 

@@ -1,11 +1,10 @@
 package schema
 
 import (
-	"time"
-
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"github.com/NpoolPlatform/third-manager/pkg/db/mixin"
 
 	"github.com/google/uuid"
 )
@@ -15,8 +14,15 @@ type AppEmailTemplate struct {
 	ent.Schema
 }
 
+func (AppEmailTemplate) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.TimeMixin{},
+	}
+}
+
 // Fields of the AppEmailTemplate.
 func (AppEmailTemplate) Fields() []ent.Field {
+	var maxLen = 8192
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New).
@@ -29,18 +35,7 @@ func (AppEmailTemplate) Fields() []ent.Field {
 		field.JSON("reply_tos", []string{}),
 		field.JSON("cc_tos", []string{}),
 		field.String("subject"),
-		field.String("body").MaxLen(8192),
-		field.Uint32("create_at").
-			DefaultFunc(func() uint32 {
-				return uint32(time.Now().Unix())
-			}),
-		field.Uint32("update_at").
-			DefaultFunc(func() uint32 {
-				return uint32(time.Now().Unix())
-			}).
-			UpdateDefault(func() uint32 {
-				return uint32(time.Now().Unix())
-			}),
+		field.String("body").MaxLen(maxLen),
 	}
 }
 

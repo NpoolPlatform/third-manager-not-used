@@ -1,11 +1,11 @@
-package constant
+package sms
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	tracer "github.com/NpoolPlatform/third-manager/pkg/tracer/contact"
+	tracer "github.com/NpoolPlatform/third-manager/pkg/tracer/template/sms"
 
 	constant "github.com/NpoolPlatform/third-manager/pkg/message/const"
 	commontracer "github.com/NpoolPlatform/third-manager/pkg/tracer"
@@ -14,36 +14,37 @@ import (
 	"go.opentelemetry.io/otel/codes"
 
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
-	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/contact"
+	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/sms"
 	"github.com/NpoolPlatform/third-manager/pkg/db"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appcontact"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appsmstemplate"
 	"github.com/google/uuid"
 )
 
-func CreateSet(c *ent.AppContactCreate, info *npool.ContactReq) *ent.AppContactCreate {
+func CreateSet(c *ent.AppSMSTemplateCreate, info *npool.SMSTemplateReq) *ent.AppSMSTemplateCreate {
 	if info.ID != nil {
 		c.SetID(uuid.MustParse(info.GetID()))
 	}
 	if info.AppID != nil {
 		c.SetAppID(uuid.MustParse(info.GetAppID()))
 	}
+	if info.LangID != nil {
+		c.SetLangID(uuid.MustParse(info.GetLangID()))
+	}
 	if info.UsedFor != nil {
 		c.SetUsedFor(info.GetUsedFor().String())
 	}
-	if info.Account != nil {
-		c.SetAccount(info.GetAccount())
+	if info.Subject != nil {
+		c.SetSubject(info.GetSubject())
 	}
-	if info.AccountType != nil {
-		c.SetAccountType(info.GetAccountType())
+	if info.Message != nil {
+		c.SetMessage(info.GetMessage())
 	}
-	if info.Sender != nil {
-		c.SetSender(info.GetSender())
-	}
+
 	return c
 }
-func Create(ctx context.Context, in *npool.ContactReq) (*ent.AppContact, error) {
-	var info *ent.AppContact
+func Create(ctx context.Context, in *npool.SMSTemplateReq) (*ent.AppSMSTemplate, error) {
+	var info *ent.AppSMSTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Create")
@@ -58,7 +59,7 @@ func Create(ctx context.Context, in *npool.ContactReq) (*ent.AppContact, error) 
 	span = tracer.Trace(span, in)
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		c := CreateSet(cli.AppContact.Create(), in)
+		c := CreateSet(cli.AppSMSTemplate.Create(), in)
 		info, err = c.Save(_ctx)
 		return err
 	})
@@ -69,9 +70,9 @@ func Create(ctx context.Context, in *npool.ContactReq) (*ent.AppContact, error) 
 	return info, nil
 }
 
-func CreateBulk(ctx context.Context, in []*npool.ContactReq) ([]*ent.AppContact, error) {
+func CreateBulk(ctx context.Context, in []*npool.SMSTemplateReq) ([]*ent.AppSMSTemplate, error) {
 	var err error
-	rows := []*ent.AppContact{}
+	rows := []*ent.AppSMSTemplate{}
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "CreateBulk")
 	defer span.End()
@@ -86,11 +87,11 @@ func CreateBulk(ctx context.Context, in []*npool.ContactReq) ([]*ent.AppContact,
 	span = tracer.TraceMany(span, in)
 
 	err = db.WithTx(ctx, func(_ctx context.Context, tx *ent.Tx) error {
-		bulk := make([]*ent.AppContactCreate, len(in))
+		bulk := make([]*ent.AppSMSTemplateCreate, len(in))
 		for i, info := range in {
-			bulk[i] = CreateSet(tx.AppContact.Create(), info)
+			bulk[i] = CreateSet(tx.AppSMSTemplate.Create(), info)
 		}
-		rows, err = tx.AppContact.CreateBulk(bulk...).Save(_ctx)
+		rows, err = tx.AppSMSTemplate.CreateBulk(bulk...).Save(_ctx)
 		return err
 	})
 	if err != nil {
@@ -100,9 +101,9 @@ func CreateBulk(ctx context.Context, in []*npool.ContactReq) ([]*ent.AppContact,
 	return rows, nil
 }
 
-func Update(ctx context.Context, in *npool.ContactReq) (*ent.AppContact, error) {
+func Update(ctx context.Context, in *npool.SMSTemplateReq) (*ent.AppSMSTemplate, error) {
 	var err error
-	var info *ent.AppContact
+	var info *ent.AppSMSTemplate
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Update")
 	defer span.End()
@@ -117,7 +118,7 @@ func Update(ctx context.Context, in *npool.ContactReq) (*ent.AppContact, error) 
 	span = tracer.Trace(span, in)
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		u := UpdateSet(cli.AppContact.UpdateOneID(uuid.MustParse(in.GetID())), in)
+		u := UpdateSet(cli.AppSMSTemplate.UpdateOneID(uuid.MustParse(in.GetID())), in)
 		info, err = u.Save(_ctx)
 		return err
 	})
@@ -128,22 +129,21 @@ func Update(ctx context.Context, in *npool.ContactReq) (*ent.AppContact, error) 
 	return info, nil
 }
 
-func UpdateSet(u *ent.AppContactUpdateOne, in *npool.ContactReq) *ent.AppContactUpdateOne {
-	if in.Account != nil {
-		u.SetAccount(in.GetAccount())
+func UpdateSet(u *ent.AppSMSTemplateUpdateOne, in *npool.SMSTemplateReq) *ent.AppSMSTemplateUpdateOne {
+	if in.LangID != nil {
+		u.SetLangID(uuid.MustParse(in.GetLangID()))
 	}
-	if in.AccountType != nil {
-		u.SetAccountType(in.GetAccountType())
+	if in.Subject != nil {
+		u.SetSubject(in.GetSubject())
 	}
-	if in.Sender != nil {
-		u.SetSender(in.GetSender())
+	if in.Message != nil {
+		u.SetMessage(in.GetMessage())
 	}
-
 	return u
 }
 
-func Row(ctx context.Context, id uuid.UUID) (*ent.AppContact, error) {
-	var info *ent.AppContact
+func Row(ctx context.Context, id uuid.UUID) (*ent.AppSMSTemplate, error) {
+	var info *ent.AppSMSTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Row")
@@ -159,7 +159,7 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.AppContact, error) {
 	span = commontracer.TraceID(span, id.String())
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		info, err = cli.AppContact.Query().Where(appcontact.ID(id)).Only(_ctx)
+		info, err = cli.AppSMSTemplate.Query().Where(appsmstemplate.ID(id)).Only(_ctx)
 		return err
 	})
 	if err != nil {
@@ -170,8 +170,8 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.AppContact, error) {
 }
 
 //nolint:nolintlint,gocyclo
-func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppContactQuery, error) {
-	stm := cli.AppContact.Query()
+func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppSMSTemplateQuery, error) {
+	stm := cli.AppSMSTemplate.Query()
 
 	if conds == nil {
 		return stm, nil
@@ -185,9 +185,9 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppContactQuery, e
 
 		switch conds.GetID().GetOp() {
 		case cruder.EQ:
-			stm.Where(appcontact.ID(id))
+			stm.Where(appsmstemplate.ID(id))
 		default:
-			return nil, fmt.Errorf("invalid contact field")
+			return nil, fmt.Errorf("invalid template/sms field")
 		}
 	}
 
@@ -199,27 +199,27 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppContactQuery, e
 
 		switch conds.GetAppID().GetOp() {
 		case cruder.EQ:
-			stm.Where(appcontact.AppID(id))
+			stm.Where(appsmstemplate.AppID(id))
 		default:
-			return nil, fmt.Errorf("invalid contact field")
+			return nil, fmt.Errorf("invalid template/sms field")
 		}
 	}
 
 	if conds.UsedFor != nil {
 		switch conds.GetUsedFor().GetOp() {
 		case cruder.EQ:
-			stm.Where(appcontact.UsedFor(conds.UsedFor.Value))
+			stm.Where(appsmstemplate.UsedFor(conds.UsedFor.Value))
 		default:
-			return nil, fmt.Errorf("invalid contact field")
+			return nil, fmt.Errorf("invalid template/sms field")
 		}
 	}
 
 	return stm, nil
 }
 
-func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.AppContact, int, error) {
+func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.AppSMSTemplate, int, error) {
 	var err error
-	rows := []*ent.AppContact{}
+	rows := []*ent.AppSMSTemplate{}
 	var total int
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Rows")
@@ -247,7 +247,7 @@ func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.Ap
 
 		rows, err = stm.
 			Offset(offset).
-			Order(ent.Desc(appcontact.FieldUpdatedAt)).
+			Order(ent.Desc(appsmstemplate.FieldUpdatedAt)).
 			Limit(limit).
 			All(_ctx)
 		if err != nil {
@@ -263,8 +263,8 @@ func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.Ap
 	return rows, total, nil
 }
 
-func RowOnly(ctx context.Context, conds *npool.Conds) (*ent.AppContact, error) {
-	var info *ent.AppContact
+func RowOnly(ctx context.Context, conds *npool.Conds) (*ent.AppSMSTemplate, error) {
+	var info *ent.AppSMSTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "RowOnly")
@@ -354,7 +354,7 @@ func Exist(ctx context.Context, id uuid.UUID) (bool, error) {
 	exist := false
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		exist, err = cli.AppContact.Query().Where(appcontact.ID(id)).Exist(_ctx)
+		exist, err = cli.AppSMSTemplate.Query().Where(appsmstemplate.ID(id)).Exist(_ctx)
 		return err
 	})
 	if err != nil {
@@ -400,8 +400,8 @@ func ExistConds(ctx context.Context, conds *npool.Conds) (bool, error) {
 	return exist, nil
 }
 
-func Delete(ctx context.Context, id uuid.UUID) (*ent.AppContact, error) {
-	var info *ent.AppContact
+func Delete(ctx context.Context, id uuid.UUID) (*ent.AppSMSTemplate, error) {
+	var info *ent.AppSMSTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Delete")
@@ -417,7 +417,7 @@ func Delete(ctx context.Context, id uuid.UUID) (*ent.AppContact, error) {
 	span = commontracer.TraceID(span, id.String())
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		info, err = cli.AppContact.UpdateOneID(id).
+		info, err = cli.AppSMSTemplate.UpdateOneID(id).
 			SetDeletedAt(uint32(time.Now().Unix())).
 			Save(_ctx)
 		return err

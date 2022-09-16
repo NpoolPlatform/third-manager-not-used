@@ -1,11 +1,10 @@
 package schema
 
 import (
-	"time"
-
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"github.com/NpoolPlatform/third-manager/pkg/db/mixin"
 
 	"github.com/google/uuid"
 )
@@ -13,6 +12,12 @@ import (
 // AppSMSTemplate holds the schema definition for the AppSMSTemplate entity.
 type AppSMSTemplate struct {
 	ent.Schema
+}
+
+func (AppSMSTemplate) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.TimeMixin{},
+	}
 }
 
 // Fields of the AppSMSTemplate.
@@ -26,17 +31,6 @@ func (AppSMSTemplate) Fields() []ent.Field {
 		field.String("used_for").Default(""),
 		field.String("subject").Default(""),
 		field.String("message").Default(""),
-		field.Uint32("create_at").
-			DefaultFunc(func() uint32 {
-				return uint32(time.Now().Unix())
-			}),
-		field.Uint32("update_at").
-			DefaultFunc(func() uint32 {
-				return uint32(time.Now().Unix())
-			}).
-			UpdateDefault(func() uint32 {
-				return uint32(time.Now().Unix())
-			}),
 	}
 }
 

@@ -23,6 +23,48 @@ type AppEmailTemplateCreate struct {
 	conflict []sql.ConflictOption
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (aetc *AppEmailTemplateCreate) SetCreatedAt(u uint32) *AppEmailTemplateCreate {
+	aetc.mutation.SetCreatedAt(u)
+	return aetc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (aetc *AppEmailTemplateCreate) SetNillableCreatedAt(u *uint32) *AppEmailTemplateCreate {
+	if u != nil {
+		aetc.SetCreatedAt(*u)
+	}
+	return aetc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (aetc *AppEmailTemplateCreate) SetUpdatedAt(u uint32) *AppEmailTemplateCreate {
+	aetc.mutation.SetUpdatedAt(u)
+	return aetc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (aetc *AppEmailTemplateCreate) SetNillableUpdatedAt(u *uint32) *AppEmailTemplateCreate {
+	if u != nil {
+		aetc.SetUpdatedAt(*u)
+	}
+	return aetc
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (aetc *AppEmailTemplateCreate) SetDeletedAt(u uint32) *AppEmailTemplateCreate {
+	aetc.mutation.SetDeletedAt(u)
+	return aetc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (aetc *AppEmailTemplateCreate) SetNillableDeletedAt(u *uint32) *AppEmailTemplateCreate {
+	if u != nil {
+		aetc.SetDeletedAt(*u)
+	}
+	return aetc
+}
+
 // SetAppID sets the "app_id" field.
 func (aetc *AppEmailTemplateCreate) SetAppID(u uuid.UUID) *AppEmailTemplateCreate {
 	aetc.mutation.SetAppID(u)
@@ -77,34 +119,6 @@ func (aetc *AppEmailTemplateCreate) SetBody(s string) *AppEmailTemplateCreate {
 	return aetc
 }
 
-// SetCreateAt sets the "create_at" field.
-func (aetc *AppEmailTemplateCreate) SetCreateAt(u uint32) *AppEmailTemplateCreate {
-	aetc.mutation.SetCreateAt(u)
-	return aetc
-}
-
-// SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aetc *AppEmailTemplateCreate) SetNillableCreateAt(u *uint32) *AppEmailTemplateCreate {
-	if u != nil {
-		aetc.SetCreateAt(*u)
-	}
-	return aetc
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (aetc *AppEmailTemplateCreate) SetUpdateAt(u uint32) *AppEmailTemplateCreate {
-	aetc.mutation.SetUpdateAt(u)
-	return aetc
-}
-
-// SetNillableUpdateAt sets the "update_at" field if the given value is not nil.
-func (aetc *AppEmailTemplateCreate) SetNillableUpdateAt(u *uint32) *AppEmailTemplateCreate {
-	if u != nil {
-		aetc.SetUpdateAt(*u)
-	}
-	return aetc
-}
-
 // SetID sets the "id" field.
 func (aetc *AppEmailTemplateCreate) SetID(u uuid.UUID) *AppEmailTemplateCreate {
 	aetc.mutation.SetID(u)
@@ -130,7 +144,9 @@ func (aetc *AppEmailTemplateCreate) Save(ctx context.Context) (*AppEmailTemplate
 		err  error
 		node *AppEmailTemplate
 	)
-	aetc.defaults()
+	if err := aetc.defaults(); err != nil {
+		return nil, err
+	}
 	if len(aetc.hooks) == 0 {
 		if err = aetc.check(); err != nil {
 			return nil, err
@@ -195,23 +211,49 @@ func (aetc *AppEmailTemplateCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (aetc *AppEmailTemplateCreate) defaults() {
-	if _, ok := aetc.mutation.CreateAt(); !ok {
-		v := appemailtemplate.DefaultCreateAt()
-		aetc.mutation.SetCreateAt(v)
+func (aetc *AppEmailTemplateCreate) defaults() error {
+	if _, ok := aetc.mutation.CreatedAt(); !ok {
+		if appemailtemplate.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized appemailtemplate.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := appemailtemplate.DefaultCreatedAt()
+		aetc.mutation.SetCreatedAt(v)
 	}
-	if _, ok := aetc.mutation.UpdateAt(); !ok {
-		v := appemailtemplate.DefaultUpdateAt()
-		aetc.mutation.SetUpdateAt(v)
+	if _, ok := aetc.mutation.UpdatedAt(); !ok {
+		if appemailtemplate.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized appemailtemplate.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := appemailtemplate.DefaultUpdatedAt()
+		aetc.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := aetc.mutation.DeletedAt(); !ok {
+		if appemailtemplate.DefaultDeletedAt == nil {
+			return fmt.Errorf("ent: uninitialized appemailtemplate.DefaultDeletedAt (forgotten import ent/runtime?)")
+		}
+		v := appemailtemplate.DefaultDeletedAt()
+		aetc.mutation.SetDeletedAt(v)
 	}
 	if _, ok := aetc.mutation.ID(); !ok {
+		if appemailtemplate.DefaultID == nil {
+			return fmt.Errorf("ent: uninitialized appemailtemplate.DefaultID (forgotten import ent/runtime?)")
+		}
 		v := appemailtemplate.DefaultID()
 		aetc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (aetc *AppEmailTemplateCreate) check() error {
+	if _, ok := aetc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "AppEmailTemplate.created_at"`)}
+	}
+	if _, ok := aetc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "AppEmailTemplate.updated_at"`)}
+	}
+	if _, ok := aetc.mutation.DeletedAt(); !ok {
+		return &ValidationError{Name: "deleted_at", err: errors.New(`ent: missing required field "AppEmailTemplate.deleted_at"`)}
+	}
 	if _, ok := aetc.mutation.AppID(); !ok {
 		return &ValidationError{Name: "app_id", err: errors.New(`ent: missing required field "AppEmailTemplate.app_id"`)}
 	}
@@ -243,12 +285,6 @@ func (aetc *AppEmailTemplateCreate) check() error {
 		if err := appemailtemplate.BodyValidator(v); err != nil {
 			return &ValidationError{Name: "body", err: fmt.Errorf(`ent: validator failed for field "AppEmailTemplate.body": %w`, err)}
 		}
-	}
-	if _, ok := aetc.mutation.CreateAt(); !ok {
-		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "AppEmailTemplate.create_at"`)}
-	}
-	if _, ok := aetc.mutation.UpdateAt(); !ok {
-		return &ValidationError{Name: "update_at", err: errors.New(`ent: missing required field "AppEmailTemplate.update_at"`)}
 	}
 	return nil
 }
@@ -286,6 +322,30 @@ func (aetc *AppEmailTemplateCreate) createSpec() (*AppEmailTemplate, *sqlgraph.C
 	if id, ok := aetc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := aetc.mutation.CreatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appemailtemplate.FieldCreatedAt,
+		})
+		_node.CreatedAt = value
+	}
+	if value, ok := aetc.mutation.UpdatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appemailtemplate.FieldUpdatedAt,
+		})
+		_node.UpdatedAt = value
+	}
+	if value, ok := aetc.mutation.DeletedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: appemailtemplate.FieldDeletedAt,
+		})
+		_node.DeletedAt = value
 	}
 	if value, ok := aetc.mutation.AppID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -359,22 +419,6 @@ func (aetc *AppEmailTemplateCreate) createSpec() (*AppEmailTemplate, *sqlgraph.C
 		})
 		_node.Body = value
 	}
-	if value, ok := aetc.mutation.CreateAt(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appemailtemplate.FieldCreateAt,
-		})
-		_node.CreateAt = value
-	}
-	if value, ok := aetc.mutation.UpdateAt(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: appemailtemplate.FieldUpdateAt,
-		})
-		_node.UpdateAt = value
-	}
 	return _node, _spec
 }
 
@@ -382,7 +426,7 @@ func (aetc *AppEmailTemplateCreate) createSpec() (*AppEmailTemplate, *sqlgraph.C
 // of the `INSERT` statement. For example:
 //
 //	client.AppEmailTemplate.Create().
-//		SetAppID(v).
+//		SetCreatedAt(v).
 //		OnConflict(
 //			// Update the row with the new values
 //			// the was proposed for insertion.
@@ -391,7 +435,7 @@ func (aetc *AppEmailTemplateCreate) createSpec() (*AppEmailTemplate, *sqlgraph.C
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.AppEmailTemplateUpsert) {
-//			SetAppID(v+v).
+//			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
 //
@@ -428,6 +472,60 @@ type (
 		*sql.UpdateSet
 	}
 )
+
+// SetCreatedAt sets the "created_at" field.
+func (u *AppEmailTemplateUpsert) SetCreatedAt(v uint32) *AppEmailTemplateUpsert {
+	u.Set(appemailtemplate.FieldCreatedAt, v)
+	return u
+}
+
+// UpdateCreatedAt sets the "created_at" field to the value that was provided on create.
+func (u *AppEmailTemplateUpsert) UpdateCreatedAt() *AppEmailTemplateUpsert {
+	u.SetExcluded(appemailtemplate.FieldCreatedAt)
+	return u
+}
+
+// AddCreatedAt adds v to the "created_at" field.
+func (u *AppEmailTemplateUpsert) AddCreatedAt(v uint32) *AppEmailTemplateUpsert {
+	u.Add(appemailtemplate.FieldCreatedAt, v)
+	return u
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *AppEmailTemplateUpsert) SetUpdatedAt(v uint32) *AppEmailTemplateUpsert {
+	u.Set(appemailtemplate.FieldUpdatedAt, v)
+	return u
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *AppEmailTemplateUpsert) UpdateUpdatedAt() *AppEmailTemplateUpsert {
+	u.SetExcluded(appemailtemplate.FieldUpdatedAt)
+	return u
+}
+
+// AddUpdatedAt adds v to the "updated_at" field.
+func (u *AppEmailTemplateUpsert) AddUpdatedAt(v uint32) *AppEmailTemplateUpsert {
+	u.Add(appemailtemplate.FieldUpdatedAt, v)
+	return u
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (u *AppEmailTemplateUpsert) SetDeletedAt(v uint32) *AppEmailTemplateUpsert {
+	u.Set(appemailtemplate.FieldDeletedAt, v)
+	return u
+}
+
+// UpdateDeletedAt sets the "deleted_at" field to the value that was provided on create.
+func (u *AppEmailTemplateUpsert) UpdateDeletedAt() *AppEmailTemplateUpsert {
+	u.SetExcluded(appemailtemplate.FieldDeletedAt)
+	return u
+}
+
+// AddDeletedAt adds v to the "deleted_at" field.
+func (u *AppEmailTemplateUpsert) AddDeletedAt(v uint32) *AppEmailTemplateUpsert {
+	u.Add(appemailtemplate.FieldDeletedAt, v)
+	return u
+}
 
 // SetAppID sets the "app_id" field.
 func (u *AppEmailTemplateUpsert) SetAppID(v uuid.UUID) *AppEmailTemplateUpsert {
@@ -537,42 +635,6 @@ func (u *AppEmailTemplateUpsert) UpdateBody() *AppEmailTemplateUpsert {
 	return u
 }
 
-// SetCreateAt sets the "create_at" field.
-func (u *AppEmailTemplateUpsert) SetCreateAt(v uint32) *AppEmailTemplateUpsert {
-	u.Set(appemailtemplate.FieldCreateAt, v)
-	return u
-}
-
-// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
-func (u *AppEmailTemplateUpsert) UpdateCreateAt() *AppEmailTemplateUpsert {
-	u.SetExcluded(appemailtemplate.FieldCreateAt)
-	return u
-}
-
-// AddCreateAt adds v to the "create_at" field.
-func (u *AppEmailTemplateUpsert) AddCreateAt(v uint32) *AppEmailTemplateUpsert {
-	u.Add(appemailtemplate.FieldCreateAt, v)
-	return u
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (u *AppEmailTemplateUpsert) SetUpdateAt(v uint32) *AppEmailTemplateUpsert {
-	u.Set(appemailtemplate.FieldUpdateAt, v)
-	return u
-}
-
-// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
-func (u *AppEmailTemplateUpsert) UpdateUpdateAt() *AppEmailTemplateUpsert {
-	u.SetExcluded(appemailtemplate.FieldUpdateAt)
-	return u
-}
-
-// AddUpdateAt adds v to the "update_at" field.
-func (u *AppEmailTemplateUpsert) AddUpdateAt(v uint32) *AppEmailTemplateUpsert {
-	u.Add(appemailtemplate.FieldUpdateAt, v)
-	return u
-}
-
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -621,6 +683,69 @@ func (u *AppEmailTemplateUpsertOne) Update(set func(*AppEmailTemplateUpsert)) *A
 		set(&AppEmailTemplateUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (u *AppEmailTemplateUpsertOne) SetCreatedAt(v uint32) *AppEmailTemplateUpsertOne {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.SetCreatedAt(v)
+	})
+}
+
+// AddCreatedAt adds v to the "created_at" field.
+func (u *AppEmailTemplateUpsertOne) AddCreatedAt(v uint32) *AppEmailTemplateUpsertOne {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.AddCreatedAt(v)
+	})
+}
+
+// UpdateCreatedAt sets the "created_at" field to the value that was provided on create.
+func (u *AppEmailTemplateUpsertOne) UpdateCreatedAt() *AppEmailTemplateUpsertOne {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.UpdateCreatedAt()
+	})
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *AppEmailTemplateUpsertOne) SetUpdatedAt(v uint32) *AppEmailTemplateUpsertOne {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.SetUpdatedAt(v)
+	})
+}
+
+// AddUpdatedAt adds v to the "updated_at" field.
+func (u *AppEmailTemplateUpsertOne) AddUpdatedAt(v uint32) *AppEmailTemplateUpsertOne {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.AddUpdatedAt(v)
+	})
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *AppEmailTemplateUpsertOne) UpdateUpdatedAt() *AppEmailTemplateUpsertOne {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.UpdateUpdatedAt()
+	})
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (u *AppEmailTemplateUpsertOne) SetDeletedAt(v uint32) *AppEmailTemplateUpsertOne {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.SetDeletedAt(v)
+	})
+}
+
+// AddDeletedAt adds v to the "deleted_at" field.
+func (u *AppEmailTemplateUpsertOne) AddDeletedAt(v uint32) *AppEmailTemplateUpsertOne {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.AddDeletedAt(v)
+	})
+}
+
+// UpdateDeletedAt sets the "deleted_at" field to the value that was provided on create.
+func (u *AppEmailTemplateUpsertOne) UpdateDeletedAt() *AppEmailTemplateUpsertOne {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.UpdateDeletedAt()
+	})
 }
 
 // SetAppID sets the "app_id" field.
@@ -746,48 +871,6 @@ func (u *AppEmailTemplateUpsertOne) SetBody(v string) *AppEmailTemplateUpsertOne
 func (u *AppEmailTemplateUpsertOne) UpdateBody() *AppEmailTemplateUpsertOne {
 	return u.Update(func(s *AppEmailTemplateUpsert) {
 		s.UpdateBody()
-	})
-}
-
-// SetCreateAt sets the "create_at" field.
-func (u *AppEmailTemplateUpsertOne) SetCreateAt(v uint32) *AppEmailTemplateUpsertOne {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.SetCreateAt(v)
-	})
-}
-
-// AddCreateAt adds v to the "create_at" field.
-func (u *AppEmailTemplateUpsertOne) AddCreateAt(v uint32) *AppEmailTemplateUpsertOne {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.AddCreateAt(v)
-	})
-}
-
-// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
-func (u *AppEmailTemplateUpsertOne) UpdateCreateAt() *AppEmailTemplateUpsertOne {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.UpdateCreateAt()
-	})
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (u *AppEmailTemplateUpsertOne) SetUpdateAt(v uint32) *AppEmailTemplateUpsertOne {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.SetUpdateAt(v)
-	})
-}
-
-// AddUpdateAt adds v to the "update_at" field.
-func (u *AppEmailTemplateUpsertOne) AddUpdateAt(v uint32) *AppEmailTemplateUpsertOne {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.AddUpdateAt(v)
-	})
-}
-
-// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
-func (u *AppEmailTemplateUpsertOne) UpdateUpdateAt() *AppEmailTemplateUpsertOne {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.UpdateUpdateAt()
 	})
 }
 
@@ -923,7 +1006,7 @@ func (aetcb *AppEmailTemplateCreateBulk) ExecX(ctx context.Context) {
 //		// Override some of the fields with custom
 //		// update values.
 //		Update(func(u *ent.AppEmailTemplateUpsert) {
-//			SetAppID(v+v).
+//			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
 //
@@ -1005,6 +1088,69 @@ func (u *AppEmailTemplateUpsertBulk) Update(set func(*AppEmailTemplateUpsert)) *
 		set(&AppEmailTemplateUpsert{UpdateSet: update})
 	}))
 	return u
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (u *AppEmailTemplateUpsertBulk) SetCreatedAt(v uint32) *AppEmailTemplateUpsertBulk {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.SetCreatedAt(v)
+	})
+}
+
+// AddCreatedAt adds v to the "created_at" field.
+func (u *AppEmailTemplateUpsertBulk) AddCreatedAt(v uint32) *AppEmailTemplateUpsertBulk {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.AddCreatedAt(v)
+	})
+}
+
+// UpdateCreatedAt sets the "created_at" field to the value that was provided on create.
+func (u *AppEmailTemplateUpsertBulk) UpdateCreatedAt() *AppEmailTemplateUpsertBulk {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.UpdateCreatedAt()
+	})
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *AppEmailTemplateUpsertBulk) SetUpdatedAt(v uint32) *AppEmailTemplateUpsertBulk {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.SetUpdatedAt(v)
+	})
+}
+
+// AddUpdatedAt adds v to the "updated_at" field.
+func (u *AppEmailTemplateUpsertBulk) AddUpdatedAt(v uint32) *AppEmailTemplateUpsertBulk {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.AddUpdatedAt(v)
+	})
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *AppEmailTemplateUpsertBulk) UpdateUpdatedAt() *AppEmailTemplateUpsertBulk {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.UpdateUpdatedAt()
+	})
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (u *AppEmailTemplateUpsertBulk) SetDeletedAt(v uint32) *AppEmailTemplateUpsertBulk {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.SetDeletedAt(v)
+	})
+}
+
+// AddDeletedAt adds v to the "deleted_at" field.
+func (u *AppEmailTemplateUpsertBulk) AddDeletedAt(v uint32) *AppEmailTemplateUpsertBulk {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.AddDeletedAt(v)
+	})
+}
+
+// UpdateDeletedAt sets the "deleted_at" field to the value that was provided on create.
+func (u *AppEmailTemplateUpsertBulk) UpdateDeletedAt() *AppEmailTemplateUpsertBulk {
+	return u.Update(func(s *AppEmailTemplateUpsert) {
+		s.UpdateDeletedAt()
+	})
 }
 
 // SetAppID sets the "app_id" field.
@@ -1130,48 +1276,6 @@ func (u *AppEmailTemplateUpsertBulk) SetBody(v string) *AppEmailTemplateUpsertBu
 func (u *AppEmailTemplateUpsertBulk) UpdateBody() *AppEmailTemplateUpsertBulk {
 	return u.Update(func(s *AppEmailTemplateUpsert) {
 		s.UpdateBody()
-	})
-}
-
-// SetCreateAt sets the "create_at" field.
-func (u *AppEmailTemplateUpsertBulk) SetCreateAt(v uint32) *AppEmailTemplateUpsertBulk {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.SetCreateAt(v)
-	})
-}
-
-// AddCreateAt adds v to the "create_at" field.
-func (u *AppEmailTemplateUpsertBulk) AddCreateAt(v uint32) *AppEmailTemplateUpsertBulk {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.AddCreateAt(v)
-	})
-}
-
-// UpdateCreateAt sets the "create_at" field to the value that was provided on create.
-func (u *AppEmailTemplateUpsertBulk) UpdateCreateAt() *AppEmailTemplateUpsertBulk {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.UpdateCreateAt()
-	})
-}
-
-// SetUpdateAt sets the "update_at" field.
-func (u *AppEmailTemplateUpsertBulk) SetUpdateAt(v uint32) *AppEmailTemplateUpsertBulk {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.SetUpdateAt(v)
-	})
-}
-
-// AddUpdateAt adds v to the "update_at" field.
-func (u *AppEmailTemplateUpsertBulk) AddUpdateAt(v uint32) *AppEmailTemplateUpsertBulk {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.AddUpdateAt(v)
-	})
-}
-
-// UpdateUpdateAt sets the "update_at" field to the value that was provided on create.
-func (u *AppEmailTemplateUpsertBulk) UpdateUpdateAt() *AppEmailTemplateUpsertBulk {
-	return u.Update(func(s *AppEmailTemplateUpsert) {
-		s.UpdateUpdateAt()
 	})
 }
 

@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -256,12 +257,12 @@ func (aetq *AppEmailTemplateQuery) Clone() *AppEmailTemplateQuery {
 // Example:
 //
 //	var v []struct {
-//		AppID uuid.UUID `json:"app_id,omitempty"`
+//		CreatedAt uint32 `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.AppEmailTemplate.Query().
-//		GroupBy(appemailtemplate.FieldAppID).
+//		GroupBy(appemailtemplate.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -285,11 +286,11 @@ func (aetq *AppEmailTemplateQuery) GroupBy(field string, fields ...string) *AppE
 // Example:
 //
 //	var v []struct {
-//		AppID uuid.UUID `json:"app_id,omitempty"`
+//		CreatedAt uint32 `json:"created_at,omitempty"`
 //	}
 //
 //	client.AppEmailTemplate.Query().
-//		Select(appemailtemplate.FieldAppID).
+//		Select(appemailtemplate.FieldCreatedAt).
 //		Scan(ctx, &v)
 //
 func (aetq *AppEmailTemplateQuery) Select(fields ...string) *AppEmailTemplateSelect {
@@ -312,6 +313,12 @@ func (aetq *AppEmailTemplateQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		aetq.sql = prev
+	}
+	if appemailtemplate.Policy == nil {
+		return errors.New("ent: uninitialized appemailtemplate.Policy (forgotten import ent/runtime?)")
+	}
+	if err := appemailtemplate.Policy.EvalQuery(ctx, aetq); err != nil {
+		return err
 	}
 	return nil
 }

@@ -1,8 +1,9 @@
-package constant
+package sms
 
 import (
 	"context"
 	"fmt"
+
 	"os"
 	"strconv"
 	"testing"
@@ -12,7 +13,7 @@ import (
 
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	"github.com/NpoolPlatform/message/npool"
-	"github.com/NpoolPlatform/message/npool/third/mgr/v1/contact"
+	"github.com/NpoolPlatform/message/npool/third/mgr/v1/template/sms"
 	"github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 
 	"github.com/google/uuid"
@@ -29,87 +30,89 @@ func init() {
 	}
 }
 
-var entAppContact = ent.AppContact{
-	ID:          uuid.New(),
-	AppID:       uuid.New(),
-	UsedFor:     usedfor.UsedFor_Signin.String(),
-	Sender:      uuid.NewString(),
-	Account:     uuid.NewString(),
-	AccountType: uuid.NewString(),
+var entAppSMSTemplate = ent.AppSMSTemplate{
+	ID:      uuid.New(),
+	AppID:   uuid.New(),
+	LangID:  uuid.New(),
+	UsedFor: usedfor.UsedFor_Signin.String(),
+	Subject: uuid.NewString(),
+	Message: uuid.NewString(),
 }
 
 var (
-	id         = entAppContact.ID.String()
-	appID      = entAppContact.AppID.String()
-	usedFor    = usedfor.UsedFor_Signin
-	appContact = contact.ContactReq{
-		ID:          &id,
-		AppID:       &appID,
-		UsedFor:     &usedFor,
-		Account:     &entAppContact.Account,
-		AccountType: &entAppContact.AccountType,
-		Sender:      &entAppContact.Sender,
+	id             = entAppSMSTemplate.ID.String()
+	appID          = entAppSMSTemplate.AppID.String()
+	langID         = entAppSMSTemplate.LangID.String()
+	usedFor        = usedfor.UsedFor_Signin
+	appSMSTemplate = sms.SMSTemplateReq{
+		ID:      &id,
+		AppID:   &appID,
+		LangID:  &langID,
+		UsedFor: &usedFor,
+		Subject: &entAppSMSTemplate.Subject,
+		Message: &entAppSMSTemplate.Message,
 	}
 )
 
-var info *ent.AppContact
+var info *ent.AppSMSTemplate
 
-func rowToObject(row *ent.AppContact) *ent.AppContact {
-	return &ent.AppContact{
-		ID:          row.ID,
-		CreatedAt:   row.CreatedAt,
-		AppID:       row.AppID,
-		UsedFor:     row.UsedFor,
-		Sender:      row.Sender,
-		Account:     row.Account,
-		AccountType: row.AccountType,
+func rowToObject(row *ent.AppSMSTemplate) *ent.AppSMSTemplate {
+	return &ent.AppSMSTemplate{
+		ID:        row.ID,
+		CreatedAt: row.CreatedAt,
+		AppID:     row.AppID,
+		LangID:    row.LangID,
+		UsedFor:   row.UsedFor,
+		Subject:   row.Subject,
+		Message:   row.Message,
 	}
 }
 
 func create(t *testing.T) {
 	var err error
-	info, err = Create(context.Background(), &appContact)
+	info, err = Create(context.Background(), &appSMSTemplate)
 	if assert.Nil(t, err) {
 		if assert.NotEqual(t, info.ID, uuid.UUID{}.String()) {
-			entAppContact.ID = info.ID
-			entAppContact.CreatedAt = info.CreatedAt
+			entAppSMSTemplate.ID = info.ID
+			entAppSMSTemplate.CreatedAt = info.CreatedAt
 		}
-		assert.Equal(t, rowToObject(info), &entAppContact)
+		assert.Equal(t, rowToObject(info), &entAppSMSTemplate)
 	}
 }
 
 func createBulk(t *testing.T) {
-	entApp := []ent.AppContact{
+	entApp := []ent.AppSMSTemplate{
 		{
-			ID:          uuid.New(),
-			AppID:       uuid.New(),
-			UsedFor:     usedfor.UsedFor_Signin.String(),
-			Sender:      uuid.NewString(),
-			Account:     uuid.NewString(),
-			AccountType: uuid.NewString(),
+			ID:      uuid.New(),
+			AppID:   uuid.New(),
+			LangID:  uuid.New(),
+			UsedFor: usedfor.UsedFor_Signin.String(),
+			Subject: uuid.NewString(),
+			Message: uuid.NewString(),
 		},
 		{
-			ID:          uuid.New(),
-			AppID:       uuid.New(),
-			UsedFor:     usedfor.UsedFor_Signin.String(),
-			Sender:      uuid.NewString(),
-			Account:     uuid.NewString(),
-			AccountType: uuid.NewString(),
+			ID:      uuid.New(),
+			AppID:   uuid.New(),
+			LangID:  uuid.New(),
+			UsedFor: usedfor.UsedFor_Signin.String(),
+			Subject: uuid.NewString(),
+			Message: uuid.NewString(),
 		},
 	}
 
-	apps := []*contact.ContactReq{}
+	apps := []*sms.SMSTemplateReq{}
 	for key := range entApp {
 		id := entApp[key].ID.String()
-		appID = entAppContact.AppID.String()
+		appID = entApp[key].AppID.String()
+		langID := entApp[key].LangID.String()
 		usedFor = usedfor.UsedFor_Signin
-		apps = append(apps, &contact.ContactReq{
-			ID:          &id,
-			AppID:       &appID,
-			UsedFor:     &usedFor,
-			Account:     &entApp[key].Account,
-			AccountType: &entApp[key].AccountType,
-			Sender:      &entApp[key].Sender,
+		apps = append(apps, &sms.SMSTemplateReq{
+			ID:      &id,
+			AppID:   &appID,
+			LangID:  &langID,
+			UsedFor: &usedFor,
+			Subject: &entApp[key].Subject,
+			Message: &entApp[key].Message,
 		})
 	}
 	infos, err := CreateBulk(context.Background(), apps)
@@ -122,9 +125,9 @@ func createBulk(t *testing.T) {
 
 func update(t *testing.T) {
 	var err error
-	info, err = Update(context.Background(), &appContact)
+	info, err = Update(context.Background(), &appSMSTemplate)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppContact)
+		assert.Equal(t, rowToObject(info), &entAppSMSTemplate)
 	}
 }
 
@@ -132,13 +135,13 @@ func row(t *testing.T) {
 	var err error
 	info, err = Row(context.Background(), info.ID)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppContact)
+		assert.Equal(t, rowToObject(info), &entAppSMSTemplate)
 	}
 }
 
 func rows(t *testing.T) {
 	infos, total, err := Rows(context.Background(),
-		&contact.Conds{
+		&sms.Conds{
 			ID: &npool.StringVal{
 				Value: info.ID.String(),
 				Op:    cruder.EQ,
@@ -146,27 +149,27 @@ func rows(t *testing.T) {
 		}, 0, 0)
 	if assert.Nil(t, err) {
 		assert.Equal(t, total, 1)
-		assert.Equal(t, rowToObject(infos[0]), &entAppContact)
+		assert.Equal(t, rowToObject(infos[0]), &entAppSMSTemplate)
 	}
 }
 
 func rowOnly(t *testing.T) {
 	var err error
 	info, err = RowOnly(context.Background(),
-		&contact.Conds{
+		&sms.Conds{
 			ID: &npool.StringVal{
 				Value: info.ID.String(),
 				Op:    cruder.EQ,
 			},
 		})
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppContact)
+		assert.Equal(t, rowToObject(info), &entAppSMSTemplate)
 	}
 }
 
 func count(t *testing.T) {
 	count, err := Count(context.Background(),
-		&contact.Conds{
+		&sms.Conds{
 			ID: &npool.StringVal{
 				Value: info.ID.String(),
 				Op:    cruder.EQ,
@@ -187,7 +190,7 @@ func exist(t *testing.T) {
 
 func existConds(t *testing.T) {
 	exist, err := ExistConds(context.Background(),
-		&contact.Conds{
+		&sms.Conds{
 			ID: &npool.StringVal{
 				Value: info.ID.String(),
 				Op:    cruder.EQ,
@@ -202,7 +205,7 @@ func existConds(t *testing.T) {
 func deleteT(t *testing.T) {
 	info, err := Delete(context.Background(), info.ID)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppContact)
+		assert.Equal(t, rowToObject(info), &entAppSMSTemplate)
 	}
 }
 
