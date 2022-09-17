@@ -115,12 +115,13 @@ func migrationThirdGateway(ctx context.Context) (err error) {
 
 	gwCli := gwent.NewClient(gwent.Driver(entsql.OpenDB(dialect.MySQL, thirdGW)))
 
-	defer func() {
-		logger.Sugar().Infow("Migrate appContacts", "Done", "...", "error", err)
-	}()
-
 	if len(appContacts) == 0 {
 		logger.Sugar().Infow("Migrate appContacts", "Start", "...")
+
+		defer func() {
+			logger.Sugar().Infow("Migrate appContacts", "Done", "...", "error", err)
+		}()
+
 		appContactInfos, err := gwCli.
 			AppContact.
 			Query().
@@ -158,6 +159,10 @@ func migrationThirdGateway(ctx context.Context) (err error) {
 	if len(appSMSTemplates) == 0 {
 		logger.Sugar().Infow("Migrate appSMSTemplates", "Start", "...")
 
+		defer func() {
+			logger.Sugar().Infow("Migrate appSMSTemplates", "Done", "...", "error", err)
+		}()
+
 		appSMSTemplateInfos, err := gwCli.
 			AppSMSTemplate.
 			Query().
@@ -191,6 +196,11 @@ func migrationThirdGateway(ctx context.Context) (err error) {
 
 	if len(appEmailTemplates) == 0 {
 		logger.Sugar().Infow("Migrate appEmailTemplates", "Start", "...")
+
+		defer func() {
+			logger.Sugar().Infow("Migrate appSMSTemplates", "Done", "...", "error", err)
+		}()
+
 		appEmailTemplateInfos, err := gwCli.
 			AppEmailTemplate.
 			Query().
