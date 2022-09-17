@@ -14,24 +14,17 @@ var (
 		{Name: "created_at", Type: field.TypeUint32},
 		{Name: "updated_at", Type: field.TypeUint32},
 		{Name: "deleted_at", Type: field.TypeUint32},
-		{Name: "app_id", Type: field.TypeUUID},
-		{Name: "used_for", Type: field.TypeString, Size: 32, Default: "DefaultUsedFor"},
-		{Name: "sender", Type: field.TypeString, Default: ""},
-		{Name: "account", Type: field.TypeString, Default: ""},
-		{Name: "account_type", Type: field.TypeString, Default: ""},
+		{Name: "app_id", Type: field.TypeUUID, Nullable: true},
+		{Name: "used_for", Type: field.TypeString, Nullable: true, Size: 32, Default: "DefaultUsedFor"},
+		{Name: "sender", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "account", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "account_type", Type: field.TypeString, Nullable: true, Default: ""},
 	}
 	// AppContactsTable holds the schema information for the "app_contacts" table.
 	AppContactsTable = &schema.Table{
 		Name:       "app_contacts",
 		Columns:    AppContactsColumns,
 		PrimaryKey: []*schema.Column{AppContactsColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "appcontact_app_id_account_used_for_account_type",
-				Unique:  true,
-				Columns: []*schema.Column{AppContactsColumns[4], AppContactsColumns[7], AppContactsColumns[5], AppContactsColumns[8]},
-			},
-		},
 	}
 	// AppEmailTemplatesColumns holds the columns for the "app_email_templates" table.
 	AppEmailTemplatesColumns = []*schema.Column{
@@ -47,7 +40,7 @@ var (
 		{Name: "reply_tos", Type: field.TypeJSON},
 		{Name: "cc_tos", Type: field.TypeJSON},
 		{Name: "subject", Type: field.TypeString},
-		{Name: "body", Type: field.TypeString, Size: 3072},
+		{Name: "body", Type: field.TypeString, Size: 8192},
 	}
 	// AppEmailTemplatesTable holds the schema information for the "app_email_templates" table.
 	AppEmailTemplatesTable = &schema.Table{

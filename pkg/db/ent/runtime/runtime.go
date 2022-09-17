@@ -47,6 +47,10 @@ func init() {
 	appcontactDescDeletedAt := appcontactMixinFields0[2].Descriptor()
 	// appcontact.DefaultDeletedAt holds the default value on creation for the deleted_at field.
 	appcontact.DefaultDeletedAt = appcontactDescDeletedAt.Default.(func() uint32)
+	// appcontactDescAppID is the schema descriptor for app_id field.
+	appcontactDescAppID := appcontactFields[1].Descriptor()
+	// appcontact.DefaultAppID holds the default value on creation for the app_id field.
+	appcontact.DefaultAppID = appcontactDescAppID.Default.(func() uuid.UUID)
 	// appcontactDescUsedFor is the schema descriptor for used_for field.
 	appcontactDescUsedFor := appcontactFields[2].Descriptor()
 	// appcontact.DefaultUsedFor holds the default value on creation for the used_for field.

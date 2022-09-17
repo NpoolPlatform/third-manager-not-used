@@ -71,6 +71,14 @@ func (acc *AppContactCreate) SetAppID(u uuid.UUID) *AppContactCreate {
 	return acc
 }
 
+// SetNillableAppID sets the "app_id" field if the given value is not nil.
+func (acc *AppContactCreate) SetNillableAppID(u *uuid.UUID) *AppContactCreate {
+	if u != nil {
+		acc.SetAppID(*u)
+	}
+	return acc
+}
+
 // SetUsedFor sets the "used_for" field.
 func (acc *AppContactCreate) SetUsedFor(s string) *AppContactCreate {
 	acc.mutation.SetUsedFor(s)
@@ -241,6 +249,13 @@ func (acc *AppContactCreate) defaults() error {
 		v := appcontact.DefaultDeletedAt()
 		acc.mutation.SetDeletedAt(v)
 	}
+	if _, ok := acc.mutation.AppID(); !ok {
+		if appcontact.DefaultAppID == nil {
+			return fmt.Errorf("ent: uninitialized appcontact.DefaultAppID (forgotten import ent/runtime?)")
+		}
+		v := appcontact.DefaultAppID()
+		acc.mutation.SetAppID(v)
+	}
 	if _, ok := acc.mutation.UsedFor(); !ok {
 		v := appcontact.DefaultUsedFor
 		acc.mutation.SetUsedFor(v)
@@ -278,25 +293,10 @@ func (acc *AppContactCreate) check() error {
 	if _, ok := acc.mutation.DeletedAt(); !ok {
 		return &ValidationError{Name: "deleted_at", err: errors.New(`ent: missing required field "AppContact.deleted_at"`)}
 	}
-	if _, ok := acc.mutation.AppID(); !ok {
-		return &ValidationError{Name: "app_id", err: errors.New(`ent: missing required field "AppContact.app_id"`)}
-	}
-	if _, ok := acc.mutation.UsedFor(); !ok {
-		return &ValidationError{Name: "used_for", err: errors.New(`ent: missing required field "AppContact.used_for"`)}
-	}
 	if v, ok := acc.mutation.UsedFor(); ok {
 		if err := appcontact.UsedForValidator(v); err != nil {
 			return &ValidationError{Name: "used_for", err: fmt.Errorf(`ent: validator failed for field "AppContact.used_for": %w`, err)}
 		}
-	}
-	if _, ok := acc.mutation.Sender(); !ok {
-		return &ValidationError{Name: "sender", err: errors.New(`ent: missing required field "AppContact.sender"`)}
-	}
-	if _, ok := acc.mutation.Account(); !ok {
-		return &ValidationError{Name: "account", err: errors.New(`ent: missing required field "AppContact.account"`)}
-	}
-	if _, ok := acc.mutation.AccountType(); !ok {
-		return &ValidationError{Name: "account_type", err: errors.New(`ent: missing required field "AppContact.account_type"`)}
 	}
 	return nil
 }
@@ -519,6 +519,12 @@ func (u *AppContactUpsert) UpdateAppID() *AppContactUpsert {
 	return u
 }
 
+// ClearAppID clears the value of the "app_id" field.
+func (u *AppContactUpsert) ClearAppID() *AppContactUpsert {
+	u.SetNull(appcontact.FieldAppID)
+	return u
+}
+
 // SetUsedFor sets the "used_for" field.
 func (u *AppContactUpsert) SetUsedFor(v string) *AppContactUpsert {
 	u.Set(appcontact.FieldUsedFor, v)
@@ -528,6 +534,12 @@ func (u *AppContactUpsert) SetUsedFor(v string) *AppContactUpsert {
 // UpdateUsedFor sets the "used_for" field to the value that was provided on create.
 func (u *AppContactUpsert) UpdateUsedFor() *AppContactUpsert {
 	u.SetExcluded(appcontact.FieldUsedFor)
+	return u
+}
+
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *AppContactUpsert) ClearUsedFor() *AppContactUpsert {
+	u.SetNull(appcontact.FieldUsedFor)
 	return u
 }
 
@@ -543,6 +555,12 @@ func (u *AppContactUpsert) UpdateSender() *AppContactUpsert {
 	return u
 }
 
+// ClearSender clears the value of the "sender" field.
+func (u *AppContactUpsert) ClearSender() *AppContactUpsert {
+	u.SetNull(appcontact.FieldSender)
+	return u
+}
+
 // SetAccount sets the "account" field.
 func (u *AppContactUpsert) SetAccount(v string) *AppContactUpsert {
 	u.Set(appcontact.FieldAccount, v)
@@ -555,6 +573,12 @@ func (u *AppContactUpsert) UpdateAccount() *AppContactUpsert {
 	return u
 }
 
+// ClearAccount clears the value of the "account" field.
+func (u *AppContactUpsert) ClearAccount() *AppContactUpsert {
+	u.SetNull(appcontact.FieldAccount)
+	return u
+}
+
 // SetAccountType sets the "account_type" field.
 func (u *AppContactUpsert) SetAccountType(v string) *AppContactUpsert {
 	u.Set(appcontact.FieldAccountType, v)
@@ -564,6 +588,12 @@ func (u *AppContactUpsert) SetAccountType(v string) *AppContactUpsert {
 // UpdateAccountType sets the "account_type" field to the value that was provided on create.
 func (u *AppContactUpsert) UpdateAccountType() *AppContactUpsert {
 	u.SetExcluded(appcontact.FieldAccountType)
+	return u
+}
+
+// ClearAccountType clears the value of the "account_type" field.
+func (u *AppContactUpsert) ClearAccountType() *AppContactUpsert {
+	u.SetNull(appcontact.FieldAccountType)
 	return u
 }
 
@@ -694,6 +724,13 @@ func (u *AppContactUpsertOne) UpdateAppID() *AppContactUpsertOne {
 	})
 }
 
+// ClearAppID clears the value of the "app_id" field.
+func (u *AppContactUpsertOne) ClearAppID() *AppContactUpsertOne {
+	return u.Update(func(s *AppContactUpsert) {
+		s.ClearAppID()
+	})
+}
+
 // SetUsedFor sets the "used_for" field.
 func (u *AppContactUpsertOne) SetUsedFor(v string) *AppContactUpsertOne {
 	return u.Update(func(s *AppContactUpsert) {
@@ -705,6 +742,13 @@ func (u *AppContactUpsertOne) SetUsedFor(v string) *AppContactUpsertOne {
 func (u *AppContactUpsertOne) UpdateUsedFor() *AppContactUpsertOne {
 	return u.Update(func(s *AppContactUpsert) {
 		s.UpdateUsedFor()
+	})
+}
+
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *AppContactUpsertOne) ClearUsedFor() *AppContactUpsertOne {
+	return u.Update(func(s *AppContactUpsert) {
+		s.ClearUsedFor()
 	})
 }
 
@@ -722,6 +766,13 @@ func (u *AppContactUpsertOne) UpdateSender() *AppContactUpsertOne {
 	})
 }
 
+// ClearSender clears the value of the "sender" field.
+func (u *AppContactUpsertOne) ClearSender() *AppContactUpsertOne {
+	return u.Update(func(s *AppContactUpsert) {
+		s.ClearSender()
+	})
+}
+
 // SetAccount sets the "account" field.
 func (u *AppContactUpsertOne) SetAccount(v string) *AppContactUpsertOne {
 	return u.Update(func(s *AppContactUpsert) {
@@ -736,6 +787,13 @@ func (u *AppContactUpsertOne) UpdateAccount() *AppContactUpsertOne {
 	})
 }
 
+// ClearAccount clears the value of the "account" field.
+func (u *AppContactUpsertOne) ClearAccount() *AppContactUpsertOne {
+	return u.Update(func(s *AppContactUpsert) {
+		s.ClearAccount()
+	})
+}
+
 // SetAccountType sets the "account_type" field.
 func (u *AppContactUpsertOne) SetAccountType(v string) *AppContactUpsertOne {
 	return u.Update(func(s *AppContactUpsert) {
@@ -747,6 +805,13 @@ func (u *AppContactUpsertOne) SetAccountType(v string) *AppContactUpsertOne {
 func (u *AppContactUpsertOne) UpdateAccountType() *AppContactUpsertOne {
 	return u.Update(func(s *AppContactUpsert) {
 		s.UpdateAccountType()
+	})
+}
+
+// ClearAccountType clears the value of the "account_type" field.
+func (u *AppContactUpsertOne) ClearAccountType() *AppContactUpsertOne {
+	return u.Update(func(s *AppContactUpsert) {
+		s.ClearAccountType()
 	})
 }
 
@@ -1043,6 +1108,13 @@ func (u *AppContactUpsertBulk) UpdateAppID() *AppContactUpsertBulk {
 	})
 }
 
+// ClearAppID clears the value of the "app_id" field.
+func (u *AppContactUpsertBulk) ClearAppID() *AppContactUpsertBulk {
+	return u.Update(func(s *AppContactUpsert) {
+		s.ClearAppID()
+	})
+}
+
 // SetUsedFor sets the "used_for" field.
 func (u *AppContactUpsertBulk) SetUsedFor(v string) *AppContactUpsertBulk {
 	return u.Update(func(s *AppContactUpsert) {
@@ -1054,6 +1126,13 @@ func (u *AppContactUpsertBulk) SetUsedFor(v string) *AppContactUpsertBulk {
 func (u *AppContactUpsertBulk) UpdateUsedFor() *AppContactUpsertBulk {
 	return u.Update(func(s *AppContactUpsert) {
 		s.UpdateUsedFor()
+	})
+}
+
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *AppContactUpsertBulk) ClearUsedFor() *AppContactUpsertBulk {
+	return u.Update(func(s *AppContactUpsert) {
+		s.ClearUsedFor()
 	})
 }
 
@@ -1071,6 +1150,13 @@ func (u *AppContactUpsertBulk) UpdateSender() *AppContactUpsertBulk {
 	})
 }
 
+// ClearSender clears the value of the "sender" field.
+func (u *AppContactUpsertBulk) ClearSender() *AppContactUpsertBulk {
+	return u.Update(func(s *AppContactUpsert) {
+		s.ClearSender()
+	})
+}
+
 // SetAccount sets the "account" field.
 func (u *AppContactUpsertBulk) SetAccount(v string) *AppContactUpsertBulk {
 	return u.Update(func(s *AppContactUpsert) {
@@ -1085,6 +1171,13 @@ func (u *AppContactUpsertBulk) UpdateAccount() *AppContactUpsertBulk {
 	})
 }
 
+// ClearAccount clears the value of the "account" field.
+func (u *AppContactUpsertBulk) ClearAccount() *AppContactUpsertBulk {
+	return u.Update(func(s *AppContactUpsert) {
+		s.ClearAccount()
+	})
+}
+
 // SetAccountType sets the "account_type" field.
 func (u *AppContactUpsertBulk) SetAccountType(v string) *AppContactUpsertBulk {
 	return u.Update(func(s *AppContactUpsert) {
@@ -1096,6 +1189,13 @@ func (u *AppContactUpsertBulk) SetAccountType(v string) *AppContactUpsertBulk {
 func (u *AppContactUpsertBulk) UpdateAccountType() *AppContactUpsertBulk {
 	return u.Update(func(s *AppContactUpsert) {
 		s.UpdateAccountType()
+	})
+}
+
+// ClearAccountType clears the value of the "account_type" field.
+func (u *AppContactUpsertBulk) ClearAccountType() *AppContactUpsertBulk {
+	return u.Update(func(s *AppContactUpsert) {
+		s.ClearAccountType()
 	})
 }
 

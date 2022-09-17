@@ -72,6 +72,8 @@ var (
 	UpdateDefaultUpdatedAt func() uint32
 	// DefaultDeletedAt holds the default value on creation for the "deleted_at" field.
 	DefaultDeletedAt func() uint32
+	// DefaultAppID holds the default value on creation for the "app_id" field.
+	DefaultAppID func() uuid.UUID
 	// DefaultUsedFor holds the default value on creation for the "used_for" field.
 	DefaultUsedFor string
 	// UsedForValidator is a validator for the "used_for" field. It is called by the builders before save.

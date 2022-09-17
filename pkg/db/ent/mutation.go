@@ -357,9 +357,22 @@ func (m *AppContactMutation) OldAppID(ctx context.Context) (v uuid.UUID, err err
 	return oldValue.AppID, nil
 }
 
+// ClearAppID clears the value of the "app_id" field.
+func (m *AppContactMutation) ClearAppID() {
+	m.app_id = nil
+	m.clearedFields[appcontact.FieldAppID] = struct{}{}
+}
+
+// AppIDCleared returns if the "app_id" field was cleared in this mutation.
+func (m *AppContactMutation) AppIDCleared() bool {
+	_, ok := m.clearedFields[appcontact.FieldAppID]
+	return ok
+}
+
 // ResetAppID resets all changes to the "app_id" field.
 func (m *AppContactMutation) ResetAppID() {
 	m.app_id = nil
+	delete(m.clearedFields, appcontact.FieldAppID)
 }
 
 // SetUsedFor sets the "used_for" field.
@@ -393,9 +406,22 @@ func (m *AppContactMutation) OldUsedFor(ctx context.Context) (v string, err erro
 	return oldValue.UsedFor, nil
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (m *AppContactMutation) ClearUsedFor() {
+	m.used_for = nil
+	m.clearedFields[appcontact.FieldUsedFor] = struct{}{}
+}
+
+// UsedForCleared returns if the "used_for" field was cleared in this mutation.
+func (m *AppContactMutation) UsedForCleared() bool {
+	_, ok := m.clearedFields[appcontact.FieldUsedFor]
+	return ok
+}
+
 // ResetUsedFor resets all changes to the "used_for" field.
 func (m *AppContactMutation) ResetUsedFor() {
 	m.used_for = nil
+	delete(m.clearedFields, appcontact.FieldUsedFor)
 }
 
 // SetSender sets the "sender" field.
@@ -429,9 +455,22 @@ func (m *AppContactMutation) OldSender(ctx context.Context) (v string, err error
 	return oldValue.Sender, nil
 }
 
+// ClearSender clears the value of the "sender" field.
+func (m *AppContactMutation) ClearSender() {
+	m.sender = nil
+	m.clearedFields[appcontact.FieldSender] = struct{}{}
+}
+
+// SenderCleared returns if the "sender" field was cleared in this mutation.
+func (m *AppContactMutation) SenderCleared() bool {
+	_, ok := m.clearedFields[appcontact.FieldSender]
+	return ok
+}
+
 // ResetSender resets all changes to the "sender" field.
 func (m *AppContactMutation) ResetSender() {
 	m.sender = nil
+	delete(m.clearedFields, appcontact.FieldSender)
 }
 
 // SetAccount sets the "account" field.
@@ -465,9 +504,22 @@ func (m *AppContactMutation) OldAccount(ctx context.Context) (v string, err erro
 	return oldValue.Account, nil
 }
 
+// ClearAccount clears the value of the "account" field.
+func (m *AppContactMutation) ClearAccount() {
+	m.account = nil
+	m.clearedFields[appcontact.FieldAccount] = struct{}{}
+}
+
+// AccountCleared returns if the "account" field was cleared in this mutation.
+func (m *AppContactMutation) AccountCleared() bool {
+	_, ok := m.clearedFields[appcontact.FieldAccount]
+	return ok
+}
+
 // ResetAccount resets all changes to the "account" field.
 func (m *AppContactMutation) ResetAccount() {
 	m.account = nil
+	delete(m.clearedFields, appcontact.FieldAccount)
 }
 
 // SetAccountType sets the "account_type" field.
@@ -501,9 +553,22 @@ func (m *AppContactMutation) OldAccountType(ctx context.Context) (v string, err 
 	return oldValue.AccountType, nil
 }
 
+// ClearAccountType clears the value of the "account_type" field.
+func (m *AppContactMutation) ClearAccountType() {
+	m.account_type = nil
+	m.clearedFields[appcontact.FieldAccountType] = struct{}{}
+}
+
+// AccountTypeCleared returns if the "account_type" field was cleared in this mutation.
+func (m *AppContactMutation) AccountTypeCleared() bool {
+	_, ok := m.clearedFields[appcontact.FieldAccountType]
+	return ok
+}
+
 // ResetAccountType resets all changes to the "account_type" field.
 func (m *AppContactMutation) ResetAccountType() {
 	m.account_type = nil
+	delete(m.clearedFields, appcontact.FieldAccountType)
 }
 
 // Where appends a list predicates to the AppContactMutation builder.
@@ -732,7 +797,23 @@ func (m *AppContactMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *AppContactMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(appcontact.FieldAppID) {
+		fields = append(fields, appcontact.FieldAppID)
+	}
+	if m.FieldCleared(appcontact.FieldUsedFor) {
+		fields = append(fields, appcontact.FieldUsedFor)
+	}
+	if m.FieldCleared(appcontact.FieldSender) {
+		fields = append(fields, appcontact.FieldSender)
+	}
+	if m.FieldCleared(appcontact.FieldAccount) {
+		fields = append(fields, appcontact.FieldAccount)
+	}
+	if m.FieldCleared(appcontact.FieldAccountType) {
+		fields = append(fields, appcontact.FieldAccountType)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -745,6 +826,23 @@ func (m *AppContactMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *AppContactMutation) ClearField(name string) error {
+	switch name {
+	case appcontact.FieldAppID:
+		m.ClearAppID()
+		return nil
+	case appcontact.FieldUsedFor:
+		m.ClearUsedFor()
+		return nil
+	case appcontact.FieldSender:
+		m.ClearSender()
+		return nil
+	case appcontact.FieldAccount:
+		m.ClearAccount()
+		return nil
+	case appcontact.FieldAccountType:
+		m.ClearAccountType()
+		return nil
+	}
 	return fmt.Errorf("unknown AppContact nullable field %s", name)
 }
 

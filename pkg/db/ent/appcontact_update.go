@@ -90,6 +90,20 @@ func (acu *AppContactUpdate) SetAppID(u uuid.UUID) *AppContactUpdate {
 	return acu
 }
 
+// SetNillableAppID sets the "app_id" field if the given value is not nil.
+func (acu *AppContactUpdate) SetNillableAppID(u *uuid.UUID) *AppContactUpdate {
+	if u != nil {
+		acu.SetAppID(*u)
+	}
+	return acu
+}
+
+// ClearAppID clears the value of the "app_id" field.
+func (acu *AppContactUpdate) ClearAppID() *AppContactUpdate {
+	acu.mutation.ClearAppID()
+	return acu
+}
+
 // SetUsedFor sets the "used_for" field.
 func (acu *AppContactUpdate) SetUsedFor(s string) *AppContactUpdate {
 	acu.mutation.SetUsedFor(s)
@@ -101,6 +115,12 @@ func (acu *AppContactUpdate) SetNillableUsedFor(s *string) *AppContactUpdate {
 	if s != nil {
 		acu.SetUsedFor(*s)
 	}
+	return acu
+}
+
+// ClearUsedFor clears the value of the "used_for" field.
+func (acu *AppContactUpdate) ClearUsedFor() *AppContactUpdate {
+	acu.mutation.ClearUsedFor()
 	return acu
 }
 
@@ -118,6 +138,12 @@ func (acu *AppContactUpdate) SetNillableSender(s *string) *AppContactUpdate {
 	return acu
 }
 
+// ClearSender clears the value of the "sender" field.
+func (acu *AppContactUpdate) ClearSender() *AppContactUpdate {
+	acu.mutation.ClearSender()
+	return acu
+}
+
 // SetAccount sets the "account" field.
 func (acu *AppContactUpdate) SetAccount(s string) *AppContactUpdate {
 	acu.mutation.SetAccount(s)
@@ -132,6 +158,12 @@ func (acu *AppContactUpdate) SetNillableAccount(s *string) *AppContactUpdate {
 	return acu
 }
 
+// ClearAccount clears the value of the "account" field.
+func (acu *AppContactUpdate) ClearAccount() *AppContactUpdate {
+	acu.mutation.ClearAccount()
+	return acu
+}
+
 // SetAccountType sets the "account_type" field.
 func (acu *AppContactUpdate) SetAccountType(s string) *AppContactUpdate {
 	acu.mutation.SetAccountType(s)
@@ -143,6 +175,12 @@ func (acu *AppContactUpdate) SetNillableAccountType(s *string) *AppContactUpdate
 	if s != nil {
 		acu.SetAccountType(*s)
 	}
+	return acu
+}
+
+// ClearAccountType clears the value of the "account_type" field.
+func (acu *AppContactUpdate) ClearAccountType() *AppContactUpdate {
+	acu.mutation.ClearAccountType()
 	return acu
 }
 
@@ -309,10 +347,22 @@ func (acu *AppContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: appcontact.FieldAppID,
 		})
 	}
+	if acu.mutation.AppIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Column: appcontact.FieldAppID,
+		})
+	}
 	if value, ok := acu.mutation.UsedFor(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: appcontact.FieldUsedFor,
+		})
+	}
+	if acu.mutation.UsedForCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: appcontact.FieldUsedFor,
 		})
 	}
@@ -323,6 +373,12 @@ func (acu *AppContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: appcontact.FieldSender,
 		})
 	}
+	if acu.mutation.SenderCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: appcontact.FieldSender,
+		})
+	}
 	if value, ok := acu.mutation.Account(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -330,10 +386,22 @@ func (acu *AppContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: appcontact.FieldAccount,
 		})
 	}
+	if acu.mutation.AccountCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: appcontact.FieldAccount,
+		})
+	}
 	if value, ok := acu.mutation.AccountType(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: appcontact.FieldAccountType,
+		})
+	}
+	if acu.mutation.AccountTypeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: appcontact.FieldAccountType,
 		})
 	}
@@ -419,6 +487,20 @@ func (acuo *AppContactUpdateOne) SetAppID(u uuid.UUID) *AppContactUpdateOne {
 	return acuo
 }
 
+// SetNillableAppID sets the "app_id" field if the given value is not nil.
+func (acuo *AppContactUpdateOne) SetNillableAppID(u *uuid.UUID) *AppContactUpdateOne {
+	if u != nil {
+		acuo.SetAppID(*u)
+	}
+	return acuo
+}
+
+// ClearAppID clears the value of the "app_id" field.
+func (acuo *AppContactUpdateOne) ClearAppID() *AppContactUpdateOne {
+	acuo.mutation.ClearAppID()
+	return acuo
+}
+
 // SetUsedFor sets the "used_for" field.
 func (acuo *AppContactUpdateOne) SetUsedFor(s string) *AppContactUpdateOne {
 	acuo.mutation.SetUsedFor(s)
@@ -430,6 +512,12 @@ func (acuo *AppContactUpdateOne) SetNillableUsedFor(s *string) *AppContactUpdate
 	if s != nil {
 		acuo.SetUsedFor(*s)
 	}
+	return acuo
+}
+
+// ClearUsedFor clears the value of the "used_for" field.
+func (acuo *AppContactUpdateOne) ClearUsedFor() *AppContactUpdateOne {
+	acuo.mutation.ClearUsedFor()
 	return acuo
 }
 
@@ -447,6 +535,12 @@ func (acuo *AppContactUpdateOne) SetNillableSender(s *string) *AppContactUpdateO
 	return acuo
 }
 
+// ClearSender clears the value of the "sender" field.
+func (acuo *AppContactUpdateOne) ClearSender() *AppContactUpdateOne {
+	acuo.mutation.ClearSender()
+	return acuo
+}
+
 // SetAccount sets the "account" field.
 func (acuo *AppContactUpdateOne) SetAccount(s string) *AppContactUpdateOne {
 	acuo.mutation.SetAccount(s)
@@ -461,6 +555,12 @@ func (acuo *AppContactUpdateOne) SetNillableAccount(s *string) *AppContactUpdate
 	return acuo
 }
 
+// ClearAccount clears the value of the "account" field.
+func (acuo *AppContactUpdateOne) ClearAccount() *AppContactUpdateOne {
+	acuo.mutation.ClearAccount()
+	return acuo
+}
+
 // SetAccountType sets the "account_type" field.
 func (acuo *AppContactUpdateOne) SetAccountType(s string) *AppContactUpdateOne {
 	acuo.mutation.SetAccountType(s)
@@ -472,6 +572,12 @@ func (acuo *AppContactUpdateOne) SetNillableAccountType(s *string) *AppContactUp
 	if s != nil {
 		acuo.SetAccountType(*s)
 	}
+	return acuo
+}
+
+// ClearAccountType clears the value of the "account_type" field.
+func (acuo *AppContactUpdateOne) ClearAccountType() *AppContactUpdateOne {
+	acuo.mutation.ClearAccountType()
 	return acuo
 }
 
@@ -668,10 +774,22 @@ func (acuo *AppContactUpdateOne) sqlSave(ctx context.Context) (_node *AppContact
 			Column: appcontact.FieldAppID,
 		})
 	}
+	if acuo.mutation.AppIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Column: appcontact.FieldAppID,
+		})
+	}
 	if value, ok := acuo.mutation.UsedFor(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: appcontact.FieldUsedFor,
+		})
+	}
+	if acuo.mutation.UsedForCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: appcontact.FieldUsedFor,
 		})
 	}
@@ -682,6 +800,12 @@ func (acuo *AppContactUpdateOne) sqlSave(ctx context.Context) (_node *AppContact
 			Column: appcontact.FieldSender,
 		})
 	}
+	if acuo.mutation.SenderCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: appcontact.FieldSender,
+		})
+	}
 	if value, ok := acuo.mutation.Account(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -689,10 +813,22 @@ func (acuo *AppContactUpdateOne) sqlSave(ctx context.Context) (_node *AppContact
 			Column: appcontact.FieldAccount,
 		})
 	}
+	if acuo.mutation.AccountCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: appcontact.FieldAccount,
+		})
+	}
 	if value, ok := acuo.mutation.AccountType(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: appcontact.FieldAccountType,
+		})
+	}
+	if acuo.mutation.AccountTypeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: appcontact.FieldAccountType,
 		})
 	}

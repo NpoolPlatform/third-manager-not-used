@@ -6,6 +6,7 @@ import (
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/go-service-framework/pkg/mysql"
+
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appcontact"
 
@@ -47,7 +48,8 @@ func alterColumnNames(next schema.Applier) schema.Applier {
 				if err := crudermigrate.RenameColumn(
 					ctx, conn, table,
 					column[0], column[1],
-					field.TypeInt.String(), true); err != nil {
+					field.TypeInt.String(),
+					true, false); err != nil {
 					logger.Sugar().Errorw("alterColumnNames", "src", column[0], "dst", column[1], "error", err)
 					return err
 				}

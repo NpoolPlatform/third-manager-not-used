@@ -391,6 +391,20 @@ func AppIDLTE(v uuid.UUID) predicate.AppContact {
 	})
 }
 
+// AppIDIsNil applies the IsNil predicate on the "app_id" field.
+func AppIDIsNil() predicate.AppContact {
+	return predicate.AppContact(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldAppID)))
+	})
+}
+
+// AppIDNotNil applies the NotNil predicate on the "app_id" field.
+func AppIDNotNil() predicate.AppContact {
+	return predicate.AppContact(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldAppID)))
+	})
+}
+
 // UsedForEQ applies the EQ predicate on the "used_for" field.
 func UsedForEQ(v string) predicate.AppContact {
 	return predicate.AppContact(func(s *sql.Selector) {
@@ -473,6 +487,20 @@ func UsedForHasPrefix(v string) predicate.AppContact {
 func UsedForHasSuffix(v string) predicate.AppContact {
 	return predicate.AppContact(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldUsedFor), v))
+	})
+}
+
+// UsedForIsNil applies the IsNil predicate on the "used_for" field.
+func UsedForIsNil() predicate.AppContact {
+	return predicate.AppContact(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUsedFor)))
+	})
+}
+
+// UsedForNotNil applies the NotNil predicate on the "used_for" field.
+func UsedForNotNil() predicate.AppContact {
+	return predicate.AppContact(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUsedFor)))
 	})
 }
 
@@ -575,6 +603,20 @@ func SenderHasSuffix(v string) predicate.AppContact {
 	})
 }
 
+// SenderIsNil applies the IsNil predicate on the "sender" field.
+func SenderIsNil() predicate.AppContact {
+	return predicate.AppContact(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSender)))
+	})
+}
+
+// SenderNotNil applies the NotNil predicate on the "sender" field.
+func SenderNotNil() predicate.AppContact {
+	return predicate.AppContact(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSender)))
+	})
+}
+
 // SenderEqualFold applies the EqualFold predicate on the "sender" field.
 func SenderEqualFold(v string) predicate.AppContact {
 	return predicate.AppContact(func(s *sql.Selector) {
@@ -674,6 +716,20 @@ func AccountHasSuffix(v string) predicate.AppContact {
 	})
 }
 
+// AccountIsNil applies the IsNil predicate on the "account" field.
+func AccountIsNil() predicate.AppContact {
+	return predicate.AppContact(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldAccount)))
+	})
+}
+
+// AccountNotNil applies the NotNil predicate on the "account" field.
+func AccountNotNil() predicate.AppContact {
+	return predicate.AppContact(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldAccount)))
+	})
+}
+
 // AccountEqualFold applies the EqualFold predicate on the "account" field.
 func AccountEqualFold(v string) predicate.AppContact {
 	return predicate.AppContact(func(s *sql.Selector) {
@@ -770,6 +826,20 @@ func AccountTypeHasPrefix(v string) predicate.AppContact {
 func AccountTypeHasSuffix(v string) predicate.AppContact {
 	return predicate.AppContact(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldAccountType), v))
+	})
+}
+
+// AccountTypeIsNil applies the IsNil predicate on the "account_type" field.
+func AccountTypeIsNil() predicate.AppContact {
+	return predicate.AppContact(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldAccountType)))
+	})
+}
+
+// AccountTypeNotNil applies the NotNil predicate on the "account_type" field.
+func AccountTypeNotNil() predicate.AppContact {
+	return predicate.AppContact(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldAccountType)))
 	})
 }
 
