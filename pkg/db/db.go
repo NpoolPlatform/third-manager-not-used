@@ -4,11 +4,19 @@ import (
 	"context"
 	"fmt"
 
-	"entgo.io/ent/dialect"
-	entsql "entgo.io/ent/dialect/sql"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/go-service-framework/pkg/mysql"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appcontact"
+
+	"ariga.io/atlas/sql/migrate"
+
+	"entgo.io/ent/dialect"
+	entsql "entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/schema"
+	"entgo.io/ent/schema/field"
+
+	crudermigrate "github.com/NpoolPlatform/libent-cruder/pkg/migrate"
 
 	// ent policy runtime
 	_ "github.com/NpoolPlatform/third-manager/pkg/db/ent/runtime"
@@ -23,32 +31,32 @@ func client() (*ent.Client, error) {
 	return ent.NewClient(ent.Driver(drv)), nil
 }
 
-// func alterColumnNames(next schema.Applier) schema.Applier {
-//	return schema.ApplyFunc(func(ctx context.Context, conn dialect.ExecQuerier, plan *migrate.Plan) error {
-//		tables := []string{
-//			appcontact.Table,
-//		}
-//
-//		columns := [][]string{
-//			{"create_at", "created_at"},
-//			{"update_at", "updated_at"},
-//		}
-//
-//		for _, table := range tables {
-//			for _, column := range columns {
-//				if err := crudermigrate.RenameColumn(
-//					ctx, conn, table,
-//					column[0], column[1],
-//					field.TypeInt.String(), true); err != nil {
-//					logger.Sugar().Errorw("alterColumnNames", "src", column[0], "dst", column[1], "error", err)
-//					return err
-//				}
-//			}
-//		}
-//
-//		return next.Apply(ctx, conn, plan)
-//	})
-// }
+func alterColumnNames(next schema.Applier) schema.Applier {
+	return schema.ApplyFunc(func(ctx context.Context, conn dialect.ExecQuerier, plan *migrate.Plan) error {
+		tables := []string{
+			appcontact.Table,
+		}
+
+		columns := [][]string{
+			{"create_at", "created_at"},
+			{"update_at", "updated_at"},
+		}
+
+		for _, table := range tables {
+			for _, column := range columns {
+				if err := crudermigrate.RenameColumn(
+					ctx, conn, table,
+					column[0], column[1],
+					field.TypeInt.String(), true); err != nil {
+					logger.Sugar().Errorw("alterColumnNames", "src", column[0], "dst", column[1], "error", err)
+					return err
+				}
+			}
+		}
+
+		return next.Apply(ctx, conn, plan)
+	})
+}
 
 func Init() error {
 	cli, err := client()
@@ -58,7 +66,7 @@ func Init() error {
 
 	err = cli.Schema.Create(
 		context.Background(),
-		// schema.WithApplyHook(alterColumnNames),
+		schema.WithApplyHook(alterColumnNames),
 	)
 	return err
 }
