@@ -1,12 +1,11 @@
 package main
 
 import (
+	grpc2 "github.com/NpoolPlatform/go-service-framework/pkg/grpc"
+	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/third-manager/api"
 	"github.com/NpoolPlatform/third-manager/pkg/db"
 	"github.com/NpoolPlatform/third-manager/pkg/migrator"
-
-	grpc2 "github.com/NpoolPlatform/go-service-framework/pkg/grpc"
-	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 
 	apimgrcli "github.com/NpoolPlatform/api-manager/pkg/client"
 
@@ -24,11 +23,11 @@ var runCmd = &cli.Command{
 	Aliases: []string{"s"},
 	Usage:   "Run the daemon",
 	Action: func(c *cli.Context) error {
-		if err := migrator.Migrate(c.Context); err != nil {
+		if err := db.Init(); err != nil {
 			return err
 		}
 
-		if err := db.Init(); err != nil {
+		if err := migrator.Migrate(c.Context); err != nil {
 			return err
 		}
 
@@ -56,7 +55,7 @@ func rpcGatewayRegister(mux *runtime.ServeMux, endpoint string, opts []grpc.Dial
 		return err
 	}
 
-	apimgrcli.Register(mux) //nolint
+	_ = apimgrcli.Register(mux)
 
 	return nil
 }

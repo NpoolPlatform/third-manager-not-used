@@ -8,33 +8,26 @@ import (
 )
 
 var (
-	// AppContactsColumns holds the columns for the "app_contacts" table.
-	AppContactsColumns = []*schema.Column{
+	// ContactsColumns holds the columns for the "contacts" table.
+	ContactsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeUint32},
 		{Name: "updated_at", Type: field.TypeUint32},
 		{Name: "deleted_at", Type: field.TypeUint32},
 		{Name: "app_id", Type: field.TypeUUID},
-		{Name: "used_for", Type: field.TypeString, Size: 32, Default: "DefaultUsedFor"},
+		{Name: "used_for", Type: field.TypeString},
 		{Name: "sender", Type: field.TypeString, Default: ""},
 		{Name: "account", Type: field.TypeString, Default: ""},
 		{Name: "account_type", Type: field.TypeString, Default: ""},
 	}
-	// AppContactsTable holds the schema information for the "app_contacts" table.
-	AppContactsTable = &schema.Table{
-		Name:       "app_contacts",
-		Columns:    AppContactsColumns,
-		PrimaryKey: []*schema.Column{AppContactsColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "appcontact_app_id_account_used_for_account_type",
-				Unique:  true,
-				Columns: []*schema.Column{AppContactsColumns[4], AppContactsColumns[7], AppContactsColumns[5], AppContactsColumns[8]},
-			},
-		},
+	// ContactsTable holds the schema information for the "contacts" table.
+	ContactsTable = &schema.Table{
+		Name:       "contacts",
+		Columns:    ContactsColumns,
+		PrimaryKey: []*schema.Column{ContactsColumns[0]},
 	}
-	// AppEmailTemplatesColumns holds the columns for the "app_email_templates" table.
-	AppEmailTemplatesColumns = []*schema.Column{
+	// EmailTemplatesColumns holds the columns for the "email_templates" table.
+	EmailTemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeUint32},
 		{Name: "updated_at", Type: field.TypeUint32},
@@ -46,24 +39,17 @@ var (
 		{Name: "sender", Type: field.TypeString},
 		{Name: "reply_tos", Type: field.TypeJSON},
 		{Name: "cc_tos", Type: field.TypeJSON},
-		{Name: "subject", Type: field.TypeString},
-		{Name: "body", Type: field.TypeString, Size: 3072},
+		{Name: "subject", Type: field.TypeString, Default: ""},
+		{Name: "body", Type: field.TypeString, Size: 8192, Default: ""},
 	}
-	// AppEmailTemplatesTable holds the schema information for the "app_email_templates" table.
-	AppEmailTemplatesTable = &schema.Table{
-		Name:       "app_email_templates",
-		Columns:    AppEmailTemplatesColumns,
-		PrimaryKey: []*schema.Column{AppEmailTemplatesColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "appemailtemplate_app_id_lang_id_used_for",
-				Unique:  true,
-				Columns: []*schema.Column{AppEmailTemplatesColumns[4], AppEmailTemplatesColumns[5], AppEmailTemplatesColumns[7]},
-			},
-		},
+	// EmailTemplatesTable holds the schema information for the "email_templates" table.
+	EmailTemplatesTable = &schema.Table{
+		Name:       "email_templates",
+		Columns:    EmailTemplatesColumns,
+		PrimaryKey: []*schema.Column{EmailTemplatesColumns[0]},
 	}
-	// AppSmsTemplatesColumns holds the columns for the "app_sms_templates" table.
-	AppSmsTemplatesColumns = []*schema.Column{
+	// SmsTemplatesColumns holds the columns for the "sms_templates" table.
+	SmsTemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeUint32},
 		{Name: "updated_at", Type: field.TypeUint32},
@@ -74,24 +60,17 @@ var (
 		{Name: "subject", Type: field.TypeString, Default: ""},
 		{Name: "message", Type: field.TypeString, Default: ""},
 	}
-	// AppSmsTemplatesTable holds the schema information for the "app_sms_templates" table.
-	AppSmsTemplatesTable = &schema.Table{
-		Name:       "app_sms_templates",
-		Columns:    AppSmsTemplatesColumns,
-		PrimaryKey: []*schema.Column{AppSmsTemplatesColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "appsmstemplate_app_id_lang_id_used_for",
-				Unique:  true,
-				Columns: []*schema.Column{AppSmsTemplatesColumns[4], AppSmsTemplatesColumns[5], AppSmsTemplatesColumns[6]},
-			},
-		},
+	// SmsTemplatesTable holds the schema information for the "sms_templates" table.
+	SmsTemplatesTable = &schema.Table{
+		Name:       "sms_templates",
+		Columns:    SmsTemplatesColumns,
+		PrimaryKey: []*schema.Column{SmsTemplatesColumns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		AppContactsTable,
-		AppEmailTemplatesTable,
-		AppSmsTemplatesTable,
+		ContactsTable,
+		EmailTemplatesTable,
+		SmsTemplatesTable,
 	}
 )
 

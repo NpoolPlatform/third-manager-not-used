@@ -7,12 +7,12 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appcontact"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/contact"
 	"github.com/google/uuid"
 )
 
-// AppContact is the model entity for the AppContact schema.
-type AppContact struct {
+// Contact is the model entity for the Contact schema.
+type Contact struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
@@ -35,145 +35,145 @@ type AppContact struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*AppContact) scanValues(columns []string) ([]interface{}, error) {
+func (*Contact) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case appcontact.FieldCreatedAt, appcontact.FieldUpdatedAt, appcontact.FieldDeletedAt:
+		case contact.FieldCreatedAt, contact.FieldUpdatedAt, contact.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
-		case appcontact.FieldUsedFor, appcontact.FieldSender, appcontact.FieldAccount, appcontact.FieldAccountType:
+		case contact.FieldUsedFor, contact.FieldSender, contact.FieldAccount, contact.FieldAccountType:
 			values[i] = new(sql.NullString)
-		case appcontact.FieldID, appcontact.FieldAppID:
+		case contact.FieldID, contact.FieldAppID:
 			values[i] = new(uuid.UUID)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type AppContact", columns[i])
+			return nil, fmt.Errorf("unexpected column %q for type Contact", columns[i])
 		}
 	}
 	return values, nil
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the AppContact fields.
-func (ac *AppContact) assignValues(columns []string, values []interface{}) error {
+// to the Contact fields.
+func (c *Contact) assignValues(columns []string, values []interface{}) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case appcontact.FieldID:
+		case contact.FieldID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				ac.ID = *value
+				c.ID = *value
 			}
-		case appcontact.FieldCreatedAt:
+		case contact.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ac.CreatedAt = uint32(value.Int64)
+				c.CreatedAt = uint32(value.Int64)
 			}
-		case appcontact.FieldUpdatedAt:
+		case contact.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ac.UpdatedAt = uint32(value.Int64)
+				c.UpdatedAt = uint32(value.Int64)
 			}
-		case appcontact.FieldDeletedAt:
+		case contact.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ac.DeletedAt = uint32(value.Int64)
+				c.DeletedAt = uint32(value.Int64)
 			}
-		case appcontact.FieldAppID:
+		case contact.FieldAppID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
 			} else if value != nil {
-				ac.AppID = *value
+				c.AppID = *value
 			}
-		case appcontact.FieldUsedFor:
+		case contact.FieldUsedFor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field used_for", values[i])
 			} else if value.Valid {
-				ac.UsedFor = value.String
+				c.UsedFor = value.String
 			}
-		case appcontact.FieldSender:
+		case contact.FieldSender:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field sender", values[i])
 			} else if value.Valid {
-				ac.Sender = value.String
+				c.Sender = value.String
 			}
-		case appcontact.FieldAccount:
+		case contact.FieldAccount:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field account", values[i])
 			} else if value.Valid {
-				ac.Account = value.String
+				c.Account = value.String
 			}
-		case appcontact.FieldAccountType:
+		case contact.FieldAccountType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field account_type", values[i])
 			} else if value.Valid {
-				ac.AccountType = value.String
+				c.AccountType = value.String
 			}
 		}
 	}
 	return nil
 }
 
-// Update returns a builder for updating this AppContact.
-// Note that you need to call AppContact.Unwrap() before calling this method if this AppContact
+// Update returns a builder for updating this Contact.
+// Note that you need to call Contact.Unwrap() before calling this method if this Contact
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ac *AppContact) Update() *AppContactUpdateOne {
-	return (&AppContactClient{config: ac.config}).UpdateOne(ac)
+func (c *Contact) Update() *ContactUpdateOne {
+	return (&ContactClient{config: c.config}).UpdateOne(c)
 }
 
-// Unwrap unwraps the AppContact entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the Contact entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ac *AppContact) Unwrap() *AppContact {
-	_tx, ok := ac.config.driver.(*txDriver)
+func (c *Contact) Unwrap() *Contact {
+	_tx, ok := c.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: AppContact is not a transactional entity")
+		panic("ent: Contact is not a transactional entity")
 	}
-	ac.config.driver = _tx.drv
-	return ac
+	c.config.driver = _tx.drv
+	return c
 }
 
 // String implements the fmt.Stringer.
-func (ac *AppContact) String() string {
+func (c *Contact) String() string {
 	var builder strings.Builder
-	builder.WriteString("AppContact(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ac.ID))
+	builder.WriteString("Contact(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", ac.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", c.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", ac.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", c.UpdatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(fmt.Sprintf("%v", ac.DeletedAt))
+	builder.WriteString(fmt.Sprintf("%v", c.DeletedAt))
 	builder.WriteString(", ")
 	builder.WriteString("app_id=")
-	builder.WriteString(fmt.Sprintf("%v", ac.AppID))
+	builder.WriteString(fmt.Sprintf("%v", c.AppID))
 	builder.WriteString(", ")
 	builder.WriteString("used_for=")
-	builder.WriteString(ac.UsedFor)
+	builder.WriteString(c.UsedFor)
 	builder.WriteString(", ")
 	builder.WriteString("sender=")
-	builder.WriteString(ac.Sender)
+	builder.WriteString(c.Sender)
 	builder.WriteString(", ")
 	builder.WriteString("account=")
-	builder.WriteString(ac.Account)
+	builder.WriteString(c.Account)
 	builder.WriteString(", ")
 	builder.WriteString("account_type=")
-	builder.WriteString(ac.AccountType)
+	builder.WriteString(c.AccountType)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// AppContacts is a parsable slice of AppContact.
-type AppContacts []*AppContact
+// Contacts is a parsable slice of Contact.
+type Contacts []*Contact
 
-func (ac AppContacts) config(cfg config) {
-	for _i := range ac {
-		ac[_i].config = cfg
+func (c Contacts) config(cfg config) {
+	for _i := range c {
+		c[_i].config = cfg
 	}
 }

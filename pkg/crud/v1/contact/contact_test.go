@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/NpoolPlatform/message/npool/appuser/mgr/v2/signmethod"
+
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent"
 	"github.com/NpoolPlatform/third-manager/pkg/testinit"
 
@@ -29,33 +31,34 @@ func init() {
 	}
 }
 
-var entAppContact = ent.AppContact{
+var entContact = ent.Contact{
 	ID:          uuid.New(),
 	AppID:       uuid.New(),
 	UsedFor:     usedfor.UsedFor_Signin.String(),
 	Sender:      uuid.NewString(),
 	Account:     uuid.NewString(),
-	AccountType: uuid.NewString(),
+	AccountType: signmethod.SignMethodType_Mobile.String(),
 }
 
 var (
-	id         = entAppContact.ID.String()
-	appID      = entAppContact.AppID.String()
-	usedFor    = usedfor.UsedFor_Signin
-	appContact = contact.ContactReq{
+	id          = entContact.ID.String()
+	appID       = entContact.AppID.String()
+	usedFor     = usedfor.UsedFor_Signin
+	accountType = signmethod.SignMethodType_Mobile
+	Contact     = contact.ContactReq{
 		ID:          &id,
 		AppID:       &appID,
 		UsedFor:     &usedFor,
-		Account:     &entAppContact.Account,
-		AccountType: &entAppContact.AccountType,
-		Sender:      &entAppContact.Sender,
+		Account:     &entContact.Account,
+		AccountType: &accountType,
+		Sender:      &entContact.Sender,
 	}
 )
 
-var info *ent.AppContact
+var info *ent.Contact
 
-func rowToObject(row *ent.AppContact) *ent.AppContact {
-	return &ent.AppContact{
+func rowToObject(row *ent.Contact) *ent.Contact {
+	return &ent.Contact{
 		ID:          row.ID,
 		CreatedAt:   row.CreatedAt,
 		AppID:       row.AppID,
@@ -68,25 +71,25 @@ func rowToObject(row *ent.AppContact) *ent.AppContact {
 
 func create(t *testing.T) {
 	var err error
-	info, err = Create(context.Background(), &appContact)
+	info, err = Create(context.Background(), &Contact)
 	if assert.Nil(t, err) {
 		if assert.NotEqual(t, info.ID, uuid.UUID{}.String()) {
-			entAppContact.ID = info.ID
-			entAppContact.CreatedAt = info.CreatedAt
+			entContact.ID = info.ID
+			entContact.CreatedAt = info.CreatedAt
 		}
-		assert.Equal(t, rowToObject(info), &entAppContact)
+		assert.Equal(t, rowToObject(info), &entContact)
 	}
 }
 
 func createBulk(t *testing.T) {
-	entApp := []ent.AppContact{
+	entApp := []ent.Contact{
 		{
 			ID:          uuid.New(),
 			AppID:       uuid.New(),
 			UsedFor:     usedfor.UsedFor_Signin.String(),
 			Sender:      uuid.NewString(),
 			Account:     uuid.NewString(),
-			AccountType: uuid.NewString(),
+			AccountType: accountType.String(),
 		},
 		{
 			ID:          uuid.New(),
@@ -94,21 +97,21 @@ func createBulk(t *testing.T) {
 			UsedFor:     usedfor.UsedFor_Signin.String(),
 			Sender:      uuid.NewString(),
 			Account:     uuid.NewString(),
-			AccountType: uuid.NewString(),
+			AccountType: accountType.String(),
 		},
 	}
 
 	apps := []*contact.ContactReq{}
 	for key := range entApp {
 		id := entApp[key].ID.String()
-		appID = entAppContact.AppID.String()
+		appID = entContact.AppID.String()
 		usedFor = usedfor.UsedFor_Signin
 		apps = append(apps, &contact.ContactReq{
 			ID:          &id,
 			AppID:       &appID,
 			UsedFor:     &usedFor,
 			Account:     &entApp[key].Account,
-			AccountType: &entApp[key].AccountType,
+			AccountType: &accountType,
 			Sender:      &entApp[key].Sender,
 		})
 	}
@@ -122,9 +125,9 @@ func createBulk(t *testing.T) {
 
 func update(t *testing.T) {
 	var err error
-	info, err = Update(context.Background(), &appContact)
+	info, err = Update(context.Background(), &Contact)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppContact)
+		assert.Equal(t, rowToObject(info), &entContact)
 	}
 }
 
@@ -132,7 +135,7 @@ func row(t *testing.T) {
 	var err error
 	info, err = Row(context.Background(), info.ID)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppContact)
+		assert.Equal(t, rowToObject(info), &entContact)
 	}
 }
 
@@ -146,7 +149,7 @@ func rows(t *testing.T) {
 		}, 0, 0)
 	if assert.Nil(t, err) {
 		assert.Equal(t, total, 1)
-		assert.Equal(t, rowToObject(infos[0]), &entAppContact)
+		assert.Equal(t, rowToObject(infos[0]), &entContact)
 	}
 }
 
@@ -160,7 +163,7 @@ func rowOnly(t *testing.T) {
 			},
 		})
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppContact)
+		assert.Equal(t, rowToObject(info), &entContact)
 	}
 }
 
@@ -202,7 +205,7 @@ func existConds(t *testing.T) {
 func deleteT(t *testing.T) {
 	info, err := Delete(context.Background(), info.ID)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppContact)
+		assert.Equal(t, rowToObject(info), &entContact)
 	}
 }
 

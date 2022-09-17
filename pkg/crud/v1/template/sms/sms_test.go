@@ -30,7 +30,7 @@ func init() {
 	}
 }
 
-var entAppSMSTemplate = ent.AppSMSTemplate{
+var entSMSTemplate = ent.SMSTemplate{
 	ID:      uuid.New(),
 	AppID:   uuid.New(),
 	LangID:  uuid.New(),
@@ -40,24 +40,24 @@ var entAppSMSTemplate = ent.AppSMSTemplate{
 }
 
 var (
-	id             = entAppSMSTemplate.ID.String()
-	appID          = entAppSMSTemplate.AppID.String()
-	langID         = entAppSMSTemplate.LangID.String()
+	id             = entSMSTemplate.ID.String()
+	appID          = entSMSTemplate.AppID.String()
+	langID         = entSMSTemplate.LangID.String()
 	usedFor        = usedfor.UsedFor_Signin
 	appSMSTemplate = sms.SMSTemplateReq{
 		ID:      &id,
 		AppID:   &appID,
 		LangID:  &langID,
 		UsedFor: &usedFor,
-		Subject: &entAppSMSTemplate.Subject,
-		Message: &entAppSMSTemplate.Message,
+		Subject: &entSMSTemplate.Subject,
+		Message: &entSMSTemplate.Message,
 	}
 )
 
-var info *ent.AppSMSTemplate
+var info *ent.SMSTemplate
 
-func rowToObject(row *ent.AppSMSTemplate) *ent.AppSMSTemplate {
-	return &ent.AppSMSTemplate{
+func rowToObject(row *ent.SMSTemplate) *ent.SMSTemplate {
+	return &ent.SMSTemplate{
 		ID:        row.ID,
 		CreatedAt: row.CreatedAt,
 		AppID:     row.AppID,
@@ -73,15 +73,15 @@ func create(t *testing.T) {
 	info, err = Create(context.Background(), &appSMSTemplate)
 	if assert.Nil(t, err) {
 		if assert.NotEqual(t, info.ID, uuid.UUID{}.String()) {
-			entAppSMSTemplate.ID = info.ID
-			entAppSMSTemplate.CreatedAt = info.CreatedAt
+			entSMSTemplate.ID = info.ID
+			entSMSTemplate.CreatedAt = info.CreatedAt
 		}
-		assert.Equal(t, rowToObject(info), &entAppSMSTemplate)
+		assert.Equal(t, rowToObject(info), &entSMSTemplate)
 	}
 }
 
 func createBulk(t *testing.T) {
-	entApp := []ent.AppSMSTemplate{
+	entApp := []ent.SMSTemplate{
 		{
 			ID:      uuid.New(),
 			AppID:   uuid.New(),
@@ -127,7 +127,7 @@ func update(t *testing.T) {
 	var err error
 	info, err = Update(context.Background(), &appSMSTemplate)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppSMSTemplate)
+		assert.Equal(t, rowToObject(info), &entSMSTemplate)
 	}
 }
 
@@ -135,7 +135,7 @@ func row(t *testing.T) {
 	var err error
 	info, err = Row(context.Background(), info.ID)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppSMSTemplate)
+		assert.Equal(t, rowToObject(info), &entSMSTemplate)
 	}
 }
 
@@ -149,7 +149,7 @@ func rows(t *testing.T) {
 		}, 0, 0)
 	if assert.Nil(t, err) {
 		assert.Equal(t, total, 1)
-		assert.Equal(t, rowToObject(infos[0]), &entAppSMSTemplate)
+		assert.Equal(t, rowToObject(infos[0]), &entSMSTemplate)
 	}
 }
 
@@ -163,7 +163,7 @@ func rowOnly(t *testing.T) {
 			},
 		})
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppSMSTemplate)
+		assert.Equal(t, rowToObject(info), &entSMSTemplate)
 	}
 }
 
@@ -205,7 +205,7 @@ func existConds(t *testing.T) {
 func deleteT(t *testing.T) {
 	info, err := Delete(context.Background(), info.ID)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppSMSTemplate)
+		assert.Equal(t, rowToObject(info), &entSMSTemplate)
 	}
 }
 

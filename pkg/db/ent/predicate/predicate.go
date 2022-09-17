@@ -6,11 +6,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// AppContact is the predicate function for appcontact builders.
-type AppContact func(*sql.Selector)
+// Contact is the predicate function for contact builders.
+type Contact func(*sql.Selector)
 
-// AppEmailTemplate is the predicate function for appemailtemplate builders.
-type AppEmailTemplate func(*sql.Selector)
+// EmailTemplate is the predicate function for emailtemplate builders.
+type EmailTemplate func(*sql.Selector)
 
-// AppSMSTemplate is the predicate function for appsmstemplate builders.
-type AppSMSTemplate func(*sql.Selector)
+// SMSTemplate is the predicate function for smstemplate builders.
+type SMSTemplate func(*sql.Selector)

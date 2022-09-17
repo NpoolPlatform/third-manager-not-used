@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/NpoolPlatform/message/npool/appuser/mgr/v2/signmethod"
+
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/config"
@@ -41,7 +43,7 @@ var appDate = npool.Contact{
 	AppID:       uuid.NewString(),
 	UsedFor:     usedfor.UsedFor_Signin,
 	Account:     uuid.NewString(),
-	AccountType: uuid.NewString(),
+	AccountType: signmethod.SignMethodType_Email,
 	Sender:      uuid.NewString(),
 }
 
@@ -73,7 +75,7 @@ func createContacts(t *testing.T) {
 			AppID:       uuid.NewString(),
 			UsedFor:     usedfor.UsedFor_Signin,
 			Account:     uuid.NewString(),
-			AccountType: uuid.NewString(),
+			AccountType: signmethod.SignMethodType_Email,
 			Sender:      uuid.NewString(),
 		},
 		{
@@ -81,7 +83,7 @@ func createContacts(t *testing.T) {
 			AppID:       uuid.NewString(),
 			UsedFor:     usedfor.UsedFor_Signin,
 			Account:     uuid.NewString(),
-			AccountType: uuid.NewString(),
+			AccountType: signmethod.SignMethodType_Email,
 			Sender:      uuid.NewString(),
 		},
 	}

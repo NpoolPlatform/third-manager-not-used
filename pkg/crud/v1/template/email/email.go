@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
+
 	tracer "github.com/NpoolPlatform/third-manager/pkg/tracer/template/email"
 
 	constant "github.com/NpoolPlatform/third-manager/pkg/message/const"
@@ -17,11 +19,11 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/email"
 	"github.com/NpoolPlatform/third-manager/pkg/db"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appemailtemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
 	"github.com/google/uuid"
 )
 
-func CreateSet(c *ent.AppEmailTemplateCreate, info *npool.EmailTemplateReq) *ent.AppEmailTemplateCreate {
+func CreateSet(c *ent.EmailTemplateCreate, info *npool.EmailTemplateReq) *ent.EmailTemplateCreate {
 	if info.ID != nil {
 		c.SetID(uuid.MustParse(info.GetID()))
 	}
@@ -54,8 +56,8 @@ func CreateSet(c *ent.AppEmailTemplateCreate, info *npool.EmailTemplateReq) *ent
 	}
 	return c
 }
-func Create(ctx context.Context, in *npool.EmailTemplateReq) (*ent.AppEmailTemplate, error) {
-	var info *ent.AppEmailTemplate
+func Create(ctx context.Context, in *npool.EmailTemplateReq) (*ent.EmailTemplate, error) {
+	var info *ent.EmailTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Create")
@@ -70,7 +72,7 @@ func Create(ctx context.Context, in *npool.EmailTemplateReq) (*ent.AppEmailTempl
 	span = tracer.Trace(span, in)
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		c := CreateSet(cli.AppEmailTemplate.Create(), in)
+		c := CreateSet(cli.EmailTemplate.Create(), in)
 		info, err = c.Save(_ctx)
 		return err
 	})
@@ -81,9 +83,9 @@ func Create(ctx context.Context, in *npool.EmailTemplateReq) (*ent.AppEmailTempl
 	return info, nil
 }
 
-func CreateBulk(ctx context.Context, in []*npool.EmailTemplateReq) ([]*ent.AppEmailTemplate, error) {
+func CreateBulk(ctx context.Context, in []*npool.EmailTemplateReq) ([]*ent.EmailTemplate, error) {
 	var err error
-	rows := []*ent.AppEmailTemplate{}
+	rows := []*ent.EmailTemplate{}
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "CreateBulk")
 	defer span.End()
@@ -98,11 +100,11 @@ func CreateBulk(ctx context.Context, in []*npool.EmailTemplateReq) ([]*ent.AppEm
 	span = tracer.TraceMany(span, in)
 
 	err = db.WithTx(ctx, func(_ctx context.Context, tx *ent.Tx) error {
-		bulk := make([]*ent.AppEmailTemplateCreate, len(in))
+		bulk := make([]*ent.EmailTemplateCreate, len(in))
 		for i, info := range in {
-			bulk[i] = CreateSet(tx.AppEmailTemplate.Create(), info)
+			bulk[i] = CreateSet(tx.EmailTemplate.Create(), info)
 		}
-		rows, err = tx.AppEmailTemplate.CreateBulk(bulk...).Save(_ctx)
+		rows, err = tx.EmailTemplate.CreateBulk(bulk...).Save(_ctx)
 		return err
 	})
 	if err != nil {
@@ -112,9 +114,9 @@ func CreateBulk(ctx context.Context, in []*npool.EmailTemplateReq) ([]*ent.AppEm
 	return rows, nil
 }
 
-func Update(ctx context.Context, in *npool.EmailTemplateReq) (*ent.AppEmailTemplate, error) {
+func Update(ctx context.Context, in *npool.EmailTemplateReq) (*ent.EmailTemplate, error) {
 	var err error
-	var info *ent.AppEmailTemplate
+	var info *ent.EmailTemplate
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Update")
 	defer span.End()
@@ -129,7 +131,7 @@ func Update(ctx context.Context, in *npool.EmailTemplateReq) (*ent.AppEmailTempl
 	span = tracer.Trace(span, in)
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		u := UpdateSet(cli.AppEmailTemplate.UpdateOneID(uuid.MustParse(in.GetID())), in)
+		u := UpdateSet(cli.EmailTemplate.UpdateOneID(uuid.MustParse(in.GetID())), in)
 		info, err = u.Save(_ctx)
 		return err
 	})
@@ -140,7 +142,7 @@ func Update(ctx context.Context, in *npool.EmailTemplateReq) (*ent.AppEmailTempl
 	return info, nil
 }
 
-func UpdateSet(u *ent.AppEmailTemplateUpdateOne, in *npool.EmailTemplateReq) *ent.AppEmailTemplateUpdateOne {
+func UpdateSet(u *ent.EmailTemplateUpdateOne, in *npool.EmailTemplateReq) *ent.EmailTemplateUpdateOne {
 	if in.LangID != nil {
 		u.SetLangID(uuid.MustParse(in.GetLangID()))
 	}
@@ -168,8 +170,8 @@ func UpdateSet(u *ent.AppEmailTemplateUpdateOne, in *npool.EmailTemplateReq) *en
 	return u
 }
 
-func Row(ctx context.Context, id uuid.UUID) (*ent.AppEmailTemplate, error) {
-	var info *ent.AppEmailTemplate
+func Row(ctx context.Context, id uuid.UUID) (*ent.EmailTemplate, error) {
+	var info *ent.EmailTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Row")
@@ -185,7 +187,7 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.AppEmailTemplate, error) {
 	span = commontracer.TraceID(span, id.String())
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		info, err = cli.AppEmailTemplate.Query().Where(appemailtemplate.ID(id)).Only(_ctx)
+		info, err = cli.EmailTemplate.Query().Where(emailtemplate.ID(id)).Only(_ctx)
 		return err
 	})
 	if err != nil {
@@ -196,8 +198,8 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.AppEmailTemplate, error) {
 }
 
 //nolint:nolintlint,gocyclo
-func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppEmailTemplateQuery, error) {
-	stm := cli.AppEmailTemplate.Query()
+func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.EmailTemplateQuery, error) {
+	stm := cli.EmailTemplate.Query()
 
 	if conds == nil {
 		return stm, nil
@@ -211,9 +213,9 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppEmailTemplateQu
 
 		switch conds.GetID().GetOp() {
 		case cruder.EQ:
-			stm.Where(appemailtemplate.ID(id))
+			stm.Where(emailtemplate.ID(id))
 		default:
-			return nil, fmt.Errorf("invalid template/email field")
+			return nil, fmt.Errorf("invalid email field")
 		}
 	}
 
@@ -225,27 +227,27 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppEmailTemplateQu
 
 		switch conds.GetAppID().GetOp() {
 		case cruder.EQ:
-			stm.Where(appemailtemplate.AppID(id))
+			stm.Where(emailtemplate.AppID(id))
 		default:
-			return nil, fmt.Errorf("invalid template/email field")
+			return nil, fmt.Errorf("invalid email field")
 		}
 	}
 
 	if conds.UsedFor != nil {
 		switch conds.GetUsedFor().GetOp() {
 		case cruder.EQ:
-			stm.Where(appemailtemplate.UsedFor(conds.UsedFor.Value))
+			stm.Where(emailtemplate.UsedFor(usedfor.UsedFor(conds.UsedFor.Value).String()))
 		default:
-			return nil, fmt.Errorf("invalid template/email field")
+			return nil, fmt.Errorf("invalid email field")
 		}
 	}
 
 	return stm, nil
 }
 
-func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.AppEmailTemplate, int, error) {
+func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.EmailTemplate, int, error) {
 	var err error
-	rows := []*ent.AppEmailTemplate{}
+	rows := []*ent.EmailTemplate{}
 	var total int
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Rows")
@@ -273,7 +275,7 @@ func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.Ap
 
 		rows, err = stm.
 			Offset(offset).
-			Order(ent.Desc(appemailtemplate.FieldUpdatedAt)).
+			Order(ent.Desc(emailtemplate.FieldUpdatedAt)).
 			Limit(limit).
 			All(_ctx)
 		if err != nil {
@@ -289,8 +291,8 @@ func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.Ap
 	return rows, total, nil
 }
 
-func RowOnly(ctx context.Context, conds *npool.Conds) (*ent.AppEmailTemplate, error) {
-	var info *ent.AppEmailTemplate
+func RowOnly(ctx context.Context, conds *npool.Conds) (*ent.EmailTemplate, error) {
+	var info *ent.EmailTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "RowOnly")
@@ -380,7 +382,7 @@ func Exist(ctx context.Context, id uuid.UUID) (bool, error) {
 	exist := false
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		exist, err = cli.AppEmailTemplate.Query().Where(appemailtemplate.ID(id)).Exist(_ctx)
+		exist, err = cli.EmailTemplate.Query().Where(emailtemplate.ID(id)).Exist(_ctx)
 		return err
 	})
 	if err != nil {
@@ -426,8 +428,8 @@ func ExistConds(ctx context.Context, conds *npool.Conds) (bool, error) {
 	return exist, nil
 }
 
-func Delete(ctx context.Context, id uuid.UUID) (*ent.AppEmailTemplate, error) {
-	var info *ent.AppEmailTemplate
+func Delete(ctx context.Context, id uuid.UUID) (*ent.EmailTemplate, error) {
+	var info *ent.EmailTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Delete")
@@ -443,7 +445,7 @@ func Delete(ctx context.Context, id uuid.UUID) (*ent.AppEmailTemplate, error) {
 	span = commontracer.TraceID(span, id.String())
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		info, err = cli.AppEmailTemplate.UpdateOneID(id).
+		info, err = cli.EmailTemplate.UpdateOneID(id).
 			SetDeletedAt(uint32(time.Now().Unix())).
 			Save(_ctx)
 		return err

@@ -7,7 +7,7 @@ import (
 	"github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 )
 
-func Ent2Grpc(row *ent.AppEmailTemplate) *npool.EmailTemplate {
+func Ent2Grpc(row *ent.EmailTemplate) *npool.EmailTemplate {
 	if row == nil {
 		return nil
 	}
@@ -26,7 +26,7 @@ func Ent2Grpc(row *ent.AppEmailTemplate) *npool.EmailTemplate {
 	}
 }
 
-func Ent2GrpcMany(rows []*ent.AppEmailTemplate) []*npool.EmailTemplate {
+func Ent2GrpcMany(rows []*ent.EmailTemplate) []*npool.EmailTemplate {
 	infos := []*npool.EmailTemplate{}
 	for _, row := range rows {
 		infos = append(infos, Ent2Grpc(row))

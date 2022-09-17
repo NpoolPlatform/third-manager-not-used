@@ -3,9 +3,9 @@
 package ent
 
 import (
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appcontact"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appemailtemplate"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appsmstemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/contact"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -18,69 +18,69 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 3)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
-			Table:   appcontact.Table,
-			Columns: appcontact.Columns,
+			Table:   contact.Table,
+			Columns: contact.Columns,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeUUID,
-				Column: appcontact.FieldID,
+				Column: contact.FieldID,
 			},
 		},
-		Type: "AppContact",
+		Type: "Contact",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			appcontact.FieldCreatedAt:   {Type: field.TypeUint32, Column: appcontact.FieldCreatedAt},
-			appcontact.FieldUpdatedAt:   {Type: field.TypeUint32, Column: appcontact.FieldUpdatedAt},
-			appcontact.FieldDeletedAt:   {Type: field.TypeUint32, Column: appcontact.FieldDeletedAt},
-			appcontact.FieldAppID:       {Type: field.TypeUUID, Column: appcontact.FieldAppID},
-			appcontact.FieldUsedFor:     {Type: field.TypeString, Column: appcontact.FieldUsedFor},
-			appcontact.FieldSender:      {Type: field.TypeString, Column: appcontact.FieldSender},
-			appcontact.FieldAccount:     {Type: field.TypeString, Column: appcontact.FieldAccount},
-			appcontact.FieldAccountType: {Type: field.TypeString, Column: appcontact.FieldAccountType},
+			contact.FieldCreatedAt:   {Type: field.TypeUint32, Column: contact.FieldCreatedAt},
+			contact.FieldUpdatedAt:   {Type: field.TypeUint32, Column: contact.FieldUpdatedAt},
+			contact.FieldDeletedAt:   {Type: field.TypeUint32, Column: contact.FieldDeletedAt},
+			contact.FieldAppID:       {Type: field.TypeUUID, Column: contact.FieldAppID},
+			contact.FieldUsedFor:     {Type: field.TypeString, Column: contact.FieldUsedFor},
+			contact.FieldSender:      {Type: field.TypeString, Column: contact.FieldSender},
+			contact.FieldAccount:     {Type: field.TypeString, Column: contact.FieldAccount},
+			contact.FieldAccountType: {Type: field.TypeString, Column: contact.FieldAccountType},
 		},
 	}
 	graph.Nodes[1] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
-			Table:   appemailtemplate.Table,
-			Columns: appemailtemplate.Columns,
+			Table:   emailtemplate.Table,
+			Columns: emailtemplate.Columns,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeUUID,
-				Column: appemailtemplate.FieldID,
+				Column: emailtemplate.FieldID,
 			},
 		},
-		Type: "AppEmailTemplate",
+		Type: "EmailTemplate",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			appemailtemplate.FieldCreatedAt:         {Type: field.TypeUint32, Column: appemailtemplate.FieldCreatedAt},
-			appemailtemplate.FieldUpdatedAt:         {Type: field.TypeUint32, Column: appemailtemplate.FieldUpdatedAt},
-			appemailtemplate.FieldDeletedAt:         {Type: field.TypeUint32, Column: appemailtemplate.FieldDeletedAt},
-			appemailtemplate.FieldAppID:             {Type: field.TypeUUID, Column: appemailtemplate.FieldAppID},
-			appemailtemplate.FieldLangID:            {Type: field.TypeUUID, Column: appemailtemplate.FieldLangID},
-			appemailtemplate.FieldDefaultToUsername: {Type: field.TypeString, Column: appemailtemplate.FieldDefaultToUsername},
-			appemailtemplate.FieldUsedFor:           {Type: field.TypeString, Column: appemailtemplate.FieldUsedFor},
-			appemailtemplate.FieldSender:            {Type: field.TypeString, Column: appemailtemplate.FieldSender},
-			appemailtemplate.FieldReplyTos:          {Type: field.TypeJSON, Column: appemailtemplate.FieldReplyTos},
-			appemailtemplate.FieldCcTos:             {Type: field.TypeJSON, Column: appemailtemplate.FieldCcTos},
-			appemailtemplate.FieldSubject:           {Type: field.TypeString, Column: appemailtemplate.FieldSubject},
-			appemailtemplate.FieldBody:              {Type: field.TypeString, Column: appemailtemplate.FieldBody},
+			emailtemplate.FieldCreatedAt:         {Type: field.TypeUint32, Column: emailtemplate.FieldCreatedAt},
+			emailtemplate.FieldUpdatedAt:         {Type: field.TypeUint32, Column: emailtemplate.FieldUpdatedAt},
+			emailtemplate.FieldDeletedAt:         {Type: field.TypeUint32, Column: emailtemplate.FieldDeletedAt},
+			emailtemplate.FieldAppID:             {Type: field.TypeUUID, Column: emailtemplate.FieldAppID},
+			emailtemplate.FieldLangID:            {Type: field.TypeUUID, Column: emailtemplate.FieldLangID},
+			emailtemplate.FieldDefaultToUsername: {Type: field.TypeString, Column: emailtemplate.FieldDefaultToUsername},
+			emailtemplate.FieldUsedFor:           {Type: field.TypeString, Column: emailtemplate.FieldUsedFor},
+			emailtemplate.FieldSender:            {Type: field.TypeString, Column: emailtemplate.FieldSender},
+			emailtemplate.FieldReplyTos:          {Type: field.TypeJSON, Column: emailtemplate.FieldReplyTos},
+			emailtemplate.FieldCcTos:             {Type: field.TypeJSON, Column: emailtemplate.FieldCcTos},
+			emailtemplate.FieldSubject:           {Type: field.TypeString, Column: emailtemplate.FieldSubject},
+			emailtemplate.FieldBody:              {Type: field.TypeString, Column: emailtemplate.FieldBody},
 		},
 	}
 	graph.Nodes[2] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
-			Table:   appsmstemplate.Table,
-			Columns: appsmstemplate.Columns,
+			Table:   smstemplate.Table,
+			Columns: smstemplate.Columns,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeUUID,
-				Column: appsmstemplate.FieldID,
+				Column: smstemplate.FieldID,
 			},
 		},
-		Type: "AppSMSTemplate",
+		Type: "SMSTemplate",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			appsmstemplate.FieldCreatedAt: {Type: field.TypeUint32, Column: appsmstemplate.FieldCreatedAt},
-			appsmstemplate.FieldUpdatedAt: {Type: field.TypeUint32, Column: appsmstemplate.FieldUpdatedAt},
-			appsmstemplate.FieldDeletedAt: {Type: field.TypeUint32, Column: appsmstemplate.FieldDeletedAt},
-			appsmstemplate.FieldAppID:     {Type: field.TypeUUID, Column: appsmstemplate.FieldAppID},
-			appsmstemplate.FieldLangID:    {Type: field.TypeUUID, Column: appsmstemplate.FieldLangID},
-			appsmstemplate.FieldUsedFor:   {Type: field.TypeString, Column: appsmstemplate.FieldUsedFor},
-			appsmstemplate.FieldSubject:   {Type: field.TypeString, Column: appsmstemplate.FieldSubject},
-			appsmstemplate.FieldMessage:   {Type: field.TypeString, Column: appsmstemplate.FieldMessage},
+			smstemplate.FieldCreatedAt: {Type: field.TypeUint32, Column: smstemplate.FieldCreatedAt},
+			smstemplate.FieldUpdatedAt: {Type: field.TypeUint32, Column: smstemplate.FieldUpdatedAt},
+			smstemplate.FieldDeletedAt: {Type: field.TypeUint32, Column: smstemplate.FieldDeletedAt},
+			smstemplate.FieldAppID:     {Type: field.TypeUUID, Column: smstemplate.FieldAppID},
+			smstemplate.FieldLangID:    {Type: field.TypeUUID, Column: smstemplate.FieldLangID},
+			smstemplate.FieldUsedFor:   {Type: field.TypeString, Column: smstemplate.FieldUsedFor},
+			smstemplate.FieldSubject:   {Type: field.TypeString, Column: smstemplate.FieldSubject},
+			smstemplate.FieldMessage:   {Type: field.TypeString, Column: smstemplate.FieldMessage},
 		},
 	}
 	return graph
@@ -93,33 +93,33 @@ type predicateAdder interface {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (acq *AppContactQuery) addPredicate(pred func(s *sql.Selector)) {
-	acq.predicates = append(acq.predicates, pred)
+func (cq *ContactQuery) addPredicate(pred func(s *sql.Selector)) {
+	cq.predicates = append(cq.predicates, pred)
 }
 
-// Filter returns a Filter implementation to apply filters on the AppContactQuery builder.
-func (acq *AppContactQuery) Filter() *AppContactFilter {
-	return &AppContactFilter{config: acq.config, predicateAdder: acq}
+// Filter returns a Filter implementation to apply filters on the ContactQuery builder.
+func (cq *ContactQuery) Filter() *ContactFilter {
+	return &ContactFilter{config: cq.config, predicateAdder: cq}
 }
 
 // addPredicate implements the predicateAdder interface.
-func (m *AppContactMutation) addPredicate(pred func(s *sql.Selector)) {
+func (m *ContactMutation) addPredicate(pred func(s *sql.Selector)) {
 	m.predicates = append(m.predicates, pred)
 }
 
-// Filter returns an entql.Where implementation to apply filters on the AppContactMutation builder.
-func (m *AppContactMutation) Filter() *AppContactFilter {
-	return &AppContactFilter{config: m.config, predicateAdder: m}
+// Filter returns an entql.Where implementation to apply filters on the ContactMutation builder.
+func (m *ContactMutation) Filter() *ContactFilter {
+	return &ContactFilter{config: m.config, predicateAdder: m}
 }
 
-// AppContactFilter provides a generic filtering capability at runtime for AppContactQuery.
-type AppContactFilter struct {
+// ContactFilter provides a generic filtering capability at runtime for ContactQuery.
+type ContactFilter struct {
 	predicateAdder
 	config
 }
 
 // Where applies the entql predicate on the query filter.
-func (f *AppContactFilter) Where(p entql.P) {
+func (f *ContactFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
 		if err := schemaGraph.EvalP(schemaGraph.Nodes[0].Type, p, s); err != nil {
 			s.AddError(err)
@@ -128,78 +128,78 @@ func (f *AppContactFilter) Where(p entql.P) {
 }
 
 // WhereID applies the entql [16]byte predicate on the id field.
-func (f *AppContactFilter) WhereID(p entql.ValueP) {
-	f.Where(p.Field(appcontact.FieldID))
+func (f *ContactFilter) WhereID(p entql.ValueP) {
+	f.Where(p.Field(contact.FieldID))
 }
 
 // WhereCreatedAt applies the entql uint32 predicate on the created_at field.
-func (f *AppContactFilter) WhereCreatedAt(p entql.Uint32P) {
-	f.Where(p.Field(appcontact.FieldCreatedAt))
+func (f *ContactFilter) WhereCreatedAt(p entql.Uint32P) {
+	f.Where(p.Field(contact.FieldCreatedAt))
 }
 
 // WhereUpdatedAt applies the entql uint32 predicate on the updated_at field.
-func (f *AppContactFilter) WhereUpdatedAt(p entql.Uint32P) {
-	f.Where(p.Field(appcontact.FieldUpdatedAt))
+func (f *ContactFilter) WhereUpdatedAt(p entql.Uint32P) {
+	f.Where(p.Field(contact.FieldUpdatedAt))
 }
 
 // WhereDeletedAt applies the entql uint32 predicate on the deleted_at field.
-func (f *AppContactFilter) WhereDeletedAt(p entql.Uint32P) {
-	f.Where(p.Field(appcontact.FieldDeletedAt))
+func (f *ContactFilter) WhereDeletedAt(p entql.Uint32P) {
+	f.Where(p.Field(contact.FieldDeletedAt))
 }
 
 // WhereAppID applies the entql [16]byte predicate on the app_id field.
-func (f *AppContactFilter) WhereAppID(p entql.ValueP) {
-	f.Where(p.Field(appcontact.FieldAppID))
+func (f *ContactFilter) WhereAppID(p entql.ValueP) {
+	f.Where(p.Field(contact.FieldAppID))
 }
 
 // WhereUsedFor applies the entql string predicate on the used_for field.
-func (f *AppContactFilter) WhereUsedFor(p entql.StringP) {
-	f.Where(p.Field(appcontact.FieldUsedFor))
+func (f *ContactFilter) WhereUsedFor(p entql.StringP) {
+	f.Where(p.Field(contact.FieldUsedFor))
 }
 
 // WhereSender applies the entql string predicate on the sender field.
-func (f *AppContactFilter) WhereSender(p entql.StringP) {
-	f.Where(p.Field(appcontact.FieldSender))
+func (f *ContactFilter) WhereSender(p entql.StringP) {
+	f.Where(p.Field(contact.FieldSender))
 }
 
 // WhereAccount applies the entql string predicate on the account field.
-func (f *AppContactFilter) WhereAccount(p entql.StringP) {
-	f.Where(p.Field(appcontact.FieldAccount))
+func (f *ContactFilter) WhereAccount(p entql.StringP) {
+	f.Where(p.Field(contact.FieldAccount))
 }
 
 // WhereAccountType applies the entql string predicate on the account_type field.
-func (f *AppContactFilter) WhereAccountType(p entql.StringP) {
-	f.Where(p.Field(appcontact.FieldAccountType))
+func (f *ContactFilter) WhereAccountType(p entql.StringP) {
+	f.Where(p.Field(contact.FieldAccountType))
 }
 
 // addPredicate implements the predicateAdder interface.
-func (aetq *AppEmailTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
-	aetq.predicates = append(aetq.predicates, pred)
+func (etq *EmailTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
+	etq.predicates = append(etq.predicates, pred)
 }
 
-// Filter returns a Filter implementation to apply filters on the AppEmailTemplateQuery builder.
-func (aetq *AppEmailTemplateQuery) Filter() *AppEmailTemplateFilter {
-	return &AppEmailTemplateFilter{config: aetq.config, predicateAdder: aetq}
+// Filter returns a Filter implementation to apply filters on the EmailTemplateQuery builder.
+func (etq *EmailTemplateQuery) Filter() *EmailTemplateFilter {
+	return &EmailTemplateFilter{config: etq.config, predicateAdder: etq}
 }
 
 // addPredicate implements the predicateAdder interface.
-func (m *AppEmailTemplateMutation) addPredicate(pred func(s *sql.Selector)) {
+func (m *EmailTemplateMutation) addPredicate(pred func(s *sql.Selector)) {
 	m.predicates = append(m.predicates, pred)
 }
 
-// Filter returns an entql.Where implementation to apply filters on the AppEmailTemplateMutation builder.
-func (m *AppEmailTemplateMutation) Filter() *AppEmailTemplateFilter {
-	return &AppEmailTemplateFilter{config: m.config, predicateAdder: m}
+// Filter returns an entql.Where implementation to apply filters on the EmailTemplateMutation builder.
+func (m *EmailTemplateMutation) Filter() *EmailTemplateFilter {
+	return &EmailTemplateFilter{config: m.config, predicateAdder: m}
 }
 
-// AppEmailTemplateFilter provides a generic filtering capability at runtime for AppEmailTemplateQuery.
-type AppEmailTemplateFilter struct {
+// EmailTemplateFilter provides a generic filtering capability at runtime for EmailTemplateQuery.
+type EmailTemplateFilter struct {
 	predicateAdder
 	config
 }
 
 // Where applies the entql predicate on the query filter.
-func (f *AppEmailTemplateFilter) Where(p entql.P) {
+func (f *EmailTemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
 		if err := schemaGraph.EvalP(schemaGraph.Nodes[1].Type, p, s); err != nil {
 			s.AddError(err)
@@ -208,98 +208,98 @@ func (f *AppEmailTemplateFilter) Where(p entql.P) {
 }
 
 // WhereID applies the entql [16]byte predicate on the id field.
-func (f *AppEmailTemplateFilter) WhereID(p entql.ValueP) {
-	f.Where(p.Field(appemailtemplate.FieldID))
+func (f *EmailTemplateFilter) WhereID(p entql.ValueP) {
+	f.Where(p.Field(emailtemplate.FieldID))
 }
 
 // WhereCreatedAt applies the entql uint32 predicate on the created_at field.
-func (f *AppEmailTemplateFilter) WhereCreatedAt(p entql.Uint32P) {
-	f.Where(p.Field(appemailtemplate.FieldCreatedAt))
+func (f *EmailTemplateFilter) WhereCreatedAt(p entql.Uint32P) {
+	f.Where(p.Field(emailtemplate.FieldCreatedAt))
 }
 
 // WhereUpdatedAt applies the entql uint32 predicate on the updated_at field.
-func (f *AppEmailTemplateFilter) WhereUpdatedAt(p entql.Uint32P) {
-	f.Where(p.Field(appemailtemplate.FieldUpdatedAt))
+func (f *EmailTemplateFilter) WhereUpdatedAt(p entql.Uint32P) {
+	f.Where(p.Field(emailtemplate.FieldUpdatedAt))
 }
 
 // WhereDeletedAt applies the entql uint32 predicate on the deleted_at field.
-func (f *AppEmailTemplateFilter) WhereDeletedAt(p entql.Uint32P) {
-	f.Where(p.Field(appemailtemplate.FieldDeletedAt))
+func (f *EmailTemplateFilter) WhereDeletedAt(p entql.Uint32P) {
+	f.Where(p.Field(emailtemplate.FieldDeletedAt))
 }
 
 // WhereAppID applies the entql [16]byte predicate on the app_id field.
-func (f *AppEmailTemplateFilter) WhereAppID(p entql.ValueP) {
-	f.Where(p.Field(appemailtemplate.FieldAppID))
+func (f *EmailTemplateFilter) WhereAppID(p entql.ValueP) {
+	f.Where(p.Field(emailtemplate.FieldAppID))
 }
 
 // WhereLangID applies the entql [16]byte predicate on the lang_id field.
-func (f *AppEmailTemplateFilter) WhereLangID(p entql.ValueP) {
-	f.Where(p.Field(appemailtemplate.FieldLangID))
+func (f *EmailTemplateFilter) WhereLangID(p entql.ValueP) {
+	f.Where(p.Field(emailtemplate.FieldLangID))
 }
 
 // WhereDefaultToUsername applies the entql string predicate on the default_to_username field.
-func (f *AppEmailTemplateFilter) WhereDefaultToUsername(p entql.StringP) {
-	f.Where(p.Field(appemailtemplate.FieldDefaultToUsername))
+func (f *EmailTemplateFilter) WhereDefaultToUsername(p entql.StringP) {
+	f.Where(p.Field(emailtemplate.FieldDefaultToUsername))
 }
 
 // WhereUsedFor applies the entql string predicate on the used_for field.
-func (f *AppEmailTemplateFilter) WhereUsedFor(p entql.StringP) {
-	f.Where(p.Field(appemailtemplate.FieldUsedFor))
+func (f *EmailTemplateFilter) WhereUsedFor(p entql.StringP) {
+	f.Where(p.Field(emailtemplate.FieldUsedFor))
 }
 
 // WhereSender applies the entql string predicate on the sender field.
-func (f *AppEmailTemplateFilter) WhereSender(p entql.StringP) {
-	f.Where(p.Field(appemailtemplate.FieldSender))
+func (f *EmailTemplateFilter) WhereSender(p entql.StringP) {
+	f.Where(p.Field(emailtemplate.FieldSender))
 }
 
 // WhereReplyTos applies the entql json.RawMessage predicate on the reply_tos field.
-func (f *AppEmailTemplateFilter) WhereReplyTos(p entql.BytesP) {
-	f.Where(p.Field(appemailtemplate.FieldReplyTos))
+func (f *EmailTemplateFilter) WhereReplyTos(p entql.BytesP) {
+	f.Where(p.Field(emailtemplate.FieldReplyTos))
 }
 
 // WhereCcTos applies the entql json.RawMessage predicate on the cc_tos field.
-func (f *AppEmailTemplateFilter) WhereCcTos(p entql.BytesP) {
-	f.Where(p.Field(appemailtemplate.FieldCcTos))
+func (f *EmailTemplateFilter) WhereCcTos(p entql.BytesP) {
+	f.Where(p.Field(emailtemplate.FieldCcTos))
 }
 
 // WhereSubject applies the entql string predicate on the subject field.
-func (f *AppEmailTemplateFilter) WhereSubject(p entql.StringP) {
-	f.Where(p.Field(appemailtemplate.FieldSubject))
+func (f *EmailTemplateFilter) WhereSubject(p entql.StringP) {
+	f.Where(p.Field(emailtemplate.FieldSubject))
 }
 
 // WhereBody applies the entql string predicate on the body field.
-func (f *AppEmailTemplateFilter) WhereBody(p entql.StringP) {
-	f.Where(p.Field(appemailtemplate.FieldBody))
+func (f *EmailTemplateFilter) WhereBody(p entql.StringP) {
+	f.Where(p.Field(emailtemplate.FieldBody))
 }
 
 // addPredicate implements the predicateAdder interface.
-func (astq *AppSMSTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
-	astq.predicates = append(astq.predicates, pred)
+func (stq *SMSTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
+	stq.predicates = append(stq.predicates, pred)
 }
 
-// Filter returns a Filter implementation to apply filters on the AppSMSTemplateQuery builder.
-func (astq *AppSMSTemplateQuery) Filter() *AppSMSTemplateFilter {
-	return &AppSMSTemplateFilter{config: astq.config, predicateAdder: astq}
+// Filter returns a Filter implementation to apply filters on the SMSTemplateQuery builder.
+func (stq *SMSTemplateQuery) Filter() *SMSTemplateFilter {
+	return &SMSTemplateFilter{config: stq.config, predicateAdder: stq}
 }
 
 // addPredicate implements the predicateAdder interface.
-func (m *AppSMSTemplateMutation) addPredicate(pred func(s *sql.Selector)) {
+func (m *SMSTemplateMutation) addPredicate(pred func(s *sql.Selector)) {
 	m.predicates = append(m.predicates, pred)
 }
 
-// Filter returns an entql.Where implementation to apply filters on the AppSMSTemplateMutation builder.
-func (m *AppSMSTemplateMutation) Filter() *AppSMSTemplateFilter {
-	return &AppSMSTemplateFilter{config: m.config, predicateAdder: m}
+// Filter returns an entql.Where implementation to apply filters on the SMSTemplateMutation builder.
+func (m *SMSTemplateMutation) Filter() *SMSTemplateFilter {
+	return &SMSTemplateFilter{config: m.config, predicateAdder: m}
 }
 
-// AppSMSTemplateFilter provides a generic filtering capability at runtime for AppSMSTemplateQuery.
-type AppSMSTemplateFilter struct {
+// SMSTemplateFilter provides a generic filtering capability at runtime for SMSTemplateQuery.
+type SMSTemplateFilter struct {
 	predicateAdder
 	config
 }
 
 // Where applies the entql predicate on the query filter.
-func (f *AppSMSTemplateFilter) Where(p entql.P) {
+func (f *SMSTemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
 		if err := schemaGraph.EvalP(schemaGraph.Nodes[2].Type, p, s); err != nil {
 			s.AddError(err)
@@ -308,46 +308,46 @@ func (f *AppSMSTemplateFilter) Where(p entql.P) {
 }
 
 // WhereID applies the entql [16]byte predicate on the id field.
-func (f *AppSMSTemplateFilter) WhereID(p entql.ValueP) {
-	f.Where(p.Field(appsmstemplate.FieldID))
+func (f *SMSTemplateFilter) WhereID(p entql.ValueP) {
+	f.Where(p.Field(smstemplate.FieldID))
 }
 
 // WhereCreatedAt applies the entql uint32 predicate on the created_at field.
-func (f *AppSMSTemplateFilter) WhereCreatedAt(p entql.Uint32P) {
-	f.Where(p.Field(appsmstemplate.FieldCreatedAt))
+func (f *SMSTemplateFilter) WhereCreatedAt(p entql.Uint32P) {
+	f.Where(p.Field(smstemplate.FieldCreatedAt))
 }
 
 // WhereUpdatedAt applies the entql uint32 predicate on the updated_at field.
-func (f *AppSMSTemplateFilter) WhereUpdatedAt(p entql.Uint32P) {
-	f.Where(p.Field(appsmstemplate.FieldUpdatedAt))
+func (f *SMSTemplateFilter) WhereUpdatedAt(p entql.Uint32P) {
+	f.Where(p.Field(smstemplate.FieldUpdatedAt))
 }
 
 // WhereDeletedAt applies the entql uint32 predicate on the deleted_at field.
-func (f *AppSMSTemplateFilter) WhereDeletedAt(p entql.Uint32P) {
-	f.Where(p.Field(appsmstemplate.FieldDeletedAt))
+func (f *SMSTemplateFilter) WhereDeletedAt(p entql.Uint32P) {
+	f.Where(p.Field(smstemplate.FieldDeletedAt))
 }
 
 // WhereAppID applies the entql [16]byte predicate on the app_id field.
-func (f *AppSMSTemplateFilter) WhereAppID(p entql.ValueP) {
-	f.Where(p.Field(appsmstemplate.FieldAppID))
+func (f *SMSTemplateFilter) WhereAppID(p entql.ValueP) {
+	f.Where(p.Field(smstemplate.FieldAppID))
 }
 
 // WhereLangID applies the entql [16]byte predicate on the lang_id field.
-func (f *AppSMSTemplateFilter) WhereLangID(p entql.ValueP) {
-	f.Where(p.Field(appsmstemplate.FieldLangID))
+func (f *SMSTemplateFilter) WhereLangID(p entql.ValueP) {
+	f.Where(p.Field(smstemplate.FieldLangID))
 }
 
 // WhereUsedFor applies the entql string predicate on the used_for field.
-func (f *AppSMSTemplateFilter) WhereUsedFor(p entql.StringP) {
-	f.Where(p.Field(appsmstemplate.FieldUsedFor))
+func (f *SMSTemplateFilter) WhereUsedFor(p entql.StringP) {
+	f.Where(p.Field(smstemplate.FieldUsedFor))
 }
 
 // WhereSubject applies the entql string predicate on the subject field.
-func (f *AppSMSTemplateFilter) WhereSubject(p entql.StringP) {
-	f.Where(p.Field(appsmstemplate.FieldSubject))
+func (f *SMSTemplateFilter) WhereSubject(p entql.StringP) {
+	f.Where(p.Field(smstemplate.FieldSubject))
 }
 
 // WhereMessage applies the entql string predicate on the message field.
-func (f *AppSMSTemplateFilter) WhereMessage(p entql.StringP) {
-	f.Where(p.Field(appsmstemplate.FieldMessage))
+func (f *SMSTemplateFilter) WhereMessage(p entql.StringP) {
+	f.Where(p.Field(smstemplate.FieldMessage))
 }

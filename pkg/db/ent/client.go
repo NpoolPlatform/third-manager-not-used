@@ -11,9 +11,9 @@ import (
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/migrate"
 	"github.com/google/uuid"
 
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appcontact"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appemailtemplate"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appsmstemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/contact"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
@@ -24,12 +24,12 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// AppContact is the client for interacting with the AppContact builders.
-	AppContact *AppContactClient
-	// AppEmailTemplate is the client for interacting with the AppEmailTemplate builders.
-	AppEmailTemplate *AppEmailTemplateClient
-	// AppSMSTemplate is the client for interacting with the AppSMSTemplate builders.
-	AppSMSTemplate *AppSMSTemplateClient
+	// Contact is the client for interacting with the Contact builders.
+	Contact *ContactClient
+	// EmailTemplate is the client for interacting with the EmailTemplate builders.
+	EmailTemplate *EmailTemplateClient
+	// SMSTemplate is the client for interacting with the SMSTemplate builders.
+	SMSTemplate *SMSTemplateClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -43,9 +43,9 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.AppContact = NewAppContactClient(c.config)
-	c.AppEmailTemplate = NewAppEmailTemplateClient(c.config)
-	c.AppSMSTemplate = NewAppSMSTemplateClient(c.config)
+	c.Contact = NewContactClient(c.config)
+	c.EmailTemplate = NewEmailTemplateClient(c.config)
+	c.SMSTemplate = NewSMSTemplateClient(c.config)
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -77,11 +77,11 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:              ctx,
-		config:           cfg,
-		AppContact:       NewAppContactClient(cfg),
-		AppEmailTemplate: NewAppEmailTemplateClient(cfg),
-		AppSMSTemplate:   NewAppSMSTemplateClient(cfg),
+		ctx:           ctx,
+		config:        cfg,
+		Contact:       NewContactClient(cfg),
+		EmailTemplate: NewEmailTemplateClient(cfg),
+		SMSTemplate:   NewSMSTemplateClient(cfg),
 	}, nil
 }
 
@@ -99,18 +99,18 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:              ctx,
-		config:           cfg,
-		AppContact:       NewAppContactClient(cfg),
-		AppEmailTemplate: NewAppEmailTemplateClient(cfg),
-		AppSMSTemplate:   NewAppSMSTemplateClient(cfg),
+		ctx:           ctx,
+		config:        cfg,
+		Contact:       NewContactClient(cfg),
+		EmailTemplate: NewEmailTemplateClient(cfg),
+		SMSTemplate:   NewSMSTemplateClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		AppContact.
+//		Contact.
 //		Query().
 //		Count(ctx)
 //
@@ -133,89 +133,89 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.AppContact.Use(hooks...)
-	c.AppEmailTemplate.Use(hooks...)
-	c.AppSMSTemplate.Use(hooks...)
+	c.Contact.Use(hooks...)
+	c.EmailTemplate.Use(hooks...)
+	c.SMSTemplate.Use(hooks...)
 }
 
-// AppContactClient is a client for the AppContact schema.
-type AppContactClient struct {
+// ContactClient is a client for the Contact schema.
+type ContactClient struct {
 	config
 }
 
-// NewAppContactClient returns a client for the AppContact from the given config.
-func NewAppContactClient(c config) *AppContactClient {
-	return &AppContactClient{config: c}
+// NewContactClient returns a client for the Contact from the given config.
+func NewContactClient(c config) *ContactClient {
+	return &ContactClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `appcontact.Hooks(f(g(h())))`.
-func (c *AppContactClient) Use(hooks ...Hook) {
-	c.hooks.AppContact = append(c.hooks.AppContact, hooks...)
+// A call to `Use(f, g, h)` equals to `contact.Hooks(f(g(h())))`.
+func (c *ContactClient) Use(hooks ...Hook) {
+	c.hooks.Contact = append(c.hooks.Contact, hooks...)
 }
 
-// Create returns a builder for creating a AppContact entity.
-func (c *AppContactClient) Create() *AppContactCreate {
-	mutation := newAppContactMutation(c.config, OpCreate)
-	return &AppContactCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a Contact entity.
+func (c *ContactClient) Create() *ContactCreate {
+	mutation := newContactMutation(c.config, OpCreate)
+	return &ContactCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of AppContact entities.
-func (c *AppContactClient) CreateBulk(builders ...*AppContactCreate) *AppContactCreateBulk {
-	return &AppContactCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of Contact entities.
+func (c *ContactClient) CreateBulk(builders ...*ContactCreate) *ContactCreateBulk {
+	return &ContactCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for AppContact.
-func (c *AppContactClient) Update() *AppContactUpdate {
-	mutation := newAppContactMutation(c.config, OpUpdate)
-	return &AppContactUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for Contact.
+func (c *ContactClient) Update() *ContactUpdate {
+	mutation := newContactMutation(c.config, OpUpdate)
+	return &ContactUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *AppContactClient) UpdateOne(ac *AppContact) *AppContactUpdateOne {
-	mutation := newAppContactMutation(c.config, OpUpdateOne, withAppContact(ac))
-	return &AppContactUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ContactClient) UpdateOne(co *Contact) *ContactUpdateOne {
+	mutation := newContactMutation(c.config, OpUpdateOne, withContact(co))
+	return &ContactUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *AppContactClient) UpdateOneID(id uuid.UUID) *AppContactUpdateOne {
-	mutation := newAppContactMutation(c.config, OpUpdateOne, withAppContactID(id))
-	return &AppContactUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ContactClient) UpdateOneID(id uuid.UUID) *ContactUpdateOne {
+	mutation := newContactMutation(c.config, OpUpdateOne, withContactID(id))
+	return &ContactUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for AppContact.
-func (c *AppContactClient) Delete() *AppContactDelete {
-	mutation := newAppContactMutation(c.config, OpDelete)
-	return &AppContactDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for Contact.
+func (c *ContactClient) Delete() *ContactDelete {
+	mutation := newContactMutation(c.config, OpDelete)
+	return &ContactDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *AppContactClient) DeleteOne(ac *AppContact) *AppContactDeleteOne {
-	return c.DeleteOneID(ac.ID)
+func (c *ContactClient) DeleteOne(co *Contact) *ContactDeleteOne {
+	return c.DeleteOneID(co.ID)
 }
 
 // DeleteOne returns a builder for deleting the given entity by its id.
-func (c *AppContactClient) DeleteOneID(id uuid.UUID) *AppContactDeleteOne {
-	builder := c.Delete().Where(appcontact.ID(id))
+func (c *ContactClient) DeleteOneID(id uuid.UUID) *ContactDeleteOne {
+	builder := c.Delete().Where(contact.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &AppContactDeleteOne{builder}
+	return &ContactDeleteOne{builder}
 }
 
-// Query returns a query builder for AppContact.
-func (c *AppContactClient) Query() *AppContactQuery {
-	return &AppContactQuery{
+// Query returns a query builder for Contact.
+func (c *ContactClient) Query() *ContactQuery {
+	return &ContactQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a AppContact entity by its id.
-func (c *AppContactClient) Get(ctx context.Context, id uuid.UUID) (*AppContact, error) {
-	return c.Query().Where(appcontact.ID(id)).Only(ctx)
+// Get returns a Contact entity by its id.
+func (c *ContactClient) Get(ctx context.Context, id uuid.UUID) (*Contact, error) {
+	return c.Query().Where(contact.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *AppContactClient) GetX(ctx context.Context, id uuid.UUID) *AppContact {
+func (c *ContactClient) GetX(ctx context.Context, id uuid.UUID) *Contact {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -224,89 +224,89 @@ func (c *AppContactClient) GetX(ctx context.Context, id uuid.UUID) *AppContact {
 }
 
 // Hooks returns the client hooks.
-func (c *AppContactClient) Hooks() []Hook {
-	hooks := c.hooks.AppContact
-	return append(hooks[:len(hooks):len(hooks)], appcontact.Hooks[:]...)
+func (c *ContactClient) Hooks() []Hook {
+	hooks := c.hooks.Contact
+	return append(hooks[:len(hooks):len(hooks)], contact.Hooks[:]...)
 }
 
-// AppEmailTemplateClient is a client for the AppEmailTemplate schema.
-type AppEmailTemplateClient struct {
+// EmailTemplateClient is a client for the EmailTemplate schema.
+type EmailTemplateClient struct {
 	config
 }
 
-// NewAppEmailTemplateClient returns a client for the AppEmailTemplate from the given config.
-func NewAppEmailTemplateClient(c config) *AppEmailTemplateClient {
-	return &AppEmailTemplateClient{config: c}
+// NewEmailTemplateClient returns a client for the EmailTemplate from the given config.
+func NewEmailTemplateClient(c config) *EmailTemplateClient {
+	return &EmailTemplateClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `appemailtemplate.Hooks(f(g(h())))`.
-func (c *AppEmailTemplateClient) Use(hooks ...Hook) {
-	c.hooks.AppEmailTemplate = append(c.hooks.AppEmailTemplate, hooks...)
+// A call to `Use(f, g, h)` equals to `emailtemplate.Hooks(f(g(h())))`.
+func (c *EmailTemplateClient) Use(hooks ...Hook) {
+	c.hooks.EmailTemplate = append(c.hooks.EmailTemplate, hooks...)
 }
 
-// Create returns a builder for creating a AppEmailTemplate entity.
-func (c *AppEmailTemplateClient) Create() *AppEmailTemplateCreate {
-	mutation := newAppEmailTemplateMutation(c.config, OpCreate)
-	return &AppEmailTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a EmailTemplate entity.
+func (c *EmailTemplateClient) Create() *EmailTemplateCreate {
+	mutation := newEmailTemplateMutation(c.config, OpCreate)
+	return &EmailTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of AppEmailTemplate entities.
-func (c *AppEmailTemplateClient) CreateBulk(builders ...*AppEmailTemplateCreate) *AppEmailTemplateCreateBulk {
-	return &AppEmailTemplateCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of EmailTemplate entities.
+func (c *EmailTemplateClient) CreateBulk(builders ...*EmailTemplateCreate) *EmailTemplateCreateBulk {
+	return &EmailTemplateCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for AppEmailTemplate.
-func (c *AppEmailTemplateClient) Update() *AppEmailTemplateUpdate {
-	mutation := newAppEmailTemplateMutation(c.config, OpUpdate)
-	return &AppEmailTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for EmailTemplate.
+func (c *EmailTemplateClient) Update() *EmailTemplateUpdate {
+	mutation := newEmailTemplateMutation(c.config, OpUpdate)
+	return &EmailTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *AppEmailTemplateClient) UpdateOne(aet *AppEmailTemplate) *AppEmailTemplateUpdateOne {
-	mutation := newAppEmailTemplateMutation(c.config, OpUpdateOne, withAppEmailTemplate(aet))
-	return &AppEmailTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *EmailTemplateClient) UpdateOne(et *EmailTemplate) *EmailTemplateUpdateOne {
+	mutation := newEmailTemplateMutation(c.config, OpUpdateOne, withEmailTemplate(et))
+	return &EmailTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *AppEmailTemplateClient) UpdateOneID(id uuid.UUID) *AppEmailTemplateUpdateOne {
-	mutation := newAppEmailTemplateMutation(c.config, OpUpdateOne, withAppEmailTemplateID(id))
-	return &AppEmailTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *EmailTemplateClient) UpdateOneID(id uuid.UUID) *EmailTemplateUpdateOne {
+	mutation := newEmailTemplateMutation(c.config, OpUpdateOne, withEmailTemplateID(id))
+	return &EmailTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for AppEmailTemplate.
-func (c *AppEmailTemplateClient) Delete() *AppEmailTemplateDelete {
-	mutation := newAppEmailTemplateMutation(c.config, OpDelete)
-	return &AppEmailTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for EmailTemplate.
+func (c *EmailTemplateClient) Delete() *EmailTemplateDelete {
+	mutation := newEmailTemplateMutation(c.config, OpDelete)
+	return &EmailTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *AppEmailTemplateClient) DeleteOne(aet *AppEmailTemplate) *AppEmailTemplateDeleteOne {
-	return c.DeleteOneID(aet.ID)
+func (c *EmailTemplateClient) DeleteOne(et *EmailTemplate) *EmailTemplateDeleteOne {
+	return c.DeleteOneID(et.ID)
 }
 
 // DeleteOne returns a builder for deleting the given entity by its id.
-func (c *AppEmailTemplateClient) DeleteOneID(id uuid.UUID) *AppEmailTemplateDeleteOne {
-	builder := c.Delete().Where(appemailtemplate.ID(id))
+func (c *EmailTemplateClient) DeleteOneID(id uuid.UUID) *EmailTemplateDeleteOne {
+	builder := c.Delete().Where(emailtemplate.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &AppEmailTemplateDeleteOne{builder}
+	return &EmailTemplateDeleteOne{builder}
 }
 
-// Query returns a query builder for AppEmailTemplate.
-func (c *AppEmailTemplateClient) Query() *AppEmailTemplateQuery {
-	return &AppEmailTemplateQuery{
+// Query returns a query builder for EmailTemplate.
+func (c *EmailTemplateClient) Query() *EmailTemplateQuery {
+	return &EmailTemplateQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a AppEmailTemplate entity by its id.
-func (c *AppEmailTemplateClient) Get(ctx context.Context, id uuid.UUID) (*AppEmailTemplate, error) {
-	return c.Query().Where(appemailtemplate.ID(id)).Only(ctx)
+// Get returns a EmailTemplate entity by its id.
+func (c *EmailTemplateClient) Get(ctx context.Context, id uuid.UUID) (*EmailTemplate, error) {
+	return c.Query().Where(emailtemplate.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *AppEmailTemplateClient) GetX(ctx context.Context, id uuid.UUID) *AppEmailTemplate {
+func (c *EmailTemplateClient) GetX(ctx context.Context, id uuid.UUID) *EmailTemplate {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -315,89 +315,89 @@ func (c *AppEmailTemplateClient) GetX(ctx context.Context, id uuid.UUID) *AppEma
 }
 
 // Hooks returns the client hooks.
-func (c *AppEmailTemplateClient) Hooks() []Hook {
-	hooks := c.hooks.AppEmailTemplate
-	return append(hooks[:len(hooks):len(hooks)], appemailtemplate.Hooks[:]...)
+func (c *EmailTemplateClient) Hooks() []Hook {
+	hooks := c.hooks.EmailTemplate
+	return append(hooks[:len(hooks):len(hooks)], emailtemplate.Hooks[:]...)
 }
 
-// AppSMSTemplateClient is a client for the AppSMSTemplate schema.
-type AppSMSTemplateClient struct {
+// SMSTemplateClient is a client for the SMSTemplate schema.
+type SMSTemplateClient struct {
 	config
 }
 
-// NewAppSMSTemplateClient returns a client for the AppSMSTemplate from the given config.
-func NewAppSMSTemplateClient(c config) *AppSMSTemplateClient {
-	return &AppSMSTemplateClient{config: c}
+// NewSMSTemplateClient returns a client for the SMSTemplate from the given config.
+func NewSMSTemplateClient(c config) *SMSTemplateClient {
+	return &SMSTemplateClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `appsmstemplate.Hooks(f(g(h())))`.
-func (c *AppSMSTemplateClient) Use(hooks ...Hook) {
-	c.hooks.AppSMSTemplate = append(c.hooks.AppSMSTemplate, hooks...)
+// A call to `Use(f, g, h)` equals to `smstemplate.Hooks(f(g(h())))`.
+func (c *SMSTemplateClient) Use(hooks ...Hook) {
+	c.hooks.SMSTemplate = append(c.hooks.SMSTemplate, hooks...)
 }
 
-// Create returns a builder for creating a AppSMSTemplate entity.
-func (c *AppSMSTemplateClient) Create() *AppSMSTemplateCreate {
-	mutation := newAppSMSTemplateMutation(c.config, OpCreate)
-	return &AppSMSTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a SMSTemplate entity.
+func (c *SMSTemplateClient) Create() *SMSTemplateCreate {
+	mutation := newSMSTemplateMutation(c.config, OpCreate)
+	return &SMSTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of AppSMSTemplate entities.
-func (c *AppSMSTemplateClient) CreateBulk(builders ...*AppSMSTemplateCreate) *AppSMSTemplateCreateBulk {
-	return &AppSMSTemplateCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of SMSTemplate entities.
+func (c *SMSTemplateClient) CreateBulk(builders ...*SMSTemplateCreate) *SMSTemplateCreateBulk {
+	return &SMSTemplateCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for AppSMSTemplate.
-func (c *AppSMSTemplateClient) Update() *AppSMSTemplateUpdate {
-	mutation := newAppSMSTemplateMutation(c.config, OpUpdate)
-	return &AppSMSTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for SMSTemplate.
+func (c *SMSTemplateClient) Update() *SMSTemplateUpdate {
+	mutation := newSMSTemplateMutation(c.config, OpUpdate)
+	return &SMSTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *AppSMSTemplateClient) UpdateOne(ast *AppSMSTemplate) *AppSMSTemplateUpdateOne {
-	mutation := newAppSMSTemplateMutation(c.config, OpUpdateOne, withAppSMSTemplate(ast))
-	return &AppSMSTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *SMSTemplateClient) UpdateOne(st *SMSTemplate) *SMSTemplateUpdateOne {
+	mutation := newSMSTemplateMutation(c.config, OpUpdateOne, withSMSTemplate(st))
+	return &SMSTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *AppSMSTemplateClient) UpdateOneID(id uuid.UUID) *AppSMSTemplateUpdateOne {
-	mutation := newAppSMSTemplateMutation(c.config, OpUpdateOne, withAppSMSTemplateID(id))
-	return &AppSMSTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *SMSTemplateClient) UpdateOneID(id uuid.UUID) *SMSTemplateUpdateOne {
+	mutation := newSMSTemplateMutation(c.config, OpUpdateOne, withSMSTemplateID(id))
+	return &SMSTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for AppSMSTemplate.
-func (c *AppSMSTemplateClient) Delete() *AppSMSTemplateDelete {
-	mutation := newAppSMSTemplateMutation(c.config, OpDelete)
-	return &AppSMSTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for SMSTemplate.
+func (c *SMSTemplateClient) Delete() *SMSTemplateDelete {
+	mutation := newSMSTemplateMutation(c.config, OpDelete)
+	return &SMSTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *AppSMSTemplateClient) DeleteOne(ast *AppSMSTemplate) *AppSMSTemplateDeleteOne {
-	return c.DeleteOneID(ast.ID)
+func (c *SMSTemplateClient) DeleteOne(st *SMSTemplate) *SMSTemplateDeleteOne {
+	return c.DeleteOneID(st.ID)
 }
 
 // DeleteOne returns a builder for deleting the given entity by its id.
-func (c *AppSMSTemplateClient) DeleteOneID(id uuid.UUID) *AppSMSTemplateDeleteOne {
-	builder := c.Delete().Where(appsmstemplate.ID(id))
+func (c *SMSTemplateClient) DeleteOneID(id uuid.UUID) *SMSTemplateDeleteOne {
+	builder := c.Delete().Where(smstemplate.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &AppSMSTemplateDeleteOne{builder}
+	return &SMSTemplateDeleteOne{builder}
 }
 
-// Query returns a query builder for AppSMSTemplate.
-func (c *AppSMSTemplateClient) Query() *AppSMSTemplateQuery {
-	return &AppSMSTemplateQuery{
+// Query returns a query builder for SMSTemplate.
+func (c *SMSTemplateClient) Query() *SMSTemplateQuery {
+	return &SMSTemplateQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a AppSMSTemplate entity by its id.
-func (c *AppSMSTemplateClient) Get(ctx context.Context, id uuid.UUID) (*AppSMSTemplate, error) {
-	return c.Query().Where(appsmstemplate.ID(id)).Only(ctx)
+// Get returns a SMSTemplate entity by its id.
+func (c *SMSTemplateClient) Get(ctx context.Context, id uuid.UUID) (*SMSTemplate, error) {
+	return c.Query().Where(smstemplate.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *AppSMSTemplateClient) GetX(ctx context.Context, id uuid.UUID) *AppSMSTemplate {
+func (c *SMSTemplateClient) GetX(ctx context.Context, id uuid.UUID) *SMSTemplate {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -406,7 +406,7 @@ func (c *AppSMSTemplateClient) GetX(ctx context.Context, id uuid.UUID) *AppSMSTe
 }
 
 // Hooks returns the client hooks.
-func (c *AppSMSTemplateClient) Hooks() []Hook {
-	hooks := c.hooks.AppSMSTemplate
-	return append(hooks[:len(hooks):len(hooks)], appsmstemplate.Hooks[:]...)
+func (c *SMSTemplateClient) Hooks() []Hook {
+	hooks := c.hooks.SMSTemplate
+	return append(hooks[:len(hooks):len(hooks)], smstemplate.Hooks[:]...)
 }

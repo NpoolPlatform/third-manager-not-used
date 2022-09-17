@@ -9,41 +9,41 @@ import (
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent"
 )
 
-// The AppContactFunc type is an adapter to allow the use of ordinary
-// function as AppContact mutator.
-type AppContactFunc func(context.Context, *ent.AppContactMutation) (ent.Value, error)
+// The ContactFunc type is an adapter to allow the use of ordinary
+// function as Contact mutator.
+type ContactFunc func(context.Context, *ent.ContactMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f AppContactFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.AppContactMutation)
+func (f ContactFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ContactMutation)
 	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AppContactMutation", m)
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ContactMutation", m)
 	}
 	return f(ctx, mv)
 }
 
-// The AppEmailTemplateFunc type is an adapter to allow the use of ordinary
-// function as AppEmailTemplate mutator.
-type AppEmailTemplateFunc func(context.Context, *ent.AppEmailTemplateMutation) (ent.Value, error)
+// The EmailTemplateFunc type is an adapter to allow the use of ordinary
+// function as EmailTemplate mutator.
+type EmailTemplateFunc func(context.Context, *ent.EmailTemplateMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f AppEmailTemplateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.AppEmailTemplateMutation)
+func (f EmailTemplateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.EmailTemplateMutation)
 	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AppEmailTemplateMutation", m)
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EmailTemplateMutation", m)
 	}
 	return f(ctx, mv)
 }
 
-// The AppSMSTemplateFunc type is an adapter to allow the use of ordinary
-// function as AppSMSTemplate mutator.
-type AppSMSTemplateFunc func(context.Context, *ent.AppSMSTemplateMutation) (ent.Value, error)
+// The SMSTemplateFunc type is an adapter to allow the use of ordinary
+// function as SMSTemplate mutator.
+type SMSTemplateFunc func(context.Context, *ent.SMSTemplateMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f AppSMSTemplateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.AppSMSTemplateMutation)
+func (f SMSTemplateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.SMSTemplateMutation)
 	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AppSMSTemplateMutation", m)
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SMSTemplateMutation", m)
 	}
 	return f(ctx, mv)
 }

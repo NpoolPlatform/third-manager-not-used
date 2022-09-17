@@ -14,12 +14,12 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
-	// AppContact is the client for interacting with the AppContact builders.
-	AppContact *AppContactClient
-	// AppEmailTemplate is the client for interacting with the AppEmailTemplate builders.
-	AppEmailTemplate *AppEmailTemplateClient
-	// AppSMSTemplate is the client for interacting with the AppSMSTemplate builders.
-	AppSMSTemplate *AppSMSTemplateClient
+	// Contact is the client for interacting with the Contact builders.
+	Contact *ContactClient
+	// EmailTemplate is the client for interacting with the EmailTemplate builders.
+	EmailTemplate *EmailTemplateClient
+	// SMSTemplate is the client for interacting with the SMSTemplate builders.
+	SMSTemplate *SMSTemplateClient
 
 	// lazily loaded.
 	client     *Client
@@ -155,9 +155,9 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
-	tx.AppContact = NewAppContactClient(tx.config)
-	tx.AppEmailTemplate = NewAppEmailTemplateClient(tx.config)
-	tx.AppSMSTemplate = NewAppSMSTemplateClient(tx.config)
+	tx.Contact = NewContactClient(tx.config)
+	tx.EmailTemplate = NewEmailTemplateClient(tx.config)
+	tx.SMSTemplate = NewSMSTemplateClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
@@ -167,7 +167,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: AppContact.QueryXXX(), the query will be executed
+// applies a query, for example: Contact.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

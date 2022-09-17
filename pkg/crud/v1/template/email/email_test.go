@@ -30,7 +30,7 @@ func init() {
 	}
 }
 
-var entAppEmailTemplate = ent.AppEmailTemplate{
+var entEmailTemplate = ent.EmailTemplate{
 	ID:                uuid.New(),
 	AppID:             uuid.New(),
 	LangID:            uuid.New(),
@@ -44,28 +44,28 @@ var entAppEmailTemplate = ent.AppEmailTemplate{
 }
 
 var (
-	id               = entAppEmailTemplate.ID.String()
-	appID            = entAppEmailTemplate.AppID.String()
-	langID           = entAppEmailTemplate.LangID.String()
-	usedFor          = usedfor.UsedFor_Signin
-	appEmailTemplate = email.EmailTemplateReq{
+	id            = entEmailTemplate.ID.String()
+	appID         = entEmailTemplate.AppID.String()
+	langID        = entEmailTemplate.LangID.String()
+	usedFor       = usedfor.UsedFor_Signin
+	EmailTemplate = email.EmailTemplateReq{
 		ID:                &id,
 		AppID:             &appID,
 		LangID:            &langID,
 		UsedFor:           &usedFor,
-		Sender:            &entAppEmailTemplate.Sender,
-		ReplyTos:          entAppEmailTemplate.ReplyTos,
-		CCTos:             entAppEmailTemplate.CcTos,
-		Subject:           &entAppEmailTemplate.Subject,
-		Body:              &entAppEmailTemplate.Body,
-		DefaultToUsername: &entAppEmailTemplate.DefaultToUsername,
+		Sender:            &entEmailTemplate.Sender,
+		ReplyTos:          entEmailTemplate.ReplyTos,
+		CCTos:             entEmailTemplate.CcTos,
+		Subject:           &entEmailTemplate.Subject,
+		Body:              &entEmailTemplate.Body,
+		DefaultToUsername: &entEmailTemplate.DefaultToUsername,
 	}
 )
 
-var info *ent.AppEmailTemplate
+var info *ent.EmailTemplate
 
-func rowToObject(row *ent.AppEmailTemplate) *ent.AppEmailTemplate {
-	return &ent.AppEmailTemplate{
+func rowToObject(row *ent.EmailTemplate) *ent.EmailTemplate {
+	return &ent.EmailTemplate{
 		ID:                row.ID,
 		CreatedAt:         row.CreatedAt,
 		AppID:             row.AppID,
@@ -82,18 +82,18 @@ func rowToObject(row *ent.AppEmailTemplate) *ent.AppEmailTemplate {
 
 func create(t *testing.T) {
 	var err error
-	info, err = Create(context.Background(), &appEmailTemplate)
+	info, err = Create(context.Background(), &EmailTemplate)
 	if assert.Nil(t, err) {
 		if assert.NotEqual(t, info.ID, uuid.UUID{}.String()) {
-			entAppEmailTemplate.ID = info.ID
-			entAppEmailTemplate.CreatedAt = info.CreatedAt
+			entEmailTemplate.ID = info.ID
+			entEmailTemplate.CreatedAt = info.CreatedAt
 		}
-		assert.Equal(t, rowToObject(info), &entAppEmailTemplate)
+		assert.Equal(t, rowToObject(info), &entEmailTemplate)
 	}
 }
 
 func createBulk(t *testing.T) {
-	entApp := []ent.AppEmailTemplate{
+	entApp := []ent.EmailTemplate{
 		{
 			ID:                uuid.New(),
 			AppID:             uuid.New(),
@@ -149,9 +149,9 @@ func createBulk(t *testing.T) {
 
 func update(t *testing.T) {
 	var err error
-	info, err = Update(context.Background(), &appEmailTemplate)
+	info, err = Update(context.Background(), &EmailTemplate)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppEmailTemplate)
+		assert.Equal(t, rowToObject(info), &entEmailTemplate)
 	}
 }
 
@@ -159,7 +159,7 @@ func row(t *testing.T) {
 	var err error
 	info, err = Row(context.Background(), info.ID)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppEmailTemplate)
+		assert.Equal(t, rowToObject(info), &entEmailTemplate)
 	}
 }
 
@@ -173,7 +173,7 @@ func rows(t *testing.T) {
 		}, 0, 0)
 	if assert.Nil(t, err) {
 		assert.Equal(t, total, 1)
-		assert.Equal(t, rowToObject(infos[0]), &entAppEmailTemplate)
+		assert.Equal(t, rowToObject(infos[0]), &entEmailTemplate)
 	}
 }
 
@@ -187,7 +187,7 @@ func rowOnly(t *testing.T) {
 			},
 		})
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppEmailTemplate)
+		assert.Equal(t, rowToObject(info), &entEmailTemplate)
 	}
 }
 
@@ -229,7 +229,7 @@ func existConds(t *testing.T) {
 func deleteT(t *testing.T) {
 	info, err := Delete(context.Background(), info.ID)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entAppEmailTemplate)
+		assert.Equal(t, rowToObject(info), &entEmailTemplate)
 	}
 }
 

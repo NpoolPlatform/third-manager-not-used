@@ -15,7 +15,7 @@ func trace(span trace1.Span, in *npool.ContactReq, index int) trace1.Span {
 		attribute.String(fmt.Sprintf("AppID.%v", index), in.GetAppID()),
 		attribute.String(fmt.Sprintf("UsedFor.%v", index), in.GetUsedFor().String()),
 		attribute.String(fmt.Sprintf("Account.%v", index), in.GetAccount()),
-		attribute.String(fmt.Sprintf("AccountType.%v", index), in.GetAccountType()),
+		attribute.String(fmt.Sprintf("AccountType.%v", index), in.GetAccountType().String()),
 		attribute.String(fmt.Sprintf("Sender.%v", index), in.GetSender()),
 	)
 	return span
@@ -32,7 +32,7 @@ func TraceConds(span trace1.Span, in *npool.Conds) trace1.Span {
 		attribute.String("AppID.Op", in.GetAppID().GetOp()),
 		attribute.String("AppID.Val", in.GetAppID().GetValue()),
 		attribute.String("UsedFor.Op", in.GetUsedFor().GetOp()),
-		attribute.String("UsedFor.Val", in.GetUsedFor().GetValue()),
+		attribute.Int("UsedFor.Val", int(in.GetUsedFor().GetValue())),
 	)
 	return span
 }

@@ -5,10 +5,10 @@ package runtime
 import (
 	"context"
 
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appcontact"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appemailtemplate"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appsmstemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/contact"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/schema"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 	"github.com/google/uuid"
 
 	"entgo.io/ent"
@@ -19,136 +19,144 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	appcontactMixin := schema.AppContact{}.Mixin()
-	appcontact.Policy = privacy.NewPolicies(appcontactMixin[0], schema.AppContact{})
-	appcontact.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+	contactMixin := schema.Contact{}.Mixin()
+	contact.Policy = privacy.NewPolicies(contactMixin[0], schema.Contact{})
+	contact.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := appcontact.Policy.EvalMutation(ctx, m); err != nil {
+			if err := contact.Policy.EvalMutation(ctx, m); err != nil {
 				return nil, err
 			}
 			return next.Mutate(ctx, m)
 		})
 	}
-	appcontactMixinFields0 := appcontactMixin[0].Fields()
-	_ = appcontactMixinFields0
-	appcontactFields := schema.AppContact{}.Fields()
-	_ = appcontactFields
-	// appcontactDescCreatedAt is the schema descriptor for created_at field.
-	appcontactDescCreatedAt := appcontactMixinFields0[0].Descriptor()
-	// appcontact.DefaultCreatedAt holds the default value on creation for the created_at field.
-	appcontact.DefaultCreatedAt = appcontactDescCreatedAt.Default.(func() uint32)
-	// appcontactDescUpdatedAt is the schema descriptor for updated_at field.
-	appcontactDescUpdatedAt := appcontactMixinFields0[1].Descriptor()
-	// appcontact.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	appcontact.DefaultUpdatedAt = appcontactDescUpdatedAt.Default.(func() uint32)
-	// appcontact.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	appcontact.UpdateDefaultUpdatedAt = appcontactDescUpdatedAt.UpdateDefault.(func() uint32)
-	// appcontactDescDeletedAt is the schema descriptor for deleted_at field.
-	appcontactDescDeletedAt := appcontactMixinFields0[2].Descriptor()
-	// appcontact.DefaultDeletedAt holds the default value on creation for the deleted_at field.
-	appcontact.DefaultDeletedAt = appcontactDescDeletedAt.Default.(func() uint32)
-	// appcontactDescUsedFor is the schema descriptor for used_for field.
-	appcontactDescUsedFor := appcontactFields[2].Descriptor()
-	// appcontact.DefaultUsedFor holds the default value on creation for the used_for field.
-	appcontact.DefaultUsedFor = appcontactDescUsedFor.Default.(string)
-	// appcontact.UsedForValidator is a validator for the "used_for" field. It is called by the builders before save.
-	appcontact.UsedForValidator = appcontactDescUsedFor.Validators[0].(func(string) error)
-	// appcontactDescSender is the schema descriptor for sender field.
-	appcontactDescSender := appcontactFields[3].Descriptor()
-	// appcontact.DefaultSender holds the default value on creation for the sender field.
-	appcontact.DefaultSender = appcontactDescSender.Default.(string)
-	// appcontactDescAccount is the schema descriptor for account field.
-	appcontactDescAccount := appcontactFields[4].Descriptor()
-	// appcontact.DefaultAccount holds the default value on creation for the account field.
-	appcontact.DefaultAccount = appcontactDescAccount.Default.(string)
-	// appcontactDescAccountType is the schema descriptor for account_type field.
-	appcontactDescAccountType := appcontactFields[5].Descriptor()
-	// appcontact.DefaultAccountType holds the default value on creation for the account_type field.
-	appcontact.DefaultAccountType = appcontactDescAccountType.Default.(string)
-	// appcontactDescID is the schema descriptor for id field.
-	appcontactDescID := appcontactFields[0].Descriptor()
-	// appcontact.DefaultID holds the default value on creation for the id field.
-	appcontact.DefaultID = appcontactDescID.Default.(func() uuid.UUID)
-	appemailtemplateMixin := schema.AppEmailTemplate{}.Mixin()
-	appemailtemplate.Policy = privacy.NewPolicies(appemailtemplateMixin[0], schema.AppEmailTemplate{})
-	appemailtemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+	contactMixinFields0 := contactMixin[0].Fields()
+	_ = contactMixinFields0
+	contactFields := schema.Contact{}.Fields()
+	_ = contactFields
+	// contactDescCreatedAt is the schema descriptor for created_at field.
+	contactDescCreatedAt := contactMixinFields0[0].Descriptor()
+	// contact.DefaultCreatedAt holds the default value on creation for the created_at field.
+	contact.DefaultCreatedAt = contactDescCreatedAt.Default.(func() uint32)
+	// contactDescUpdatedAt is the schema descriptor for updated_at field.
+	contactDescUpdatedAt := contactMixinFields0[1].Descriptor()
+	// contact.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	contact.DefaultUpdatedAt = contactDescUpdatedAt.Default.(func() uint32)
+	// contact.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	contact.UpdateDefaultUpdatedAt = contactDescUpdatedAt.UpdateDefault.(func() uint32)
+	// contactDescDeletedAt is the schema descriptor for deleted_at field.
+	contactDescDeletedAt := contactMixinFields0[2].Descriptor()
+	// contact.DefaultDeletedAt holds the default value on creation for the deleted_at field.
+	contact.DefaultDeletedAt = contactDescDeletedAt.Default.(func() uint32)
+	// contactDescSender is the schema descriptor for sender field.
+	contactDescSender := contactFields[3].Descriptor()
+	// contact.DefaultSender holds the default value on creation for the sender field.
+	contact.DefaultSender = contactDescSender.Default.(string)
+	// contactDescAccount is the schema descriptor for account field.
+	contactDescAccount := contactFields[4].Descriptor()
+	// contact.DefaultAccount holds the default value on creation for the account field.
+	contact.DefaultAccount = contactDescAccount.Default.(string)
+	// contactDescAccountType is the schema descriptor for account_type field.
+	contactDescAccountType := contactFields[5].Descriptor()
+	// contact.DefaultAccountType holds the default value on creation for the account_type field.
+	contact.DefaultAccountType = contactDescAccountType.Default.(string)
+	// contactDescID is the schema descriptor for id field.
+	contactDescID := contactFields[0].Descriptor()
+	// contact.DefaultID holds the default value on creation for the id field.
+	contact.DefaultID = contactDescID.Default.(func() uuid.UUID)
+	emailtemplateMixin := schema.EmailTemplate{}.Mixin()
+	emailtemplate.Policy = privacy.NewPolicies(emailtemplateMixin[0], schema.EmailTemplate{})
+	emailtemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := appemailtemplate.Policy.EvalMutation(ctx, m); err != nil {
+			if err := emailtemplate.Policy.EvalMutation(ctx, m); err != nil {
 				return nil, err
 			}
 			return next.Mutate(ctx, m)
 		})
 	}
-	appemailtemplateMixinFields0 := appemailtemplateMixin[0].Fields()
-	_ = appemailtemplateMixinFields0
-	appemailtemplateFields := schema.AppEmailTemplate{}.Fields()
-	_ = appemailtemplateFields
-	// appemailtemplateDescCreatedAt is the schema descriptor for created_at field.
-	appemailtemplateDescCreatedAt := appemailtemplateMixinFields0[0].Descriptor()
-	// appemailtemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
-	appemailtemplate.DefaultCreatedAt = appemailtemplateDescCreatedAt.Default.(func() uint32)
-	// appemailtemplateDescUpdatedAt is the schema descriptor for updated_at field.
-	appemailtemplateDescUpdatedAt := appemailtemplateMixinFields0[1].Descriptor()
-	// appemailtemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	appemailtemplate.DefaultUpdatedAt = appemailtemplateDescUpdatedAt.Default.(func() uint32)
-	// appemailtemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	appemailtemplate.UpdateDefaultUpdatedAt = appemailtemplateDescUpdatedAt.UpdateDefault.(func() uint32)
-	// appemailtemplateDescDeletedAt is the schema descriptor for deleted_at field.
-	appemailtemplateDescDeletedAt := appemailtemplateMixinFields0[2].Descriptor()
-	// appemailtemplate.DefaultDeletedAt holds the default value on creation for the deleted_at field.
-	appemailtemplate.DefaultDeletedAt = appemailtemplateDescDeletedAt.Default.(func() uint32)
-	// appemailtemplateDescBody is the schema descriptor for body field.
-	appemailtemplateDescBody := appemailtemplateFields[9].Descriptor()
-	// appemailtemplate.BodyValidator is a validator for the "body" field. It is called by the builders before save.
-	appemailtemplate.BodyValidator = appemailtemplateDescBody.Validators[0].(func(string) error)
-	// appemailtemplateDescID is the schema descriptor for id field.
-	appemailtemplateDescID := appemailtemplateFields[0].Descriptor()
-	// appemailtemplate.DefaultID holds the default value on creation for the id field.
-	appemailtemplate.DefaultID = appemailtemplateDescID.Default.(func() uuid.UUID)
-	appsmstemplateMixin := schema.AppSMSTemplate{}.Mixin()
-	appsmstemplate.Policy = privacy.NewPolicies(appsmstemplateMixin[0], schema.AppSMSTemplate{})
-	appsmstemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+	emailtemplateMixinFields0 := emailtemplateMixin[0].Fields()
+	_ = emailtemplateMixinFields0
+	emailtemplateFields := schema.EmailTemplate{}.Fields()
+	_ = emailtemplateFields
+	// emailtemplateDescCreatedAt is the schema descriptor for created_at field.
+	emailtemplateDescCreatedAt := emailtemplateMixinFields0[0].Descriptor()
+	// emailtemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
+	emailtemplate.DefaultCreatedAt = emailtemplateDescCreatedAt.Default.(func() uint32)
+	// emailtemplateDescUpdatedAt is the schema descriptor for updated_at field.
+	emailtemplateDescUpdatedAt := emailtemplateMixinFields0[1].Descriptor()
+	// emailtemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	emailtemplate.DefaultUpdatedAt = emailtemplateDescUpdatedAt.Default.(func() uint32)
+	// emailtemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	emailtemplate.UpdateDefaultUpdatedAt = emailtemplateDescUpdatedAt.UpdateDefault.(func() uint32)
+	// emailtemplateDescDeletedAt is the schema descriptor for deleted_at field.
+	emailtemplateDescDeletedAt := emailtemplateMixinFields0[2].Descriptor()
+	// emailtemplate.DefaultDeletedAt holds the default value on creation for the deleted_at field.
+	emailtemplate.DefaultDeletedAt = emailtemplateDescDeletedAt.Default.(func() uint32)
+	// emailtemplateDescReplyTos is the schema descriptor for reply_tos field.
+	emailtemplateDescReplyTos := emailtemplateFields[6].Descriptor()
+	// emailtemplate.DefaultReplyTos holds the default value on creation for the reply_tos field.
+	emailtemplate.DefaultReplyTos = emailtemplateDescReplyTos.Default.([]string)
+	// emailtemplateDescCcTos is the schema descriptor for cc_tos field.
+	emailtemplateDescCcTos := emailtemplateFields[7].Descriptor()
+	// emailtemplate.DefaultCcTos holds the default value on creation for the cc_tos field.
+	emailtemplate.DefaultCcTos = emailtemplateDescCcTos.Default.([]string)
+	// emailtemplateDescSubject is the schema descriptor for subject field.
+	emailtemplateDescSubject := emailtemplateFields[8].Descriptor()
+	// emailtemplate.DefaultSubject holds the default value on creation for the subject field.
+	emailtemplate.DefaultSubject = emailtemplateDescSubject.Default.(string)
+	// emailtemplateDescBody is the schema descriptor for body field.
+	emailtemplateDescBody := emailtemplateFields[9].Descriptor()
+	// emailtemplate.DefaultBody holds the default value on creation for the body field.
+	emailtemplate.DefaultBody = emailtemplateDescBody.Default.(string)
+	// emailtemplate.BodyValidator is a validator for the "body" field. It is called by the builders before save.
+	emailtemplate.BodyValidator = emailtemplateDescBody.Validators[0].(func(string) error)
+	// emailtemplateDescID is the schema descriptor for id field.
+	emailtemplateDescID := emailtemplateFields[0].Descriptor()
+	// emailtemplate.DefaultID holds the default value on creation for the id field.
+	emailtemplate.DefaultID = emailtemplateDescID.Default.(func() uuid.UUID)
+	smstemplateMixin := schema.SMSTemplate{}.Mixin()
+	smstemplate.Policy = privacy.NewPolicies(smstemplateMixin[0], schema.SMSTemplate{})
+	smstemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := appsmstemplate.Policy.EvalMutation(ctx, m); err != nil {
+			if err := smstemplate.Policy.EvalMutation(ctx, m); err != nil {
 				return nil, err
 			}
 			return next.Mutate(ctx, m)
 		})
 	}
-	appsmstemplateMixinFields0 := appsmstemplateMixin[0].Fields()
-	_ = appsmstemplateMixinFields0
-	appsmstemplateFields := schema.AppSMSTemplate{}.Fields()
-	_ = appsmstemplateFields
-	// appsmstemplateDescCreatedAt is the schema descriptor for created_at field.
-	appsmstemplateDescCreatedAt := appsmstemplateMixinFields0[0].Descriptor()
-	// appsmstemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
-	appsmstemplate.DefaultCreatedAt = appsmstemplateDescCreatedAt.Default.(func() uint32)
-	// appsmstemplateDescUpdatedAt is the schema descriptor for updated_at field.
-	appsmstemplateDescUpdatedAt := appsmstemplateMixinFields0[1].Descriptor()
-	// appsmstemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	appsmstemplate.DefaultUpdatedAt = appsmstemplateDescUpdatedAt.Default.(func() uint32)
-	// appsmstemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	appsmstemplate.UpdateDefaultUpdatedAt = appsmstemplateDescUpdatedAt.UpdateDefault.(func() uint32)
-	// appsmstemplateDescDeletedAt is the schema descriptor for deleted_at field.
-	appsmstemplateDescDeletedAt := appsmstemplateMixinFields0[2].Descriptor()
-	// appsmstemplate.DefaultDeletedAt holds the default value on creation for the deleted_at field.
-	appsmstemplate.DefaultDeletedAt = appsmstemplateDescDeletedAt.Default.(func() uint32)
-	// appsmstemplateDescUsedFor is the schema descriptor for used_for field.
-	appsmstemplateDescUsedFor := appsmstemplateFields[3].Descriptor()
-	// appsmstemplate.DefaultUsedFor holds the default value on creation for the used_for field.
-	appsmstemplate.DefaultUsedFor = appsmstemplateDescUsedFor.Default.(string)
-	// appsmstemplateDescSubject is the schema descriptor for subject field.
-	appsmstemplateDescSubject := appsmstemplateFields[4].Descriptor()
-	// appsmstemplate.DefaultSubject holds the default value on creation for the subject field.
-	appsmstemplate.DefaultSubject = appsmstemplateDescSubject.Default.(string)
-	// appsmstemplateDescMessage is the schema descriptor for message field.
-	appsmstemplateDescMessage := appsmstemplateFields[5].Descriptor()
-	// appsmstemplate.DefaultMessage holds the default value on creation for the message field.
-	appsmstemplate.DefaultMessage = appsmstemplateDescMessage.Default.(string)
-	// appsmstemplateDescID is the schema descriptor for id field.
-	appsmstemplateDescID := appsmstemplateFields[0].Descriptor()
-	// appsmstemplate.DefaultID holds the default value on creation for the id field.
-	appsmstemplate.DefaultID = appsmstemplateDescID.Default.(func() uuid.UUID)
+	smstemplateMixinFields0 := smstemplateMixin[0].Fields()
+	_ = smstemplateMixinFields0
+	smstemplateFields := schema.SMSTemplate{}.Fields()
+	_ = smstemplateFields
+	// smstemplateDescCreatedAt is the schema descriptor for created_at field.
+	smstemplateDescCreatedAt := smstemplateMixinFields0[0].Descriptor()
+	// smstemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
+	smstemplate.DefaultCreatedAt = smstemplateDescCreatedAt.Default.(func() uint32)
+	// smstemplateDescUpdatedAt is the schema descriptor for updated_at field.
+	smstemplateDescUpdatedAt := smstemplateMixinFields0[1].Descriptor()
+	// smstemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	smstemplate.DefaultUpdatedAt = smstemplateDescUpdatedAt.Default.(func() uint32)
+	// smstemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	smstemplate.UpdateDefaultUpdatedAt = smstemplateDescUpdatedAt.UpdateDefault.(func() uint32)
+	// smstemplateDescDeletedAt is the schema descriptor for deleted_at field.
+	smstemplateDescDeletedAt := smstemplateMixinFields0[2].Descriptor()
+	// smstemplate.DefaultDeletedAt holds the default value on creation for the deleted_at field.
+	smstemplate.DefaultDeletedAt = smstemplateDescDeletedAt.Default.(func() uint32)
+	// smstemplateDescUsedFor is the schema descriptor for used_for field.
+	smstemplateDescUsedFor := smstemplateFields[3].Descriptor()
+	// smstemplate.DefaultUsedFor holds the default value on creation for the used_for field.
+	smstemplate.DefaultUsedFor = smstemplateDescUsedFor.Default.(string)
+	// smstemplateDescSubject is the schema descriptor for subject field.
+	smstemplateDescSubject := smstemplateFields[4].Descriptor()
+	// smstemplate.DefaultSubject holds the default value on creation for the subject field.
+	smstemplate.DefaultSubject = smstemplateDescSubject.Default.(string)
+	// smstemplateDescMessage is the schema descriptor for message field.
+	smstemplateDescMessage := smstemplateFields[5].Descriptor()
+	// smstemplate.DefaultMessage holds the default value on creation for the message field.
+	smstemplate.DefaultMessage = smstemplateDescMessage.Default.(string)
+	// smstemplateDescID is the schema descriptor for id field.
+	smstemplateDescID := smstemplateFields[0].Descriptor()
+	// smstemplate.DefaultID holds the default value on creation for the id field.
+	smstemplate.DefaultID = smstemplateDescID.Default.(func() uuid.UUID)
 }
 
 const (

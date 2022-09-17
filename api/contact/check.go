@@ -2,6 +2,7 @@ package contact
 
 import (
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
+	"github.com/NpoolPlatform/message/npool/appuser/mgr/v2/signmethod"
 	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/contact"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -29,9 +30,17 @@ func validate(info *npool.ContactReq) error {
 		return status.Error(codes.InvalidArgument, "Account is empty")
 	}
 
-	if info.AccountType == nil || info.GetAccountType() == "" {
+	if info.AccountType == nil {
 		logger.Sugar().Errorw("validate", "AccountType", info.AccountType, "GetAccountType", info.GetAccountType())
 		return status.Error(codes.InvalidArgument, "AccountType is empty")
+	}
+
+	switch info.GetAccountType() {
+	case signmethod.SignMethodType_Email:
+	case signmethod.SignMethodType_Mobile:
+	default:
+		logger.Sugar().Errorw("validate", "AccountType", info.GetAccountType(), "GetAccountType", info.GetAccountType())
+		return status.Error(codes.InvalidArgument, "AccountType is invalid")
 	}
 
 	if info.Sender == nil || info.GetSender() == "" {

@@ -150,76 +150,76 @@ func DenyMutationOperationRule(op ent.Op) MutationRule {
 	return OnMutationOperation(rule, op)
 }
 
-// The AppContactQueryRuleFunc type is an adapter to allow the use of ordinary
+// The ContactQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
-type AppContactQueryRuleFunc func(context.Context, *ent.AppContactQuery) error
+type ContactQueryRuleFunc func(context.Context, *ent.ContactQuery) error
 
 // EvalQuery return f(ctx, q).
-func (f AppContactQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.AppContactQuery); ok {
+func (f ContactQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.ContactQuery); ok {
 		return f(ctx, q)
 	}
-	return Denyf("ent/privacy: unexpected query type %T, expect *ent.AppContactQuery", q)
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.ContactQuery", q)
 }
 
-// The AppContactMutationRuleFunc type is an adapter to allow the use of ordinary
+// The ContactMutationRuleFunc type is an adapter to allow the use of ordinary
 // functions as a mutation rule.
-type AppContactMutationRuleFunc func(context.Context, *ent.AppContactMutation) error
+type ContactMutationRuleFunc func(context.Context, *ent.ContactMutation) error
 
 // EvalMutation calls f(ctx, m).
-func (f AppContactMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
-	if m, ok := m.(*ent.AppContactMutation); ok {
+func (f ContactMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.ContactMutation); ok {
 		return f(ctx, m)
 	}
-	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.AppContactMutation", m)
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.ContactMutation", m)
 }
 
-// The AppEmailTemplateQueryRuleFunc type is an adapter to allow the use of ordinary
+// The EmailTemplateQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
-type AppEmailTemplateQueryRuleFunc func(context.Context, *ent.AppEmailTemplateQuery) error
+type EmailTemplateQueryRuleFunc func(context.Context, *ent.EmailTemplateQuery) error
 
 // EvalQuery return f(ctx, q).
-func (f AppEmailTemplateQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.AppEmailTemplateQuery); ok {
+func (f EmailTemplateQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.EmailTemplateQuery); ok {
 		return f(ctx, q)
 	}
-	return Denyf("ent/privacy: unexpected query type %T, expect *ent.AppEmailTemplateQuery", q)
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.EmailTemplateQuery", q)
 }
 
-// The AppEmailTemplateMutationRuleFunc type is an adapter to allow the use of ordinary
+// The EmailTemplateMutationRuleFunc type is an adapter to allow the use of ordinary
 // functions as a mutation rule.
-type AppEmailTemplateMutationRuleFunc func(context.Context, *ent.AppEmailTemplateMutation) error
+type EmailTemplateMutationRuleFunc func(context.Context, *ent.EmailTemplateMutation) error
 
 // EvalMutation calls f(ctx, m).
-func (f AppEmailTemplateMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
-	if m, ok := m.(*ent.AppEmailTemplateMutation); ok {
+func (f EmailTemplateMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.EmailTemplateMutation); ok {
 		return f(ctx, m)
 	}
-	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.AppEmailTemplateMutation", m)
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.EmailTemplateMutation", m)
 }
 
-// The AppSMSTemplateQueryRuleFunc type is an adapter to allow the use of ordinary
+// The SMSTemplateQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
-type AppSMSTemplateQueryRuleFunc func(context.Context, *ent.AppSMSTemplateQuery) error
+type SMSTemplateQueryRuleFunc func(context.Context, *ent.SMSTemplateQuery) error
 
 // EvalQuery return f(ctx, q).
-func (f AppSMSTemplateQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.AppSMSTemplateQuery); ok {
+func (f SMSTemplateQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.SMSTemplateQuery); ok {
 		return f(ctx, q)
 	}
-	return Denyf("ent/privacy: unexpected query type %T, expect *ent.AppSMSTemplateQuery", q)
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.SMSTemplateQuery", q)
 }
 
-// The AppSMSTemplateMutationRuleFunc type is an adapter to allow the use of ordinary
+// The SMSTemplateMutationRuleFunc type is an adapter to allow the use of ordinary
 // functions as a mutation rule.
-type AppSMSTemplateMutationRuleFunc func(context.Context, *ent.AppSMSTemplateMutation) error
+type SMSTemplateMutationRuleFunc func(context.Context, *ent.SMSTemplateMutation) error
 
 // EvalMutation calls f(ctx, m).
-func (f AppSMSTemplateMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
-	if m, ok := m.(*ent.AppSMSTemplateMutation); ok {
+func (f SMSTemplateMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.SMSTemplateMutation); ok {
 		return f(ctx, m)
 	}
-	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.AppSMSTemplateMutation", m)
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.SMSTemplateMutation", m)
 }
 
 type (
@@ -257,11 +257,11 @@ var _ QueryMutationRule = FilterFunc(nil)
 
 func queryFilter(q ent.Query) (Filter, error) {
 	switch q := q.(type) {
-	case *ent.AppContactQuery:
+	case *ent.ContactQuery:
 		return q.Filter(), nil
-	case *ent.AppEmailTemplateQuery:
+	case *ent.EmailTemplateQuery:
 		return q.Filter(), nil
-	case *ent.AppSMSTemplateQuery:
+	case *ent.SMSTemplateQuery:
 		return q.Filter(), nil
 	default:
 		return nil, Denyf("ent/privacy: unexpected query type %T for query filter", q)
@@ -270,11 +270,11 @@ func queryFilter(q ent.Query) (Filter, error) {
 
 func mutationFilter(m ent.Mutation) (Filter, error) {
 	switch m := m.(type) {
-	case *ent.AppContactMutation:
+	case *ent.ContactMutation:
 		return m.Filter(), nil
-	case *ent.AppEmailTemplateMutation:
+	case *ent.EmailTemplateMutation:
 		return m.Filter(), nil
-	case *ent.AppSMSTemplateMutation:
+	case *ent.SMSTemplateMutation:
 		return m.Filter(), nil
 	default:
 		return nil, Denyf("ent/privacy: unexpected mutation type %T for mutation filter", m)

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
+
 	tracer "github.com/NpoolPlatform/third-manager/pkg/tracer/template/sms"
 
 	constant "github.com/NpoolPlatform/third-manager/pkg/message/const"
@@ -17,11 +19,11 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/sms"
 	"github.com/NpoolPlatform/third-manager/pkg/db"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appsmstemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 	"github.com/google/uuid"
 )
 
-func CreateSet(c *ent.AppSMSTemplateCreate, info *npool.SMSTemplateReq) *ent.AppSMSTemplateCreate {
+func CreateSet(c *ent.SMSTemplateCreate, info *npool.SMSTemplateReq) *ent.SMSTemplateCreate {
 	if info.ID != nil {
 		c.SetID(uuid.MustParse(info.GetID()))
 	}
@@ -43,8 +45,8 @@ func CreateSet(c *ent.AppSMSTemplateCreate, info *npool.SMSTemplateReq) *ent.App
 
 	return c
 }
-func Create(ctx context.Context, in *npool.SMSTemplateReq) (*ent.AppSMSTemplate, error) {
-	var info *ent.AppSMSTemplate
+func Create(ctx context.Context, in *npool.SMSTemplateReq) (*ent.SMSTemplate, error) {
+	var info *ent.SMSTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Create")
@@ -59,7 +61,7 @@ func Create(ctx context.Context, in *npool.SMSTemplateReq) (*ent.AppSMSTemplate,
 	span = tracer.Trace(span, in)
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		c := CreateSet(cli.AppSMSTemplate.Create(), in)
+		c := CreateSet(cli.SMSTemplate.Create(), in)
 		info, err = c.Save(_ctx)
 		return err
 	})
@@ -70,9 +72,9 @@ func Create(ctx context.Context, in *npool.SMSTemplateReq) (*ent.AppSMSTemplate,
 	return info, nil
 }
 
-func CreateBulk(ctx context.Context, in []*npool.SMSTemplateReq) ([]*ent.AppSMSTemplate, error) {
+func CreateBulk(ctx context.Context, in []*npool.SMSTemplateReq) ([]*ent.SMSTemplate, error) {
 	var err error
-	rows := []*ent.AppSMSTemplate{}
+	rows := []*ent.SMSTemplate{}
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "CreateBulk")
 	defer span.End()
@@ -87,11 +89,11 @@ func CreateBulk(ctx context.Context, in []*npool.SMSTemplateReq) ([]*ent.AppSMST
 	span = tracer.TraceMany(span, in)
 
 	err = db.WithTx(ctx, func(_ctx context.Context, tx *ent.Tx) error {
-		bulk := make([]*ent.AppSMSTemplateCreate, len(in))
+		bulk := make([]*ent.SMSTemplateCreate, len(in))
 		for i, info := range in {
-			bulk[i] = CreateSet(tx.AppSMSTemplate.Create(), info)
+			bulk[i] = CreateSet(tx.SMSTemplate.Create(), info)
 		}
-		rows, err = tx.AppSMSTemplate.CreateBulk(bulk...).Save(_ctx)
+		rows, err = tx.SMSTemplate.CreateBulk(bulk...).Save(_ctx)
 		return err
 	})
 	if err != nil {
@@ -101,9 +103,9 @@ func CreateBulk(ctx context.Context, in []*npool.SMSTemplateReq) ([]*ent.AppSMST
 	return rows, nil
 }
 
-func Update(ctx context.Context, in *npool.SMSTemplateReq) (*ent.AppSMSTemplate, error) {
+func Update(ctx context.Context, in *npool.SMSTemplateReq) (*ent.SMSTemplate, error) {
 	var err error
-	var info *ent.AppSMSTemplate
+	var info *ent.SMSTemplate
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Update")
 	defer span.End()
@@ -118,7 +120,7 @@ func Update(ctx context.Context, in *npool.SMSTemplateReq) (*ent.AppSMSTemplate,
 	span = tracer.Trace(span, in)
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		u := UpdateSet(cli.AppSMSTemplate.UpdateOneID(uuid.MustParse(in.GetID())), in)
+		u := UpdateSet(cli.SMSTemplate.UpdateOneID(uuid.MustParse(in.GetID())), in)
 		info, err = u.Save(_ctx)
 		return err
 	})
@@ -129,7 +131,7 @@ func Update(ctx context.Context, in *npool.SMSTemplateReq) (*ent.AppSMSTemplate,
 	return info, nil
 }
 
-func UpdateSet(u *ent.AppSMSTemplateUpdateOne, in *npool.SMSTemplateReq) *ent.AppSMSTemplateUpdateOne {
+func UpdateSet(u *ent.SMSTemplateUpdateOne, in *npool.SMSTemplateReq) *ent.SMSTemplateUpdateOne {
 	if in.LangID != nil {
 		u.SetLangID(uuid.MustParse(in.GetLangID()))
 	}
@@ -142,8 +144,8 @@ func UpdateSet(u *ent.AppSMSTemplateUpdateOne, in *npool.SMSTemplateReq) *ent.Ap
 	return u
 }
 
-func Row(ctx context.Context, id uuid.UUID) (*ent.AppSMSTemplate, error) {
-	var info *ent.AppSMSTemplate
+func Row(ctx context.Context, id uuid.UUID) (*ent.SMSTemplate, error) {
+	var info *ent.SMSTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Row")
@@ -159,7 +161,7 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.AppSMSTemplate, error) {
 	span = commontracer.TraceID(span, id.String())
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		info, err = cli.AppSMSTemplate.Query().Where(appsmstemplate.ID(id)).Only(_ctx)
+		info, err = cli.SMSTemplate.Query().Where(smstemplate.ID(id)).Only(_ctx)
 		return err
 	})
 	if err != nil {
@@ -170,8 +172,8 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.AppSMSTemplate, error) {
 }
 
 //nolint:nolintlint,gocyclo
-func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppSMSTemplateQuery, error) {
-	stm := cli.AppSMSTemplate.Query()
+func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.SMSTemplateQuery, error) {
+	stm := cli.SMSTemplate.Query()
 
 	if conds == nil {
 		return stm, nil
@@ -185,7 +187,7 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppSMSTemplateQuer
 
 		switch conds.GetID().GetOp() {
 		case cruder.EQ:
-			stm.Where(appsmstemplate.ID(id))
+			stm.Where(smstemplate.ID(id))
 		default:
 			return nil, fmt.Errorf("invalid template/sms field")
 		}
@@ -199,7 +201,7 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppSMSTemplateQuer
 
 		switch conds.GetAppID().GetOp() {
 		case cruder.EQ:
-			stm.Where(appsmstemplate.AppID(id))
+			stm.Where(smstemplate.AppID(id))
 		default:
 			return nil, fmt.Errorf("invalid template/sms field")
 		}
@@ -208,7 +210,7 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppSMSTemplateQuer
 	if conds.UsedFor != nil {
 		switch conds.GetUsedFor().GetOp() {
 		case cruder.EQ:
-			stm.Where(appsmstemplate.UsedFor(conds.UsedFor.Value))
+			stm.Where(smstemplate.UsedFor(usedfor.UsedFor(conds.UsedFor.Value).String()))
 		default:
 			return nil, fmt.Errorf("invalid template/sms field")
 		}
@@ -217,9 +219,9 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.AppSMSTemplateQuer
 	return stm, nil
 }
 
-func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.AppSMSTemplate, int, error) {
+func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.SMSTemplate, int, error) {
 	var err error
-	rows := []*ent.AppSMSTemplate{}
+	rows := []*ent.SMSTemplate{}
 	var total int
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Rows")
@@ -247,7 +249,7 @@ func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.Ap
 
 		rows, err = stm.
 			Offset(offset).
-			Order(ent.Desc(appsmstemplate.FieldUpdatedAt)).
+			Order(ent.Desc(smstemplate.FieldUpdatedAt)).
 			Limit(limit).
 			All(_ctx)
 		if err != nil {
@@ -263,8 +265,8 @@ func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.Ap
 	return rows, total, nil
 }
 
-func RowOnly(ctx context.Context, conds *npool.Conds) (*ent.AppSMSTemplate, error) {
-	var info *ent.AppSMSTemplate
+func RowOnly(ctx context.Context, conds *npool.Conds) (*ent.SMSTemplate, error) {
+	var info *ent.SMSTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "RowOnly")
@@ -354,7 +356,7 @@ func Exist(ctx context.Context, id uuid.UUID) (bool, error) {
 	exist := false
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		exist, err = cli.AppSMSTemplate.Query().Where(appsmstemplate.ID(id)).Exist(_ctx)
+		exist, err = cli.SMSTemplate.Query().Where(smstemplate.ID(id)).Exist(_ctx)
 		return err
 	})
 	if err != nil {
@@ -400,8 +402,8 @@ func ExistConds(ctx context.Context, conds *npool.Conds) (bool, error) {
 	return exist, nil
 }
 
-func Delete(ctx context.Context, id uuid.UUID) (*ent.AppSMSTemplate, error) {
-	var info *ent.AppSMSTemplate
+func Delete(ctx context.Context, id uuid.UUID) (*ent.SMSTemplate, error) {
+	var info *ent.SMSTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Delete")
@@ -417,7 +419,7 @@ func Delete(ctx context.Context, id uuid.UUID) (*ent.AppSMSTemplate, error) {
 	span = commontracer.TraceID(span, id.String())
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		info, err = cli.AppSMSTemplate.UpdateOneID(id).
+		info, err = cli.SMSTemplate.UpdateOneID(id).
 			SetDeletedAt(uint32(time.Now().Unix())).
 			Save(_ctx)
 		return err

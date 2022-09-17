@@ -7,12 +7,12 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appsmstemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 	"github.com/google/uuid"
 )
 
-// AppSMSTemplate is the model entity for the AppSMSTemplate schema.
-type AppSMSTemplate struct {
+// SMSTemplate is the model entity for the SMSTemplate schema.
+type SMSTemplate struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
@@ -35,145 +35,145 @@ type AppSMSTemplate struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*AppSMSTemplate) scanValues(columns []string) ([]interface{}, error) {
+func (*SMSTemplate) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case appsmstemplate.FieldCreatedAt, appsmstemplate.FieldUpdatedAt, appsmstemplate.FieldDeletedAt:
+		case smstemplate.FieldCreatedAt, smstemplate.FieldUpdatedAt, smstemplate.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
-		case appsmstemplate.FieldUsedFor, appsmstemplate.FieldSubject, appsmstemplate.FieldMessage:
+		case smstemplate.FieldUsedFor, smstemplate.FieldSubject, smstemplate.FieldMessage:
 			values[i] = new(sql.NullString)
-		case appsmstemplate.FieldID, appsmstemplate.FieldAppID, appsmstemplate.FieldLangID:
+		case smstemplate.FieldID, smstemplate.FieldAppID, smstemplate.FieldLangID:
 			values[i] = new(uuid.UUID)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type AppSMSTemplate", columns[i])
+			return nil, fmt.Errorf("unexpected column %q for type SMSTemplate", columns[i])
 		}
 	}
 	return values, nil
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the AppSMSTemplate fields.
-func (ast *AppSMSTemplate) assignValues(columns []string, values []interface{}) error {
+// to the SMSTemplate fields.
+func (st *SMSTemplate) assignValues(columns []string, values []interface{}) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case appsmstemplate.FieldID:
+		case smstemplate.FieldID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				ast.ID = *value
+				st.ID = *value
 			}
-		case appsmstemplate.FieldCreatedAt:
+		case smstemplate.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ast.CreatedAt = uint32(value.Int64)
+				st.CreatedAt = uint32(value.Int64)
 			}
-		case appsmstemplate.FieldUpdatedAt:
+		case smstemplate.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ast.UpdatedAt = uint32(value.Int64)
+				st.UpdatedAt = uint32(value.Int64)
 			}
-		case appsmstemplate.FieldDeletedAt:
+		case smstemplate.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ast.DeletedAt = uint32(value.Int64)
+				st.DeletedAt = uint32(value.Int64)
 			}
-		case appsmstemplate.FieldAppID:
+		case smstemplate.FieldAppID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
 			} else if value != nil {
-				ast.AppID = *value
+				st.AppID = *value
 			}
-		case appsmstemplate.FieldLangID:
+		case smstemplate.FieldLangID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field lang_id", values[i])
 			} else if value != nil {
-				ast.LangID = *value
+				st.LangID = *value
 			}
-		case appsmstemplate.FieldUsedFor:
+		case smstemplate.FieldUsedFor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field used_for", values[i])
 			} else if value.Valid {
-				ast.UsedFor = value.String
+				st.UsedFor = value.String
 			}
-		case appsmstemplate.FieldSubject:
+		case smstemplate.FieldSubject:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subject", values[i])
 			} else if value.Valid {
-				ast.Subject = value.String
+				st.Subject = value.String
 			}
-		case appsmstemplate.FieldMessage:
+		case smstemplate.FieldMessage:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field message", values[i])
 			} else if value.Valid {
-				ast.Message = value.String
+				st.Message = value.String
 			}
 		}
 	}
 	return nil
 }
 
-// Update returns a builder for updating this AppSMSTemplate.
-// Note that you need to call AppSMSTemplate.Unwrap() before calling this method if this AppSMSTemplate
+// Update returns a builder for updating this SMSTemplate.
+// Note that you need to call SMSTemplate.Unwrap() before calling this method if this SMSTemplate
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ast *AppSMSTemplate) Update() *AppSMSTemplateUpdateOne {
-	return (&AppSMSTemplateClient{config: ast.config}).UpdateOne(ast)
+func (st *SMSTemplate) Update() *SMSTemplateUpdateOne {
+	return (&SMSTemplateClient{config: st.config}).UpdateOne(st)
 }
 
-// Unwrap unwraps the AppSMSTemplate entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the SMSTemplate entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ast *AppSMSTemplate) Unwrap() *AppSMSTemplate {
-	_tx, ok := ast.config.driver.(*txDriver)
+func (st *SMSTemplate) Unwrap() *SMSTemplate {
+	_tx, ok := st.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: AppSMSTemplate is not a transactional entity")
+		panic("ent: SMSTemplate is not a transactional entity")
 	}
-	ast.config.driver = _tx.drv
-	return ast
+	st.config.driver = _tx.drv
+	return st
 }
 
 // String implements the fmt.Stringer.
-func (ast *AppSMSTemplate) String() string {
+func (st *SMSTemplate) String() string {
 	var builder strings.Builder
-	builder.WriteString("AppSMSTemplate(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ast.ID))
+	builder.WriteString("SMSTemplate(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", st.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", ast.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", st.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", ast.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", st.UpdatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(fmt.Sprintf("%v", ast.DeletedAt))
+	builder.WriteString(fmt.Sprintf("%v", st.DeletedAt))
 	builder.WriteString(", ")
 	builder.WriteString("app_id=")
-	builder.WriteString(fmt.Sprintf("%v", ast.AppID))
+	builder.WriteString(fmt.Sprintf("%v", st.AppID))
 	builder.WriteString(", ")
 	builder.WriteString("lang_id=")
-	builder.WriteString(fmt.Sprintf("%v", ast.LangID))
+	builder.WriteString(fmt.Sprintf("%v", st.LangID))
 	builder.WriteString(", ")
 	builder.WriteString("used_for=")
-	builder.WriteString(ast.UsedFor)
+	builder.WriteString(st.UsedFor)
 	builder.WriteString(", ")
 	builder.WriteString("subject=")
-	builder.WriteString(ast.Subject)
+	builder.WriteString(st.Subject)
 	builder.WriteString(", ")
 	builder.WriteString("message=")
-	builder.WriteString(ast.Message)
+	builder.WriteString(st.Message)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// AppSMSTemplates is a parsable slice of AppSMSTemplate.
-type AppSMSTemplates []*AppSMSTemplate
+// SMSTemplates is a parsable slice of SMSTemplate.
+type SMSTemplates []*SMSTemplate
 
-func (ast AppSMSTemplates) config(cfg config) {
-	for _i := range ast {
-		ast[_i].config = cfg
+func (st SMSTemplates) config(cfg config) {
+	for _i := range st {
+		st[_i].config = cfg
 	}
 }

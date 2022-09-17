@@ -8,12 +8,12 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/appemailtemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
 	"github.com/google/uuid"
 )
 
-// AppEmailTemplate is the model entity for the AppEmailTemplate schema.
-type AppEmailTemplate struct {
+// EmailTemplate is the model entity for the EmailTemplate schema.
+type EmailTemplate struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
@@ -44,187 +44,187 @@ type AppEmailTemplate struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*AppEmailTemplate) scanValues(columns []string) ([]interface{}, error) {
+func (*EmailTemplate) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case appemailtemplate.FieldReplyTos, appemailtemplate.FieldCcTos:
+		case emailtemplate.FieldReplyTos, emailtemplate.FieldCcTos:
 			values[i] = new([]byte)
-		case appemailtemplate.FieldCreatedAt, appemailtemplate.FieldUpdatedAt, appemailtemplate.FieldDeletedAt:
+		case emailtemplate.FieldCreatedAt, emailtemplate.FieldUpdatedAt, emailtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
-		case appemailtemplate.FieldDefaultToUsername, appemailtemplate.FieldUsedFor, appemailtemplate.FieldSender, appemailtemplate.FieldSubject, appemailtemplate.FieldBody:
+		case emailtemplate.FieldDefaultToUsername, emailtemplate.FieldUsedFor, emailtemplate.FieldSender, emailtemplate.FieldSubject, emailtemplate.FieldBody:
 			values[i] = new(sql.NullString)
-		case appemailtemplate.FieldID, appemailtemplate.FieldAppID, appemailtemplate.FieldLangID:
+		case emailtemplate.FieldID, emailtemplate.FieldAppID, emailtemplate.FieldLangID:
 			values[i] = new(uuid.UUID)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type AppEmailTemplate", columns[i])
+			return nil, fmt.Errorf("unexpected column %q for type EmailTemplate", columns[i])
 		}
 	}
 	return values, nil
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the AppEmailTemplate fields.
-func (aet *AppEmailTemplate) assignValues(columns []string, values []interface{}) error {
+// to the EmailTemplate fields.
+func (et *EmailTemplate) assignValues(columns []string, values []interface{}) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case appemailtemplate.FieldID:
+		case emailtemplate.FieldID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				aet.ID = *value
+				et.ID = *value
 			}
-		case appemailtemplate.FieldCreatedAt:
+		case emailtemplate.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				aet.CreatedAt = uint32(value.Int64)
+				et.CreatedAt = uint32(value.Int64)
 			}
-		case appemailtemplate.FieldUpdatedAt:
+		case emailtemplate.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				aet.UpdatedAt = uint32(value.Int64)
+				et.UpdatedAt = uint32(value.Int64)
 			}
-		case appemailtemplate.FieldDeletedAt:
+		case emailtemplate.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				aet.DeletedAt = uint32(value.Int64)
+				et.DeletedAt = uint32(value.Int64)
 			}
-		case appemailtemplate.FieldAppID:
+		case emailtemplate.FieldAppID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
 			} else if value != nil {
-				aet.AppID = *value
+				et.AppID = *value
 			}
-		case appemailtemplate.FieldLangID:
+		case emailtemplate.FieldLangID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field lang_id", values[i])
 			} else if value != nil {
-				aet.LangID = *value
+				et.LangID = *value
 			}
-		case appemailtemplate.FieldDefaultToUsername:
+		case emailtemplate.FieldDefaultToUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field default_to_username", values[i])
 			} else if value.Valid {
-				aet.DefaultToUsername = value.String
+				et.DefaultToUsername = value.String
 			}
-		case appemailtemplate.FieldUsedFor:
+		case emailtemplate.FieldUsedFor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field used_for", values[i])
 			} else if value.Valid {
-				aet.UsedFor = value.String
+				et.UsedFor = value.String
 			}
-		case appemailtemplate.FieldSender:
+		case emailtemplate.FieldSender:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field sender", values[i])
 			} else if value.Valid {
-				aet.Sender = value.String
+				et.Sender = value.String
 			}
-		case appemailtemplate.FieldReplyTos:
+		case emailtemplate.FieldReplyTos:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field reply_tos", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aet.ReplyTos); err != nil {
+				if err := json.Unmarshal(*value, &et.ReplyTos); err != nil {
 					return fmt.Errorf("unmarshal field reply_tos: %w", err)
 				}
 			}
-		case appemailtemplate.FieldCcTos:
+		case emailtemplate.FieldCcTos:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field cc_tos", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aet.CcTos); err != nil {
+				if err := json.Unmarshal(*value, &et.CcTos); err != nil {
 					return fmt.Errorf("unmarshal field cc_tos: %w", err)
 				}
 			}
-		case appemailtemplate.FieldSubject:
+		case emailtemplate.FieldSubject:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subject", values[i])
 			} else if value.Valid {
-				aet.Subject = value.String
+				et.Subject = value.String
 			}
-		case appemailtemplate.FieldBody:
+		case emailtemplate.FieldBody:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field body", values[i])
 			} else if value.Valid {
-				aet.Body = value.String
+				et.Body = value.String
 			}
 		}
 	}
 	return nil
 }
 
-// Update returns a builder for updating this AppEmailTemplate.
-// Note that you need to call AppEmailTemplate.Unwrap() before calling this method if this AppEmailTemplate
+// Update returns a builder for updating this EmailTemplate.
+// Note that you need to call EmailTemplate.Unwrap() before calling this method if this EmailTemplate
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (aet *AppEmailTemplate) Update() *AppEmailTemplateUpdateOne {
-	return (&AppEmailTemplateClient{config: aet.config}).UpdateOne(aet)
+func (et *EmailTemplate) Update() *EmailTemplateUpdateOne {
+	return (&EmailTemplateClient{config: et.config}).UpdateOne(et)
 }
 
-// Unwrap unwraps the AppEmailTemplate entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the EmailTemplate entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (aet *AppEmailTemplate) Unwrap() *AppEmailTemplate {
-	_tx, ok := aet.config.driver.(*txDriver)
+func (et *EmailTemplate) Unwrap() *EmailTemplate {
+	_tx, ok := et.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: AppEmailTemplate is not a transactional entity")
+		panic("ent: EmailTemplate is not a transactional entity")
 	}
-	aet.config.driver = _tx.drv
-	return aet
+	et.config.driver = _tx.drv
+	return et
 }
 
 // String implements the fmt.Stringer.
-func (aet *AppEmailTemplate) String() string {
+func (et *EmailTemplate) String() string {
 	var builder strings.Builder
-	builder.WriteString("AppEmailTemplate(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", aet.ID))
+	builder.WriteString("EmailTemplate(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", et.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", aet.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", et.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", aet.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", et.UpdatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(fmt.Sprintf("%v", aet.DeletedAt))
+	builder.WriteString(fmt.Sprintf("%v", et.DeletedAt))
 	builder.WriteString(", ")
 	builder.WriteString("app_id=")
-	builder.WriteString(fmt.Sprintf("%v", aet.AppID))
+	builder.WriteString(fmt.Sprintf("%v", et.AppID))
 	builder.WriteString(", ")
 	builder.WriteString("lang_id=")
-	builder.WriteString(fmt.Sprintf("%v", aet.LangID))
+	builder.WriteString(fmt.Sprintf("%v", et.LangID))
 	builder.WriteString(", ")
 	builder.WriteString("default_to_username=")
-	builder.WriteString(aet.DefaultToUsername)
+	builder.WriteString(et.DefaultToUsername)
 	builder.WriteString(", ")
 	builder.WriteString("used_for=")
-	builder.WriteString(aet.UsedFor)
+	builder.WriteString(et.UsedFor)
 	builder.WriteString(", ")
 	builder.WriteString("sender=")
-	builder.WriteString(aet.Sender)
+	builder.WriteString(et.Sender)
 	builder.WriteString(", ")
 	builder.WriteString("reply_tos=")
-	builder.WriteString(fmt.Sprintf("%v", aet.ReplyTos))
+	builder.WriteString(fmt.Sprintf("%v", et.ReplyTos))
 	builder.WriteString(", ")
 	builder.WriteString("cc_tos=")
-	builder.WriteString(fmt.Sprintf("%v", aet.CcTos))
+	builder.WriteString(fmt.Sprintf("%v", et.CcTos))
 	builder.WriteString(", ")
 	builder.WriteString("subject=")
-	builder.WriteString(aet.Subject)
+	builder.WriteString(et.Subject)
 	builder.WriteString(", ")
 	builder.WriteString("body=")
-	builder.WriteString(aet.Body)
+	builder.WriteString(et.Body)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// AppEmailTemplates is a parsable slice of AppEmailTemplate.
-type AppEmailTemplates []*AppEmailTemplate
+// EmailTemplates is a parsable slice of EmailTemplate.
+type EmailTemplates []*EmailTemplate
 
-func (aet AppEmailTemplates) config(cfg config) {
-	for _i := range aet {
-		aet[_i].config = cfg
+func (et EmailTemplates) config(cfg config) {
+	for _i := range et {
+		et[_i].config = cfg
 	}
 }
