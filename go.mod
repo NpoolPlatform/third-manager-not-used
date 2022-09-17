@@ -3,6 +3,7 @@ module github.com/NpoolPlatform/third-manager
 go 1.17
 
 require (
+	ariga.io/atlas v0.5.1-0.20220717122844-8593d7eb1a8e
 	bou.ke/monkey v1.0.2
 	entgo.io/ent v0.11.2
 	github.com/NpoolPlatform/api-manager v0.0.0-20220826022307-d72866fe3ec0
@@ -21,7 +22,6 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.5.1-0.20220717122844-8593d7eb1a8e // indirect
 	github.com/Shonminh/apollo-client v0.4.0 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
