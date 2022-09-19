@@ -250,7 +250,7 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.EmailTemplateQuery
 	if conds.UsedFor != nil {
 		switch conds.GetUsedFor().GetOp() {
 		case cruder.EQ:
-			stm.Where(emailtemplate.UsedFor(usedfor.UsedFor(conds.UsedFor.Value).String()))
+			stm.Where(emailtemplate.UsedFor(usedfor.UsedFor(conds.GetUsedFor().GetValue()).String()))
 		default:
 			return nil, fmt.Errorf("invalid email field")
 		}
@@ -259,7 +259,7 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.EmailTemplateQuery
 	if conds.Sender != nil {
 		switch conds.GetSender().GetOp() {
 		case cruder.EQ:
-			stm.Where(emailtemplate.Sender(conds.Sender.Value))
+			stm.Where(emailtemplate.Sender(conds.GetSender().GetValue()))
 		default:
 			return nil, fmt.Errorf("invalid email field")
 		}

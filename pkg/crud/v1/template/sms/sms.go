@@ -224,7 +224,7 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.SMSTemplateQuery, 
 	if conds.UsedFor != nil {
 		switch conds.GetUsedFor().GetOp() {
 		case cruder.EQ:
-			stm.Where(smstemplate.UsedFor(usedfor.UsedFor(conds.UsedFor.Value).String()))
+			stm.Where(smstemplate.UsedFor(usedfor.UsedFor(conds.GetUsedFor().GetValue()).String()))
 		default:
 			return nil, fmt.Errorf("invalid template/sms field")
 		}

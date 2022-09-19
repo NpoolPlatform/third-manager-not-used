@@ -3,6 +3,7 @@ package constant
 import (
 	"context"
 	"fmt"
+	"github.com/NpoolPlatform/message/npool/appuser/mgr/v2/signmethod"
 	"time"
 
 	tracer "github.com/NpoolPlatform/third-manager/pkg/tracer/contact"
@@ -207,10 +208,19 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.ContactQuery, erro
 		}
 	}
 
+	if conds.AccountType != nil {
+		switch conds.GetUsedFor().GetOp() {
+		case cruder.EQ:
+			stm.Where(contact.UsedFor(signmethod.SignMethodType(conds.GetAccountType().GetValue()).String()))
+		default:
+			return nil, fmt.Errorf("invalid contact field")
+		}
+	}
+
 	if conds.UsedFor != nil {
 		switch conds.GetUsedFor().GetOp() {
 		case cruder.EQ:
-			stm.Where(contact.UsedFor(usedfor.UsedFor(conds.UsedFor.Value).String()))
+			stm.Where(contact.UsedFor(usedfor.UsedFor(conds.GetUsedFor().GetValue()).String()))
 		default:
 			return nil, fmt.Errorf("invalid contact field")
 		}
