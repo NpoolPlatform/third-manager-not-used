@@ -207,6 +207,20 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.SMSTemplateQuery, 
 		}
 	}
 
+	if conds.LangID != nil {
+		id, err := uuid.Parse(conds.GetLangID().GetValue())
+		if err != nil {
+			return nil, err
+		}
+
+		switch conds.GetLangID().GetOp() {
+		case cruder.EQ:
+			stm.Where(smstemplate.LangID(id))
+		default:
+			return nil, fmt.Errorf("invalid template/sms field")
+		}
+	}
+
 	if conds.UsedFor != nil {
 		switch conds.GetUsedFor().GetOp() {
 		case cruder.EQ:
