@@ -233,10 +233,33 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.EmailTemplateQuery
 		}
 	}
 
+	if conds.LangID != nil {
+		id, err := uuid.Parse(conds.GetLangID().GetValue())
+		if err != nil {
+			return nil, err
+		}
+
+		switch conds.GetLangID().GetOp() {
+		case cruder.EQ:
+			stm.Where(emailtemplate.LangID(id))
+		default:
+			return nil, fmt.Errorf("invalid email field")
+		}
+	}
+
 	if conds.UsedFor != nil {
 		switch conds.GetUsedFor().GetOp() {
 		case cruder.EQ:
 			stm.Where(emailtemplate.UsedFor(usedfor.UsedFor(conds.UsedFor.Value).String()))
+		default:
+			return nil, fmt.Errorf("invalid email field")
+		}
+	}
+
+	if conds.Sender != nil {
+		switch conds.GetSender().GetOp() {
+		case cruder.EQ:
+			stm.Where(emailtemplate.Sender(conds.Sender.Value))
 		default:
 			return nil, fmt.Errorf("invalid email field")
 		}
