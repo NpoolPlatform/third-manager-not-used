@@ -393,9 +393,22 @@ func (m *ContactMutation) OldUsedFor(ctx context.Context) (v string, err error) 
 	return oldValue.UsedFor, nil
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (m *ContactMutation) ClearUsedFor() {
+	m.used_for = nil
+	m.clearedFields[contact.FieldUsedFor] = struct{}{}
+}
+
+// UsedForCleared returns if the "used_for" field was cleared in this mutation.
+func (m *ContactMutation) UsedForCleared() bool {
+	_, ok := m.clearedFields[contact.FieldUsedFor]
+	return ok
+}
+
 // ResetUsedFor resets all changes to the "used_for" field.
 func (m *ContactMutation) ResetUsedFor() {
 	m.used_for = nil
+	delete(m.clearedFields, contact.FieldUsedFor)
 }
 
 // SetSender sets the "sender" field.
@@ -429,9 +442,22 @@ func (m *ContactMutation) OldSender(ctx context.Context) (v string, err error) {
 	return oldValue.Sender, nil
 }
 
+// ClearSender clears the value of the "sender" field.
+func (m *ContactMutation) ClearSender() {
+	m.sender = nil
+	m.clearedFields[contact.FieldSender] = struct{}{}
+}
+
+// SenderCleared returns if the "sender" field was cleared in this mutation.
+func (m *ContactMutation) SenderCleared() bool {
+	_, ok := m.clearedFields[contact.FieldSender]
+	return ok
+}
+
 // ResetSender resets all changes to the "sender" field.
 func (m *ContactMutation) ResetSender() {
 	m.sender = nil
+	delete(m.clearedFields, contact.FieldSender)
 }
 
 // SetAccount sets the "account" field.
@@ -465,9 +491,22 @@ func (m *ContactMutation) OldAccount(ctx context.Context) (v string, err error) 
 	return oldValue.Account, nil
 }
 
+// ClearAccount clears the value of the "account" field.
+func (m *ContactMutation) ClearAccount() {
+	m.account = nil
+	m.clearedFields[contact.FieldAccount] = struct{}{}
+}
+
+// AccountCleared returns if the "account" field was cleared in this mutation.
+func (m *ContactMutation) AccountCleared() bool {
+	_, ok := m.clearedFields[contact.FieldAccount]
+	return ok
+}
+
 // ResetAccount resets all changes to the "account" field.
 func (m *ContactMutation) ResetAccount() {
 	m.account = nil
+	delete(m.clearedFields, contact.FieldAccount)
 }
 
 // SetAccountType sets the "account_type" field.
@@ -501,9 +540,22 @@ func (m *ContactMutation) OldAccountType(ctx context.Context) (v string, err err
 	return oldValue.AccountType, nil
 }
 
+// ClearAccountType clears the value of the "account_type" field.
+func (m *ContactMutation) ClearAccountType() {
+	m.account_type = nil
+	m.clearedFields[contact.FieldAccountType] = struct{}{}
+}
+
+// AccountTypeCleared returns if the "account_type" field was cleared in this mutation.
+func (m *ContactMutation) AccountTypeCleared() bool {
+	_, ok := m.clearedFields[contact.FieldAccountType]
+	return ok
+}
+
 // ResetAccountType resets all changes to the "account_type" field.
 func (m *ContactMutation) ResetAccountType() {
 	m.account_type = nil
+	delete(m.clearedFields, contact.FieldAccountType)
 }
 
 // Where appends a list predicates to the ContactMutation builder.
@@ -732,7 +784,20 @@ func (m *ContactMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ContactMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(contact.FieldUsedFor) {
+		fields = append(fields, contact.FieldUsedFor)
+	}
+	if m.FieldCleared(contact.FieldSender) {
+		fields = append(fields, contact.FieldSender)
+	}
+	if m.FieldCleared(contact.FieldAccount) {
+		fields = append(fields, contact.FieldAccount)
+	}
+	if m.FieldCleared(contact.FieldAccountType) {
+		fields = append(fields, contact.FieldAccountType)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -745,6 +810,20 @@ func (m *ContactMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ContactMutation) ClearField(name string) error {
+	switch name {
+	case contact.FieldUsedFor:
+		m.ClearUsedFor()
+		return nil
+	case contact.FieldSender:
+		m.ClearSender()
+		return nil
+	case contact.FieldAccount:
+		m.ClearAccount()
+		return nil
+	case contact.FieldAccountType:
+		m.ClearAccountType()
+		return nil
+	}
 	return fmt.Errorf("unknown Contact nullable field %s", name)
 }
 
@@ -1266,9 +1345,22 @@ func (m *EmailTemplateMutation) OldUsedFor(ctx context.Context) (v string, err e
 	return oldValue.UsedFor, nil
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (m *EmailTemplateMutation) ClearUsedFor() {
+	m.used_for = nil
+	m.clearedFields[emailtemplate.FieldUsedFor] = struct{}{}
+}
+
+// UsedForCleared returns if the "used_for" field was cleared in this mutation.
+func (m *EmailTemplateMutation) UsedForCleared() bool {
+	_, ok := m.clearedFields[emailtemplate.FieldUsedFor]
+	return ok
+}
+
 // ResetUsedFor resets all changes to the "used_for" field.
 func (m *EmailTemplateMutation) ResetUsedFor() {
 	m.used_for = nil
+	delete(m.clearedFields, emailtemplate.FieldUsedFor)
 }
 
 // SetSender sets the "sender" field.
@@ -1302,9 +1394,22 @@ func (m *EmailTemplateMutation) OldSender(ctx context.Context) (v string, err er
 	return oldValue.Sender, nil
 }
 
+// ClearSender clears the value of the "sender" field.
+func (m *EmailTemplateMutation) ClearSender() {
+	m.sender = nil
+	m.clearedFields[emailtemplate.FieldSender] = struct{}{}
+}
+
+// SenderCleared returns if the "sender" field was cleared in this mutation.
+func (m *EmailTemplateMutation) SenderCleared() bool {
+	_, ok := m.clearedFields[emailtemplate.FieldSender]
+	return ok
+}
+
 // ResetSender resets all changes to the "sender" field.
 func (m *EmailTemplateMutation) ResetSender() {
 	m.sender = nil
+	delete(m.clearedFields, emailtemplate.FieldSender)
 }
 
 // SetReplyTos sets the "reply_tos" field.
@@ -1338,9 +1443,22 @@ func (m *EmailTemplateMutation) OldReplyTos(ctx context.Context) (v []string, er
 	return oldValue.ReplyTos, nil
 }
 
+// ClearReplyTos clears the value of the "reply_tos" field.
+func (m *EmailTemplateMutation) ClearReplyTos() {
+	m.reply_tos = nil
+	m.clearedFields[emailtemplate.FieldReplyTos] = struct{}{}
+}
+
+// ReplyTosCleared returns if the "reply_tos" field was cleared in this mutation.
+func (m *EmailTemplateMutation) ReplyTosCleared() bool {
+	_, ok := m.clearedFields[emailtemplate.FieldReplyTos]
+	return ok
+}
+
 // ResetReplyTos resets all changes to the "reply_tos" field.
 func (m *EmailTemplateMutation) ResetReplyTos() {
 	m.reply_tos = nil
+	delete(m.clearedFields, emailtemplate.FieldReplyTos)
 }
 
 // SetCcTos sets the "cc_tos" field.
@@ -1374,9 +1492,22 @@ func (m *EmailTemplateMutation) OldCcTos(ctx context.Context) (v []string, err e
 	return oldValue.CcTos, nil
 }
 
+// ClearCcTos clears the value of the "cc_tos" field.
+func (m *EmailTemplateMutation) ClearCcTos() {
+	m.cc_tos = nil
+	m.clearedFields[emailtemplate.FieldCcTos] = struct{}{}
+}
+
+// CcTosCleared returns if the "cc_tos" field was cleared in this mutation.
+func (m *EmailTemplateMutation) CcTosCleared() bool {
+	_, ok := m.clearedFields[emailtemplate.FieldCcTos]
+	return ok
+}
+
 // ResetCcTos resets all changes to the "cc_tos" field.
 func (m *EmailTemplateMutation) ResetCcTos() {
 	m.cc_tos = nil
+	delete(m.clearedFields, emailtemplate.FieldCcTos)
 }
 
 // SetSubject sets the "subject" field.
@@ -1410,9 +1541,22 @@ func (m *EmailTemplateMutation) OldSubject(ctx context.Context) (v string, err e
 	return oldValue.Subject, nil
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (m *EmailTemplateMutation) ClearSubject() {
+	m.subject = nil
+	m.clearedFields[emailtemplate.FieldSubject] = struct{}{}
+}
+
+// SubjectCleared returns if the "subject" field was cleared in this mutation.
+func (m *EmailTemplateMutation) SubjectCleared() bool {
+	_, ok := m.clearedFields[emailtemplate.FieldSubject]
+	return ok
+}
+
 // ResetSubject resets all changes to the "subject" field.
 func (m *EmailTemplateMutation) ResetSubject() {
 	m.subject = nil
+	delete(m.clearedFields, emailtemplate.FieldSubject)
 }
 
 // SetBody sets the "body" field.
@@ -1446,9 +1590,22 @@ func (m *EmailTemplateMutation) OldBody(ctx context.Context) (v string, err erro
 	return oldValue.Body, nil
 }
 
+// ClearBody clears the value of the "body" field.
+func (m *EmailTemplateMutation) ClearBody() {
+	m.body = nil
+	m.clearedFields[emailtemplate.FieldBody] = struct{}{}
+}
+
+// BodyCleared returns if the "body" field was cleared in this mutation.
+func (m *EmailTemplateMutation) BodyCleared() bool {
+	_, ok := m.clearedFields[emailtemplate.FieldBody]
+	return ok
+}
+
 // ResetBody resets all changes to the "body" field.
 func (m *EmailTemplateMutation) ResetBody() {
 	m.body = nil
+	delete(m.clearedFields, emailtemplate.FieldBody)
 }
 
 // Where appends a list predicates to the EmailTemplateMutation builder.
@@ -1733,7 +1890,26 @@ func (m *EmailTemplateMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *EmailTemplateMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(emailtemplate.FieldUsedFor) {
+		fields = append(fields, emailtemplate.FieldUsedFor)
+	}
+	if m.FieldCleared(emailtemplate.FieldSender) {
+		fields = append(fields, emailtemplate.FieldSender)
+	}
+	if m.FieldCleared(emailtemplate.FieldReplyTos) {
+		fields = append(fields, emailtemplate.FieldReplyTos)
+	}
+	if m.FieldCleared(emailtemplate.FieldCcTos) {
+		fields = append(fields, emailtemplate.FieldCcTos)
+	}
+	if m.FieldCleared(emailtemplate.FieldSubject) {
+		fields = append(fields, emailtemplate.FieldSubject)
+	}
+	if m.FieldCleared(emailtemplate.FieldBody) {
+		fields = append(fields, emailtemplate.FieldBody)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -1746,6 +1922,26 @@ func (m *EmailTemplateMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *EmailTemplateMutation) ClearField(name string) error {
+	switch name {
+	case emailtemplate.FieldUsedFor:
+		m.ClearUsedFor()
+		return nil
+	case emailtemplate.FieldSender:
+		m.ClearSender()
+		return nil
+	case emailtemplate.FieldReplyTos:
+		m.ClearReplyTos()
+		return nil
+	case emailtemplate.FieldCcTos:
+		m.ClearCcTos()
+		return nil
+	case emailtemplate.FieldSubject:
+		m.ClearSubject()
+		return nil
+	case emailtemplate.FieldBody:
+		m.ClearBody()
+		return nil
+	}
 	return fmt.Errorf("unknown EmailTemplate nullable field %s", name)
 }
 
@@ -2239,9 +2435,22 @@ func (m *SMSTemplateMutation) OldUsedFor(ctx context.Context) (v string, err err
 	return oldValue.UsedFor, nil
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (m *SMSTemplateMutation) ClearUsedFor() {
+	m.used_for = nil
+	m.clearedFields[smstemplate.FieldUsedFor] = struct{}{}
+}
+
+// UsedForCleared returns if the "used_for" field was cleared in this mutation.
+func (m *SMSTemplateMutation) UsedForCleared() bool {
+	_, ok := m.clearedFields[smstemplate.FieldUsedFor]
+	return ok
+}
+
 // ResetUsedFor resets all changes to the "used_for" field.
 func (m *SMSTemplateMutation) ResetUsedFor() {
 	m.used_for = nil
+	delete(m.clearedFields, smstemplate.FieldUsedFor)
 }
 
 // SetSubject sets the "subject" field.
@@ -2275,9 +2484,22 @@ func (m *SMSTemplateMutation) OldSubject(ctx context.Context) (v string, err err
 	return oldValue.Subject, nil
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (m *SMSTemplateMutation) ClearSubject() {
+	m.subject = nil
+	m.clearedFields[smstemplate.FieldSubject] = struct{}{}
+}
+
+// SubjectCleared returns if the "subject" field was cleared in this mutation.
+func (m *SMSTemplateMutation) SubjectCleared() bool {
+	_, ok := m.clearedFields[smstemplate.FieldSubject]
+	return ok
+}
+
 // ResetSubject resets all changes to the "subject" field.
 func (m *SMSTemplateMutation) ResetSubject() {
 	m.subject = nil
+	delete(m.clearedFields, smstemplate.FieldSubject)
 }
 
 // SetMessage sets the "message" field.
@@ -2311,9 +2533,22 @@ func (m *SMSTemplateMutation) OldMessage(ctx context.Context) (v string, err err
 	return oldValue.Message, nil
 }
 
+// ClearMessage clears the value of the "message" field.
+func (m *SMSTemplateMutation) ClearMessage() {
+	m.message = nil
+	m.clearedFields[smstemplate.FieldMessage] = struct{}{}
+}
+
+// MessageCleared returns if the "message" field was cleared in this mutation.
+func (m *SMSTemplateMutation) MessageCleared() bool {
+	_, ok := m.clearedFields[smstemplate.FieldMessage]
+	return ok
+}
+
 // ResetMessage resets all changes to the "message" field.
 func (m *SMSTemplateMutation) ResetMessage() {
 	m.message = nil
+	delete(m.clearedFields, smstemplate.FieldMessage)
 }
 
 // Where appends a list predicates to the SMSTemplateMutation builder.
@@ -2542,7 +2777,17 @@ func (m *SMSTemplateMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *SMSTemplateMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(smstemplate.FieldUsedFor) {
+		fields = append(fields, smstemplate.FieldUsedFor)
+	}
+	if m.FieldCleared(smstemplate.FieldSubject) {
+		fields = append(fields, smstemplate.FieldSubject)
+	}
+	if m.FieldCleared(smstemplate.FieldMessage) {
+		fields = append(fields, smstemplate.FieldMessage)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -2555,6 +2800,17 @@ func (m *SMSTemplateMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *SMSTemplateMutation) ClearField(name string) error {
+	switch name {
+	case smstemplate.FieldUsedFor:
+		m.ClearUsedFor()
+		return nil
+	case smstemplate.FieldSubject:
+		m.ClearSubject()
+		return nil
+	case smstemplate.FieldMessage:
+		m.ClearMessage()
+		return nil
+	}
 	return fmt.Errorf("unknown SMSTemplate nullable field %s", name)
 }
 

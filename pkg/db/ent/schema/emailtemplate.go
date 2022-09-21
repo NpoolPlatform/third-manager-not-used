@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 	"github.com/NpoolPlatform/third-manager/pkg/db/mixin"
 
 	"github.com/google/uuid"
@@ -29,15 +30,23 @@ func (EmailTemplate) Fields() []ent.Field {
 		field.UUID("app_id", uuid.UUID{}),
 		field.UUID("lang_id", uuid.UUID{}),
 		field.String("default_to_username"),
-		field.String("used_for"),
-		field.String("sender"),
+		field.String("used_for").
+			Optional().
+			Default(usedfor.UsedFor_DefaultUsedFor.String()),
+		field.String("sender").
+			Optional().
+			Default(""),
 		field.JSON("reply_tos", []string{}).
+			Optional().
 			Default([]string{}),
 		field.JSON("cc_tos", []string{}).
+			Optional().
 			Default([]string{}),
 		field.String("subject").
+			Optional().
 			Default(""),
 		field.String("body").
+			Optional().
 			Default("").
 			MaxLen(maxLen),
 	}

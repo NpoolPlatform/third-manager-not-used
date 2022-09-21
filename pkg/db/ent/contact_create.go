@@ -77,6 +77,14 @@ func (cc *ContactCreate) SetUsedFor(s string) *ContactCreate {
 	return cc
 }
 
+// SetNillableUsedFor sets the "used_for" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableUsedFor(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetUsedFor(*s)
+	}
+	return cc
+}
+
 // SetSender sets the "sender" field.
 func (cc *ContactCreate) SetSender(s string) *ContactCreate {
 	cc.mutation.SetSender(s)
@@ -233,6 +241,10 @@ func (cc *ContactCreate) defaults() error {
 		v := contact.DefaultDeletedAt()
 		cc.mutation.SetDeletedAt(v)
 	}
+	if _, ok := cc.mutation.UsedFor(); !ok {
+		v := contact.DefaultUsedFor
+		cc.mutation.SetUsedFor(v)
+	}
 	if _, ok := cc.mutation.Sender(); !ok {
 		v := contact.DefaultSender
 		cc.mutation.SetSender(v)
@@ -268,18 +280,6 @@ func (cc *ContactCreate) check() error {
 	}
 	if _, ok := cc.mutation.AppID(); !ok {
 		return &ValidationError{Name: "app_id", err: errors.New(`ent: missing required field "Contact.app_id"`)}
-	}
-	if _, ok := cc.mutation.UsedFor(); !ok {
-		return &ValidationError{Name: "used_for", err: errors.New(`ent: missing required field "Contact.used_for"`)}
-	}
-	if _, ok := cc.mutation.Sender(); !ok {
-		return &ValidationError{Name: "sender", err: errors.New(`ent: missing required field "Contact.sender"`)}
-	}
-	if _, ok := cc.mutation.Account(); !ok {
-		return &ValidationError{Name: "account", err: errors.New(`ent: missing required field "Contact.account"`)}
-	}
-	if _, ok := cc.mutation.AccountType(); !ok {
-		return &ValidationError{Name: "account_type", err: errors.New(`ent: missing required field "Contact.account_type"`)}
 	}
 	return nil
 }
@@ -514,6 +514,12 @@ func (u *ContactUpsert) UpdateUsedFor() *ContactUpsert {
 	return u
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *ContactUpsert) ClearUsedFor() *ContactUpsert {
+	u.SetNull(contact.FieldUsedFor)
+	return u
+}
+
 // SetSender sets the "sender" field.
 func (u *ContactUpsert) SetSender(v string) *ContactUpsert {
 	u.Set(contact.FieldSender, v)
@@ -523,6 +529,12 @@ func (u *ContactUpsert) SetSender(v string) *ContactUpsert {
 // UpdateSender sets the "sender" field to the value that was provided on create.
 func (u *ContactUpsert) UpdateSender() *ContactUpsert {
 	u.SetExcluded(contact.FieldSender)
+	return u
+}
+
+// ClearSender clears the value of the "sender" field.
+func (u *ContactUpsert) ClearSender() *ContactUpsert {
+	u.SetNull(contact.FieldSender)
 	return u
 }
 
@@ -538,6 +550,12 @@ func (u *ContactUpsert) UpdateAccount() *ContactUpsert {
 	return u
 }
 
+// ClearAccount clears the value of the "account" field.
+func (u *ContactUpsert) ClearAccount() *ContactUpsert {
+	u.SetNull(contact.FieldAccount)
+	return u
+}
+
 // SetAccountType sets the "account_type" field.
 func (u *ContactUpsert) SetAccountType(v string) *ContactUpsert {
 	u.Set(contact.FieldAccountType, v)
@@ -547,6 +565,12 @@ func (u *ContactUpsert) SetAccountType(v string) *ContactUpsert {
 // UpdateAccountType sets the "account_type" field to the value that was provided on create.
 func (u *ContactUpsert) UpdateAccountType() *ContactUpsert {
 	u.SetExcluded(contact.FieldAccountType)
+	return u
+}
+
+// ClearAccountType clears the value of the "account_type" field.
+func (u *ContactUpsert) ClearAccountType() *ContactUpsert {
+	u.SetNull(contact.FieldAccountType)
 	return u
 }
 
@@ -691,6 +715,13 @@ func (u *ContactUpsertOne) UpdateUsedFor() *ContactUpsertOne {
 	})
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *ContactUpsertOne) ClearUsedFor() *ContactUpsertOne {
+	return u.Update(func(s *ContactUpsert) {
+		s.ClearUsedFor()
+	})
+}
+
 // SetSender sets the "sender" field.
 func (u *ContactUpsertOne) SetSender(v string) *ContactUpsertOne {
 	return u.Update(func(s *ContactUpsert) {
@@ -702,6 +733,13 @@ func (u *ContactUpsertOne) SetSender(v string) *ContactUpsertOne {
 func (u *ContactUpsertOne) UpdateSender() *ContactUpsertOne {
 	return u.Update(func(s *ContactUpsert) {
 		s.UpdateSender()
+	})
+}
+
+// ClearSender clears the value of the "sender" field.
+func (u *ContactUpsertOne) ClearSender() *ContactUpsertOne {
+	return u.Update(func(s *ContactUpsert) {
+		s.ClearSender()
 	})
 }
 
@@ -719,6 +757,13 @@ func (u *ContactUpsertOne) UpdateAccount() *ContactUpsertOne {
 	})
 }
 
+// ClearAccount clears the value of the "account" field.
+func (u *ContactUpsertOne) ClearAccount() *ContactUpsertOne {
+	return u.Update(func(s *ContactUpsert) {
+		s.ClearAccount()
+	})
+}
+
 // SetAccountType sets the "account_type" field.
 func (u *ContactUpsertOne) SetAccountType(v string) *ContactUpsertOne {
 	return u.Update(func(s *ContactUpsert) {
@@ -730,6 +775,13 @@ func (u *ContactUpsertOne) SetAccountType(v string) *ContactUpsertOne {
 func (u *ContactUpsertOne) UpdateAccountType() *ContactUpsertOne {
 	return u.Update(func(s *ContactUpsert) {
 		s.UpdateAccountType()
+	})
+}
+
+// ClearAccountType clears the value of the "account_type" field.
+func (u *ContactUpsertOne) ClearAccountType() *ContactUpsertOne {
+	return u.Update(func(s *ContactUpsert) {
+		s.ClearAccountType()
 	})
 }
 
@@ -1040,6 +1092,13 @@ func (u *ContactUpsertBulk) UpdateUsedFor() *ContactUpsertBulk {
 	})
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *ContactUpsertBulk) ClearUsedFor() *ContactUpsertBulk {
+	return u.Update(func(s *ContactUpsert) {
+		s.ClearUsedFor()
+	})
+}
+
 // SetSender sets the "sender" field.
 func (u *ContactUpsertBulk) SetSender(v string) *ContactUpsertBulk {
 	return u.Update(func(s *ContactUpsert) {
@@ -1051,6 +1110,13 @@ func (u *ContactUpsertBulk) SetSender(v string) *ContactUpsertBulk {
 func (u *ContactUpsertBulk) UpdateSender() *ContactUpsertBulk {
 	return u.Update(func(s *ContactUpsert) {
 		s.UpdateSender()
+	})
+}
+
+// ClearSender clears the value of the "sender" field.
+func (u *ContactUpsertBulk) ClearSender() *ContactUpsertBulk {
+	return u.Update(func(s *ContactUpsert) {
+		s.ClearSender()
 	})
 }
 
@@ -1068,6 +1134,13 @@ func (u *ContactUpsertBulk) UpdateAccount() *ContactUpsertBulk {
 	})
 }
 
+// ClearAccount clears the value of the "account" field.
+func (u *ContactUpsertBulk) ClearAccount() *ContactUpsertBulk {
+	return u.Update(func(s *ContactUpsert) {
+		s.ClearAccount()
+	})
+}
+
 // SetAccountType sets the "account_type" field.
 func (u *ContactUpsertBulk) SetAccountType(v string) *ContactUpsertBulk {
 	return u.Update(func(s *ContactUpsert) {
@@ -1079,6 +1152,13 @@ func (u *ContactUpsertBulk) SetAccountType(v string) *ContactUpsertBulk {
 func (u *ContactUpsertBulk) UpdateAccountType() *ContactUpsertBulk {
 	return u.Update(func(s *ContactUpsert) {
 		s.UpdateAccountType()
+	})
+}
+
+// ClearAccountType clears the value of the "account_type" field.
+func (u *ContactUpsertBulk) ClearAccountType() *ContactUpsertBulk {
+	return u.Update(func(s *ContactUpsert) {
+		s.ClearAccountType()
 	})
 }
 

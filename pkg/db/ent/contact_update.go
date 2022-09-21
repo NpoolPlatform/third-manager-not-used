@@ -96,6 +96,20 @@ func (cu *ContactUpdate) SetUsedFor(s string) *ContactUpdate {
 	return cu
 }
 
+// SetNillableUsedFor sets the "used_for" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableUsedFor(s *string) *ContactUpdate {
+	if s != nil {
+		cu.SetUsedFor(*s)
+	}
+	return cu
+}
+
+// ClearUsedFor clears the value of the "used_for" field.
+func (cu *ContactUpdate) ClearUsedFor() *ContactUpdate {
+	cu.mutation.ClearUsedFor()
+	return cu
+}
+
 // SetSender sets the "sender" field.
 func (cu *ContactUpdate) SetSender(s string) *ContactUpdate {
 	cu.mutation.SetSender(s)
@@ -107,6 +121,12 @@ func (cu *ContactUpdate) SetNillableSender(s *string) *ContactUpdate {
 	if s != nil {
 		cu.SetSender(*s)
 	}
+	return cu
+}
+
+// ClearSender clears the value of the "sender" field.
+func (cu *ContactUpdate) ClearSender() *ContactUpdate {
+	cu.mutation.ClearSender()
 	return cu
 }
 
@@ -124,6 +144,12 @@ func (cu *ContactUpdate) SetNillableAccount(s *string) *ContactUpdate {
 	return cu
 }
 
+// ClearAccount clears the value of the "account" field.
+func (cu *ContactUpdate) ClearAccount() *ContactUpdate {
+	cu.mutation.ClearAccount()
+	return cu
+}
+
 // SetAccountType sets the "account_type" field.
 func (cu *ContactUpdate) SetAccountType(s string) *ContactUpdate {
 	cu.mutation.SetAccountType(s)
@@ -135,6 +161,12 @@ func (cu *ContactUpdate) SetNillableAccountType(s *string) *ContactUpdate {
 	if s != nil {
 		cu.SetAccountType(*s)
 	}
+	return cu
+}
+
+// ClearAccountType clears the value of the "account_type" field.
+func (cu *ContactUpdate) ClearAccountType() *ContactUpdate {
+	cu.mutation.ClearAccountType()
 	return cu
 }
 
@@ -292,10 +324,22 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: contact.FieldUsedFor,
 		})
 	}
+	if cu.mutation.UsedForCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldUsedFor,
+		})
+	}
 	if value, ok := cu.mutation.Sender(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: contact.FieldSender,
+		})
+	}
+	if cu.mutation.SenderCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: contact.FieldSender,
 		})
 	}
@@ -306,10 +350,22 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: contact.FieldAccount,
 		})
 	}
+	if cu.mutation.AccountCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldAccount,
+		})
+	}
 	if value, ok := cu.mutation.AccountType(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: contact.FieldAccountType,
+		})
+	}
+	if cu.mutation.AccountTypeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: contact.FieldAccountType,
 		})
 	}
@@ -401,6 +457,20 @@ func (cuo *ContactUpdateOne) SetUsedFor(s string) *ContactUpdateOne {
 	return cuo
 }
 
+// SetNillableUsedFor sets the "used_for" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableUsedFor(s *string) *ContactUpdateOne {
+	if s != nil {
+		cuo.SetUsedFor(*s)
+	}
+	return cuo
+}
+
+// ClearUsedFor clears the value of the "used_for" field.
+func (cuo *ContactUpdateOne) ClearUsedFor() *ContactUpdateOne {
+	cuo.mutation.ClearUsedFor()
+	return cuo
+}
+
 // SetSender sets the "sender" field.
 func (cuo *ContactUpdateOne) SetSender(s string) *ContactUpdateOne {
 	cuo.mutation.SetSender(s)
@@ -412,6 +482,12 @@ func (cuo *ContactUpdateOne) SetNillableSender(s *string) *ContactUpdateOne {
 	if s != nil {
 		cuo.SetSender(*s)
 	}
+	return cuo
+}
+
+// ClearSender clears the value of the "sender" field.
+func (cuo *ContactUpdateOne) ClearSender() *ContactUpdateOne {
+	cuo.mutation.ClearSender()
 	return cuo
 }
 
@@ -429,6 +505,12 @@ func (cuo *ContactUpdateOne) SetNillableAccount(s *string) *ContactUpdateOne {
 	return cuo
 }
 
+// ClearAccount clears the value of the "account" field.
+func (cuo *ContactUpdateOne) ClearAccount() *ContactUpdateOne {
+	cuo.mutation.ClearAccount()
+	return cuo
+}
+
 // SetAccountType sets the "account_type" field.
 func (cuo *ContactUpdateOne) SetAccountType(s string) *ContactUpdateOne {
 	cuo.mutation.SetAccountType(s)
@@ -440,6 +522,12 @@ func (cuo *ContactUpdateOne) SetNillableAccountType(s *string) *ContactUpdateOne
 	if s != nil {
 		cuo.SetAccountType(*s)
 	}
+	return cuo
+}
+
+// ClearAccountType clears the value of the "account_type" field.
+func (cuo *ContactUpdateOne) ClearAccountType() *ContactUpdateOne {
+	cuo.mutation.ClearAccountType()
 	return cuo
 }
 
@@ -627,10 +715,22 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 			Column: contact.FieldUsedFor,
 		})
 	}
+	if cuo.mutation.UsedForCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldUsedFor,
+		})
+	}
 	if value, ok := cuo.mutation.Sender(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: contact.FieldSender,
+		})
+	}
+	if cuo.mutation.SenderCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: contact.FieldSender,
 		})
 	}
@@ -641,10 +741,22 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 			Column: contact.FieldAccount,
 		})
 	}
+	if cuo.mutation.AccountCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: contact.FieldAccount,
+		})
+	}
 	if value, ok := cuo.mutation.AccountType(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: contact.FieldAccountType,
+		})
+	}
+	if cuo.mutation.AccountTypeCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: contact.FieldAccountType,
 		})
 	}

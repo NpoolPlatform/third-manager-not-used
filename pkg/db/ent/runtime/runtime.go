@@ -47,6 +47,10 @@ func init() {
 	contactDescDeletedAt := contactMixinFields0[2].Descriptor()
 	// contact.DefaultDeletedAt holds the default value on creation for the deleted_at field.
 	contact.DefaultDeletedAt = contactDescDeletedAt.Default.(func() uint32)
+	// contactDescUsedFor is the schema descriptor for used_for field.
+	contactDescUsedFor := contactFields[2].Descriptor()
+	// contact.DefaultUsedFor holds the default value on creation for the used_for field.
+	contact.DefaultUsedFor = contactDescUsedFor.Default.(string)
 	// contactDescSender is the schema descriptor for sender field.
 	contactDescSender := contactFields[3].Descriptor()
 	// contact.DefaultSender holds the default value on creation for the sender field.
@@ -91,6 +95,14 @@ func init() {
 	emailtemplateDescDeletedAt := emailtemplateMixinFields0[2].Descriptor()
 	// emailtemplate.DefaultDeletedAt holds the default value on creation for the deleted_at field.
 	emailtemplate.DefaultDeletedAt = emailtemplateDescDeletedAt.Default.(func() uint32)
+	// emailtemplateDescUsedFor is the schema descriptor for used_for field.
+	emailtemplateDescUsedFor := emailtemplateFields[4].Descriptor()
+	// emailtemplate.DefaultUsedFor holds the default value on creation for the used_for field.
+	emailtemplate.DefaultUsedFor = emailtemplateDescUsedFor.Default.(string)
+	// emailtemplateDescSender is the schema descriptor for sender field.
+	emailtemplateDescSender := emailtemplateFields[5].Descriptor()
+	// emailtemplate.DefaultSender holds the default value on creation for the sender field.
+	emailtemplate.DefaultSender = emailtemplateDescSender.Default.(string)
 	// emailtemplateDescReplyTos is the schema descriptor for reply_tos field.
 	emailtemplateDescReplyTos := emailtemplateFields[6].Descriptor()
 	// emailtemplate.DefaultReplyTos holds the default value on creation for the reply_tos field.

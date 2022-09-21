@@ -540,6 +540,20 @@ func UsedForHasSuffix(v string) predicate.SMSTemplate {
 	})
 }
 
+// UsedForIsNil applies the IsNil predicate on the "used_for" field.
+func UsedForIsNil() predicate.SMSTemplate {
+	return predicate.SMSTemplate(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUsedFor)))
+	})
+}
+
+// UsedForNotNil applies the NotNil predicate on the "used_for" field.
+func UsedForNotNil() predicate.SMSTemplate {
+	return predicate.SMSTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUsedFor)))
+	})
+}
+
 // UsedForEqualFold applies the EqualFold predicate on the "used_for" field.
 func UsedForEqualFold(v string) predicate.SMSTemplate {
 	return predicate.SMSTemplate(func(s *sql.Selector) {
@@ -639,6 +653,20 @@ func SubjectHasSuffix(v string) predicate.SMSTemplate {
 	})
 }
 
+// SubjectIsNil applies the IsNil predicate on the "subject" field.
+func SubjectIsNil() predicate.SMSTemplate {
+	return predicate.SMSTemplate(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSubject)))
+	})
+}
+
+// SubjectNotNil applies the NotNil predicate on the "subject" field.
+func SubjectNotNil() predicate.SMSTemplate {
+	return predicate.SMSTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSubject)))
+	})
+}
+
 // SubjectEqualFold applies the EqualFold predicate on the "subject" field.
 func SubjectEqualFold(v string) predicate.SMSTemplate {
 	return predicate.SMSTemplate(func(s *sql.Selector) {
@@ -735,6 +763,20 @@ func MessageHasPrefix(v string) predicate.SMSTemplate {
 func MessageHasSuffix(v string) predicate.SMSTemplate {
 	return predicate.SMSTemplate(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldMessage), v))
+	})
+}
+
+// MessageIsNil applies the IsNil predicate on the "message" field.
+func MessageIsNil() predicate.SMSTemplate {
+	return predicate.SMSTemplate(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldMessage)))
+	})
+}
+
+// MessageNotNil applies the NotNil predicate on the "message" field.
+func MessageNotNil() predicate.SMSTemplate {
+	return predicate.SMSTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldMessage)))
 	})
 }
 

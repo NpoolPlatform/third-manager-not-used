@@ -272,15 +272,6 @@ func (stc *SMSTemplateCreate) check() error {
 	if _, ok := stc.mutation.LangID(); !ok {
 		return &ValidationError{Name: "lang_id", err: errors.New(`ent: missing required field "SMSTemplate.lang_id"`)}
 	}
-	if _, ok := stc.mutation.UsedFor(); !ok {
-		return &ValidationError{Name: "used_for", err: errors.New(`ent: missing required field "SMSTemplate.used_for"`)}
-	}
-	if _, ok := stc.mutation.Subject(); !ok {
-		return &ValidationError{Name: "subject", err: errors.New(`ent: missing required field "SMSTemplate.subject"`)}
-	}
-	if _, ok := stc.mutation.Message(); !ok {
-		return &ValidationError{Name: "message", err: errors.New(`ent: missing required field "SMSTemplate.message"`)}
-	}
 	return nil
 }
 
@@ -526,6 +517,12 @@ func (u *SMSTemplateUpsert) UpdateUsedFor() *SMSTemplateUpsert {
 	return u
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *SMSTemplateUpsert) ClearUsedFor() *SMSTemplateUpsert {
+	u.SetNull(smstemplate.FieldUsedFor)
+	return u
+}
+
 // SetSubject sets the "subject" field.
 func (u *SMSTemplateUpsert) SetSubject(v string) *SMSTemplateUpsert {
 	u.Set(smstemplate.FieldSubject, v)
@@ -538,6 +535,12 @@ func (u *SMSTemplateUpsert) UpdateSubject() *SMSTemplateUpsert {
 	return u
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (u *SMSTemplateUpsert) ClearSubject() *SMSTemplateUpsert {
+	u.SetNull(smstemplate.FieldSubject)
+	return u
+}
+
 // SetMessage sets the "message" field.
 func (u *SMSTemplateUpsert) SetMessage(v string) *SMSTemplateUpsert {
 	u.Set(smstemplate.FieldMessage, v)
@@ -547,6 +550,12 @@ func (u *SMSTemplateUpsert) SetMessage(v string) *SMSTemplateUpsert {
 // UpdateMessage sets the "message" field to the value that was provided on create.
 func (u *SMSTemplateUpsert) UpdateMessage() *SMSTemplateUpsert {
 	u.SetExcluded(smstemplate.FieldMessage)
+	return u
+}
+
+// ClearMessage clears the value of the "message" field.
+func (u *SMSTemplateUpsert) ClearMessage() *SMSTemplateUpsert {
+	u.SetNull(smstemplate.FieldMessage)
 	return u
 }
 
@@ -705,6 +714,13 @@ func (u *SMSTemplateUpsertOne) UpdateUsedFor() *SMSTemplateUpsertOne {
 	})
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *SMSTemplateUpsertOne) ClearUsedFor() *SMSTemplateUpsertOne {
+	return u.Update(func(s *SMSTemplateUpsert) {
+		s.ClearUsedFor()
+	})
+}
+
 // SetSubject sets the "subject" field.
 func (u *SMSTemplateUpsertOne) SetSubject(v string) *SMSTemplateUpsertOne {
 	return u.Update(func(s *SMSTemplateUpsert) {
@@ -719,6 +735,13 @@ func (u *SMSTemplateUpsertOne) UpdateSubject() *SMSTemplateUpsertOne {
 	})
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (u *SMSTemplateUpsertOne) ClearSubject() *SMSTemplateUpsertOne {
+	return u.Update(func(s *SMSTemplateUpsert) {
+		s.ClearSubject()
+	})
+}
+
 // SetMessage sets the "message" field.
 func (u *SMSTemplateUpsertOne) SetMessage(v string) *SMSTemplateUpsertOne {
 	return u.Update(func(s *SMSTemplateUpsert) {
@@ -730,6 +753,13 @@ func (u *SMSTemplateUpsertOne) SetMessage(v string) *SMSTemplateUpsertOne {
 func (u *SMSTemplateUpsertOne) UpdateMessage() *SMSTemplateUpsertOne {
 	return u.Update(func(s *SMSTemplateUpsert) {
 		s.UpdateMessage()
+	})
+}
+
+// ClearMessage clears the value of the "message" field.
+func (u *SMSTemplateUpsertOne) ClearMessage() *SMSTemplateUpsertOne {
+	return u.Update(func(s *SMSTemplateUpsert) {
+		s.ClearMessage()
 	})
 }
 
@@ -1054,6 +1084,13 @@ func (u *SMSTemplateUpsertBulk) UpdateUsedFor() *SMSTemplateUpsertBulk {
 	})
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *SMSTemplateUpsertBulk) ClearUsedFor() *SMSTemplateUpsertBulk {
+	return u.Update(func(s *SMSTemplateUpsert) {
+		s.ClearUsedFor()
+	})
+}
+
 // SetSubject sets the "subject" field.
 func (u *SMSTemplateUpsertBulk) SetSubject(v string) *SMSTemplateUpsertBulk {
 	return u.Update(func(s *SMSTemplateUpsert) {
@@ -1068,6 +1105,13 @@ func (u *SMSTemplateUpsertBulk) UpdateSubject() *SMSTemplateUpsertBulk {
 	})
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (u *SMSTemplateUpsertBulk) ClearSubject() *SMSTemplateUpsertBulk {
+	return u.Update(func(s *SMSTemplateUpsert) {
+		s.ClearSubject()
+	})
+}
+
 // SetMessage sets the "message" field.
 func (u *SMSTemplateUpsertBulk) SetMessage(v string) *SMSTemplateUpsertBulk {
 	return u.Update(func(s *SMSTemplateUpsert) {
@@ -1079,6 +1123,13 @@ func (u *SMSTemplateUpsertBulk) SetMessage(v string) *SMSTemplateUpsertBulk {
 func (u *SMSTemplateUpsertBulk) UpdateMessage() *SMSTemplateUpsertBulk {
 	return u.Update(func(s *SMSTemplateUpsert) {
 		s.UpdateMessage()
+	})
+}
+
+// ClearMessage clears the value of the "message" field.
+func (u *SMSTemplateUpsertBulk) ClearMessage() *SMSTemplateUpsertBulk {
+	return u.Update(func(s *SMSTemplateUpsert) {
+		s.ClearMessage()
 	})
 }
 

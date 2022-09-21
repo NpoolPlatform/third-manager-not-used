@@ -110,6 +110,12 @@ func (stu *SMSTemplateUpdate) SetNillableUsedFor(s *string) *SMSTemplateUpdate {
 	return stu
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (stu *SMSTemplateUpdate) ClearUsedFor() *SMSTemplateUpdate {
+	stu.mutation.ClearUsedFor()
+	return stu
+}
+
 // SetSubject sets the "subject" field.
 func (stu *SMSTemplateUpdate) SetSubject(s string) *SMSTemplateUpdate {
 	stu.mutation.SetSubject(s)
@@ -124,6 +130,12 @@ func (stu *SMSTemplateUpdate) SetNillableSubject(s *string) *SMSTemplateUpdate {
 	return stu
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (stu *SMSTemplateUpdate) ClearSubject() *SMSTemplateUpdate {
+	stu.mutation.ClearSubject()
+	return stu
+}
+
 // SetMessage sets the "message" field.
 func (stu *SMSTemplateUpdate) SetMessage(s string) *SMSTemplateUpdate {
 	stu.mutation.SetMessage(s)
@@ -135,6 +147,12 @@ func (stu *SMSTemplateUpdate) SetNillableMessage(s *string) *SMSTemplateUpdate {
 	if s != nil {
 		stu.SetMessage(*s)
 	}
+	return stu
+}
+
+// ClearMessage clears the value of the "message" field.
+func (stu *SMSTemplateUpdate) ClearMessage() *SMSTemplateUpdate {
+	stu.mutation.ClearMessage()
 	return stu
 }
 
@@ -299,6 +317,12 @@ func (stu *SMSTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: smstemplate.FieldUsedFor,
 		})
 	}
+	if stu.mutation.UsedForCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: smstemplate.FieldUsedFor,
+		})
+	}
 	if value, ok := stu.mutation.Subject(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -306,10 +330,22 @@ func (stu *SMSTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: smstemplate.FieldSubject,
 		})
 	}
+	if stu.mutation.SubjectCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: smstemplate.FieldSubject,
+		})
+	}
 	if value, ok := stu.mutation.Message(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: smstemplate.FieldMessage,
+		})
+	}
+	if stu.mutation.MessageCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: smstemplate.FieldMessage,
 		})
 	}
@@ -415,6 +451,12 @@ func (stuo *SMSTemplateUpdateOne) SetNillableUsedFor(s *string) *SMSTemplateUpda
 	return stuo
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (stuo *SMSTemplateUpdateOne) ClearUsedFor() *SMSTemplateUpdateOne {
+	stuo.mutation.ClearUsedFor()
+	return stuo
+}
+
 // SetSubject sets the "subject" field.
 func (stuo *SMSTemplateUpdateOne) SetSubject(s string) *SMSTemplateUpdateOne {
 	stuo.mutation.SetSubject(s)
@@ -429,6 +471,12 @@ func (stuo *SMSTemplateUpdateOne) SetNillableSubject(s *string) *SMSTemplateUpda
 	return stuo
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (stuo *SMSTemplateUpdateOne) ClearSubject() *SMSTemplateUpdateOne {
+	stuo.mutation.ClearSubject()
+	return stuo
+}
+
 // SetMessage sets the "message" field.
 func (stuo *SMSTemplateUpdateOne) SetMessage(s string) *SMSTemplateUpdateOne {
 	stuo.mutation.SetMessage(s)
@@ -440,6 +488,12 @@ func (stuo *SMSTemplateUpdateOne) SetNillableMessage(s *string) *SMSTemplateUpda
 	if s != nil {
 		stuo.SetMessage(*s)
 	}
+	return stuo
+}
+
+// ClearMessage clears the value of the "message" field.
+func (stuo *SMSTemplateUpdateOne) ClearMessage() *SMSTemplateUpdateOne {
+	stuo.mutation.ClearMessage()
 	return stuo
 }
 
@@ -634,6 +688,12 @@ func (stuo *SMSTemplateUpdateOne) sqlSave(ctx context.Context) (_node *SMSTempla
 			Column: smstemplate.FieldUsedFor,
 		})
 	}
+	if stuo.mutation.UsedForCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: smstemplate.FieldUsedFor,
+		})
+	}
 	if value, ok := stuo.mutation.Subject(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -641,10 +701,22 @@ func (stuo *SMSTemplateUpdateOne) sqlSave(ctx context.Context) (_node *SMSTempla
 			Column: smstemplate.FieldSubject,
 		})
 	}
+	if stuo.mutation.SubjectCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: smstemplate.FieldSubject,
+		})
+	}
 	if value, ok := stuo.mutation.Message(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: smstemplate.FieldMessage,
+		})
+	}
+	if stuo.mutation.MessageCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: smstemplate.FieldMessage,
 		})
 	}

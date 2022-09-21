@@ -28,10 +28,13 @@ func (SMSTemplate) Fields() []ent.Field {
 		field.UUID("app_id", uuid.UUID{}),
 		field.UUID("lang_id", uuid.UUID{}),
 		field.String("used_for").
+			Optional().
 			Default(""),
 		field.String("subject").
+			Optional().
 			Default(""),
 		field.String("message").
+			Optional().
 			Default(""),
 	}
 }

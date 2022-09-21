@@ -15,10 +15,10 @@ var (
 		{Name: "updated_at", Type: field.TypeUint32},
 		{Name: "deleted_at", Type: field.TypeUint32},
 		{Name: "app_id", Type: field.TypeUUID},
-		{Name: "used_for", Type: field.TypeString},
-		{Name: "sender", Type: field.TypeString, Default: ""},
-		{Name: "account", Type: field.TypeString, Default: ""},
-		{Name: "account_type", Type: field.TypeString, Default: ""},
+		{Name: "used_for", Type: field.TypeString, Nullable: true, Default: "DefaultUsedFor"},
+		{Name: "sender", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "account", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "account_type", Type: field.TypeString, Nullable: true, Default: ""},
 	}
 	// ContactsTable holds the schema information for the "contacts" table.
 	ContactsTable = &schema.Table{
@@ -35,12 +35,12 @@ var (
 		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "lang_id", Type: field.TypeUUID},
 		{Name: "default_to_username", Type: field.TypeString},
-		{Name: "used_for", Type: field.TypeString},
-		{Name: "sender", Type: field.TypeString},
-		{Name: "reply_tos", Type: field.TypeJSON},
-		{Name: "cc_tos", Type: field.TypeJSON},
-		{Name: "subject", Type: field.TypeString, Default: ""},
-		{Name: "body", Type: field.TypeString, Size: 8192, Default: ""},
+		{Name: "used_for", Type: field.TypeString, Nullable: true, Default: "DefaultUsedFor"},
+		{Name: "sender", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "reply_tos", Type: field.TypeJSON, Nullable: true},
+		{Name: "cc_tos", Type: field.TypeJSON, Nullable: true},
+		{Name: "subject", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "body", Type: field.TypeString, Nullable: true, Size: 8192, Default: ""},
 	}
 	// EmailTemplatesTable holds the schema information for the "email_templates" table.
 	EmailTemplatesTable = &schema.Table{
@@ -56,9 +56,9 @@ var (
 		{Name: "deleted_at", Type: field.TypeUint32},
 		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "lang_id", Type: field.TypeUUID},
-		{Name: "used_for", Type: field.TypeString, Default: ""},
-		{Name: "subject", Type: field.TypeString, Default: ""},
-		{Name: "message", Type: field.TypeString, Default: ""},
+		{Name: "used_for", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "subject", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "message", Type: field.TypeString, Nullable: true, Default: ""},
 	}
 	// SmsTemplatesTable holds the schema information for the "sms_templates" table.
 	SmsTemplatesTable = &schema.Table{

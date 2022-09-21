@@ -72,6 +72,8 @@ var (
 	UpdateDefaultUpdatedAt func() uint32
 	// DefaultDeletedAt holds the default value on creation for the "deleted_at" field.
 	DefaultDeletedAt func() uint32
+	// DefaultUsedFor holds the default value on creation for the "used_for" field.
+	DefaultUsedFor string
 	// DefaultSender holds the default value on creation for the "sender" field.
 	DefaultSender string
 	// DefaultAccount holds the default value on creation for the "account" field.

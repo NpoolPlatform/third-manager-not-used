@@ -653,6 +653,20 @@ func UsedForHasSuffix(v string) predicate.EmailTemplate {
 	})
 }
 
+// UsedForIsNil applies the IsNil predicate on the "used_for" field.
+func UsedForIsNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUsedFor)))
+	})
+}
+
+// UsedForNotNil applies the NotNil predicate on the "used_for" field.
+func UsedForNotNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUsedFor)))
+	})
+}
+
 // UsedForEqualFold applies the EqualFold predicate on the "used_for" field.
 func UsedForEqualFold(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(func(s *sql.Selector) {
@@ -752,6 +766,20 @@ func SenderHasSuffix(v string) predicate.EmailTemplate {
 	})
 }
 
+// SenderIsNil applies the IsNil predicate on the "sender" field.
+func SenderIsNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSender)))
+	})
+}
+
+// SenderNotNil applies the NotNil predicate on the "sender" field.
+func SenderNotNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSender)))
+	})
+}
+
 // SenderEqualFold applies the EqualFold predicate on the "sender" field.
 func SenderEqualFold(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(func(s *sql.Selector) {
@@ -763,6 +791,34 @@ func SenderEqualFold(v string) predicate.EmailTemplate {
 func SenderContainsFold(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldSender), v))
+	})
+}
+
+// ReplyTosIsNil applies the IsNil predicate on the "reply_tos" field.
+func ReplyTosIsNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldReplyTos)))
+	})
+}
+
+// ReplyTosNotNil applies the NotNil predicate on the "reply_tos" field.
+func ReplyTosNotNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldReplyTos)))
+	})
+}
+
+// CcTosIsNil applies the IsNil predicate on the "cc_tos" field.
+func CcTosIsNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldCcTos)))
+	})
+}
+
+// CcTosNotNil applies the NotNil predicate on the "cc_tos" field.
+func CcTosNotNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldCcTos)))
 	})
 }
 
@@ -848,6 +904,20 @@ func SubjectHasPrefix(v string) predicate.EmailTemplate {
 func SubjectHasSuffix(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldSubject), v))
+	})
+}
+
+// SubjectIsNil applies the IsNil predicate on the "subject" field.
+func SubjectIsNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSubject)))
+	})
+}
+
+// SubjectNotNil applies the NotNil predicate on the "subject" field.
+func SubjectNotNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSubject)))
 	})
 }
 
@@ -947,6 +1017,20 @@ func BodyHasPrefix(v string) predicate.EmailTemplate {
 func BodyHasSuffix(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldBody), v))
+	})
+}
+
+// BodyIsNil applies the IsNil predicate on the "body" field.
+func BodyIsNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldBody)))
+	})
+}
+
+// BodyNotNil applies the NotNil predicate on the "body" field.
+func BodyNotNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldBody)))
 	})
 }
 

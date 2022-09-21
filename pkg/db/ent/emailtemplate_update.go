@@ -108,9 +108,37 @@ func (etu *EmailTemplateUpdate) SetUsedFor(s string) *EmailTemplateUpdate {
 	return etu
 }
 
+// SetNillableUsedFor sets the "used_for" field if the given value is not nil.
+func (etu *EmailTemplateUpdate) SetNillableUsedFor(s *string) *EmailTemplateUpdate {
+	if s != nil {
+		etu.SetUsedFor(*s)
+	}
+	return etu
+}
+
+// ClearUsedFor clears the value of the "used_for" field.
+func (etu *EmailTemplateUpdate) ClearUsedFor() *EmailTemplateUpdate {
+	etu.mutation.ClearUsedFor()
+	return etu
+}
+
 // SetSender sets the "sender" field.
 func (etu *EmailTemplateUpdate) SetSender(s string) *EmailTemplateUpdate {
 	etu.mutation.SetSender(s)
+	return etu
+}
+
+// SetNillableSender sets the "sender" field if the given value is not nil.
+func (etu *EmailTemplateUpdate) SetNillableSender(s *string) *EmailTemplateUpdate {
+	if s != nil {
+		etu.SetSender(*s)
+	}
+	return etu
+}
+
+// ClearSender clears the value of the "sender" field.
+func (etu *EmailTemplateUpdate) ClearSender() *EmailTemplateUpdate {
+	etu.mutation.ClearSender()
 	return etu
 }
 
@@ -120,9 +148,21 @@ func (etu *EmailTemplateUpdate) SetReplyTos(s []string) *EmailTemplateUpdate {
 	return etu
 }
 
+// ClearReplyTos clears the value of the "reply_tos" field.
+func (etu *EmailTemplateUpdate) ClearReplyTos() *EmailTemplateUpdate {
+	etu.mutation.ClearReplyTos()
+	return etu
+}
+
 // SetCcTos sets the "cc_tos" field.
 func (etu *EmailTemplateUpdate) SetCcTos(s []string) *EmailTemplateUpdate {
 	etu.mutation.SetCcTos(s)
+	return etu
+}
+
+// ClearCcTos clears the value of the "cc_tos" field.
+func (etu *EmailTemplateUpdate) ClearCcTos() *EmailTemplateUpdate {
+	etu.mutation.ClearCcTos()
 	return etu
 }
 
@@ -140,6 +180,12 @@ func (etu *EmailTemplateUpdate) SetNillableSubject(s *string) *EmailTemplateUpda
 	return etu
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (etu *EmailTemplateUpdate) ClearSubject() *EmailTemplateUpdate {
+	etu.mutation.ClearSubject()
+	return etu
+}
+
 // SetBody sets the "body" field.
 func (etu *EmailTemplateUpdate) SetBody(s string) *EmailTemplateUpdate {
 	etu.mutation.SetBody(s)
@@ -151,6 +197,12 @@ func (etu *EmailTemplateUpdate) SetNillableBody(s *string) *EmailTemplateUpdate 
 	if s != nil {
 		etu.SetBody(*s)
 	}
+	return etu
+}
+
+// ClearBody clears the value of the "body" field.
+func (etu *EmailTemplateUpdate) ClearBody() *EmailTemplateUpdate {
+	etu.mutation.ClearBody()
 	return etu
 }
 
@@ -338,10 +390,22 @@ func (etu *EmailTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) 
 			Column: emailtemplate.FieldUsedFor,
 		})
 	}
+	if etu.mutation.UsedForCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: emailtemplate.FieldUsedFor,
+		})
+	}
 	if value, ok := etu.mutation.Sender(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: emailtemplate.FieldSender,
+		})
+	}
+	if etu.mutation.SenderCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: emailtemplate.FieldSender,
 		})
 	}
@@ -352,10 +416,22 @@ func (etu *EmailTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) 
 			Column: emailtemplate.FieldReplyTos,
 		})
 	}
+	if etu.mutation.ReplyTosCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeJSON,
+			Column: emailtemplate.FieldReplyTos,
+		})
+	}
 	if value, ok := etu.mutation.CcTos(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeJSON,
 			Value:  value,
+			Column: emailtemplate.FieldCcTos,
+		})
+	}
+	if etu.mutation.CcTosCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeJSON,
 			Column: emailtemplate.FieldCcTos,
 		})
 	}
@@ -366,10 +442,22 @@ func (etu *EmailTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) 
 			Column: emailtemplate.FieldSubject,
 		})
 	}
+	if etu.mutation.SubjectCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: emailtemplate.FieldSubject,
+		})
+	}
 	if value, ok := etu.mutation.Body(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: emailtemplate.FieldBody,
+		})
+	}
+	if etu.mutation.BodyCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: emailtemplate.FieldBody,
 		})
 	}
@@ -473,9 +561,37 @@ func (etuo *EmailTemplateUpdateOne) SetUsedFor(s string) *EmailTemplateUpdateOne
 	return etuo
 }
 
+// SetNillableUsedFor sets the "used_for" field if the given value is not nil.
+func (etuo *EmailTemplateUpdateOne) SetNillableUsedFor(s *string) *EmailTemplateUpdateOne {
+	if s != nil {
+		etuo.SetUsedFor(*s)
+	}
+	return etuo
+}
+
+// ClearUsedFor clears the value of the "used_for" field.
+func (etuo *EmailTemplateUpdateOne) ClearUsedFor() *EmailTemplateUpdateOne {
+	etuo.mutation.ClearUsedFor()
+	return etuo
+}
+
 // SetSender sets the "sender" field.
 func (etuo *EmailTemplateUpdateOne) SetSender(s string) *EmailTemplateUpdateOne {
 	etuo.mutation.SetSender(s)
+	return etuo
+}
+
+// SetNillableSender sets the "sender" field if the given value is not nil.
+func (etuo *EmailTemplateUpdateOne) SetNillableSender(s *string) *EmailTemplateUpdateOne {
+	if s != nil {
+		etuo.SetSender(*s)
+	}
+	return etuo
+}
+
+// ClearSender clears the value of the "sender" field.
+func (etuo *EmailTemplateUpdateOne) ClearSender() *EmailTemplateUpdateOne {
+	etuo.mutation.ClearSender()
 	return etuo
 }
 
@@ -485,9 +601,21 @@ func (etuo *EmailTemplateUpdateOne) SetReplyTos(s []string) *EmailTemplateUpdate
 	return etuo
 }
 
+// ClearReplyTos clears the value of the "reply_tos" field.
+func (etuo *EmailTemplateUpdateOne) ClearReplyTos() *EmailTemplateUpdateOne {
+	etuo.mutation.ClearReplyTos()
+	return etuo
+}
+
 // SetCcTos sets the "cc_tos" field.
 func (etuo *EmailTemplateUpdateOne) SetCcTos(s []string) *EmailTemplateUpdateOne {
 	etuo.mutation.SetCcTos(s)
+	return etuo
+}
+
+// ClearCcTos clears the value of the "cc_tos" field.
+func (etuo *EmailTemplateUpdateOne) ClearCcTos() *EmailTemplateUpdateOne {
+	etuo.mutation.ClearCcTos()
 	return etuo
 }
 
@@ -505,6 +633,12 @@ func (etuo *EmailTemplateUpdateOne) SetNillableSubject(s *string) *EmailTemplate
 	return etuo
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (etuo *EmailTemplateUpdateOne) ClearSubject() *EmailTemplateUpdateOne {
+	etuo.mutation.ClearSubject()
+	return etuo
+}
+
 // SetBody sets the "body" field.
 func (etuo *EmailTemplateUpdateOne) SetBody(s string) *EmailTemplateUpdateOne {
 	etuo.mutation.SetBody(s)
@@ -516,6 +650,12 @@ func (etuo *EmailTemplateUpdateOne) SetNillableBody(s *string) *EmailTemplateUpd
 	if s != nil {
 		etuo.SetBody(*s)
 	}
+	return etuo
+}
+
+// ClearBody clears the value of the "body" field.
+func (etuo *EmailTemplateUpdateOne) ClearBody() *EmailTemplateUpdateOne {
+	etuo.mutation.ClearBody()
 	return etuo
 }
 
@@ -733,10 +873,22 @@ func (etuo *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTe
 			Column: emailtemplate.FieldUsedFor,
 		})
 	}
+	if etuo.mutation.UsedForCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: emailtemplate.FieldUsedFor,
+		})
+	}
 	if value, ok := etuo.mutation.Sender(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: emailtemplate.FieldSender,
+		})
+	}
+	if etuo.mutation.SenderCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: emailtemplate.FieldSender,
 		})
 	}
@@ -747,10 +899,22 @@ func (etuo *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTe
 			Column: emailtemplate.FieldReplyTos,
 		})
 	}
+	if etuo.mutation.ReplyTosCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeJSON,
+			Column: emailtemplate.FieldReplyTos,
+		})
+	}
 	if value, ok := etuo.mutation.CcTos(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeJSON,
 			Value:  value,
+			Column: emailtemplate.FieldCcTos,
+		})
+	}
+	if etuo.mutation.CcTosCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeJSON,
 			Column: emailtemplate.FieldCcTos,
 		})
 	}
@@ -761,10 +925,22 @@ func (etuo *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTe
 			Column: emailtemplate.FieldSubject,
 		})
 	}
+	if etuo.mutation.SubjectCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: emailtemplate.FieldSubject,
+		})
+	}
 	if value, ok := etuo.mutation.Body(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: emailtemplate.FieldBody,
+		})
+	}
+	if etuo.mutation.BodyCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: emailtemplate.FieldBody,
 		})
 	}

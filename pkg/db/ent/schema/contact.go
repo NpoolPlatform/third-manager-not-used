@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 	"github.com/NpoolPlatform/third-manager/pkg/db/mixin"
 
 	"github.com/google/uuid"
@@ -26,12 +27,17 @@ func (Contact) Fields() []ent.Field {
 			Default(uuid.New).
 			Unique(),
 		field.UUID("app_id", uuid.UUID{}),
-		field.String("used_for"),
+		field.String("used_for").
+			Optional().
+			Default(usedfor.UsedFor_DefaultUsedFor.String()),
 		field.String("sender").
+			Optional().
 			Default(""),
 		field.String("account").
+			Optional().
 			Default(""),
 		field.String("account_type").
+			Optional().
 			Default(""),
 	}
 }

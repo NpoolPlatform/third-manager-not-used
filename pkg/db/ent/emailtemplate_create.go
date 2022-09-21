@@ -89,9 +89,25 @@ func (etc *EmailTemplateCreate) SetUsedFor(s string) *EmailTemplateCreate {
 	return etc
 }
 
+// SetNillableUsedFor sets the "used_for" field if the given value is not nil.
+func (etc *EmailTemplateCreate) SetNillableUsedFor(s *string) *EmailTemplateCreate {
+	if s != nil {
+		etc.SetUsedFor(*s)
+	}
+	return etc
+}
+
 // SetSender sets the "sender" field.
 func (etc *EmailTemplateCreate) SetSender(s string) *EmailTemplateCreate {
 	etc.mutation.SetSender(s)
+	return etc
+}
+
+// SetNillableSender sets the "sender" field if the given value is not nil.
+func (etc *EmailTemplateCreate) SetNillableSender(s *string) *EmailTemplateCreate {
+	if s != nil {
+		etc.SetSender(*s)
+	}
 	return etc
 }
 
@@ -249,6 +265,14 @@ func (etc *EmailTemplateCreate) defaults() error {
 		v := emailtemplate.DefaultDeletedAt()
 		etc.mutation.SetDeletedAt(v)
 	}
+	if _, ok := etc.mutation.UsedFor(); !ok {
+		v := emailtemplate.DefaultUsedFor
+		etc.mutation.SetUsedFor(v)
+	}
+	if _, ok := etc.mutation.Sender(); !ok {
+		v := emailtemplate.DefaultSender
+		etc.mutation.SetSender(v)
+	}
 	if _, ok := etc.mutation.ReplyTos(); !ok {
 		v := emailtemplate.DefaultReplyTos
 		etc.mutation.SetReplyTos(v)
@@ -294,24 +318,6 @@ func (etc *EmailTemplateCreate) check() error {
 	}
 	if _, ok := etc.mutation.DefaultToUsername(); !ok {
 		return &ValidationError{Name: "default_to_username", err: errors.New(`ent: missing required field "EmailTemplate.default_to_username"`)}
-	}
-	if _, ok := etc.mutation.UsedFor(); !ok {
-		return &ValidationError{Name: "used_for", err: errors.New(`ent: missing required field "EmailTemplate.used_for"`)}
-	}
-	if _, ok := etc.mutation.Sender(); !ok {
-		return &ValidationError{Name: "sender", err: errors.New(`ent: missing required field "EmailTemplate.sender"`)}
-	}
-	if _, ok := etc.mutation.ReplyTos(); !ok {
-		return &ValidationError{Name: "reply_tos", err: errors.New(`ent: missing required field "EmailTemplate.reply_tos"`)}
-	}
-	if _, ok := etc.mutation.CcTos(); !ok {
-		return &ValidationError{Name: "cc_tos", err: errors.New(`ent: missing required field "EmailTemplate.cc_tos"`)}
-	}
-	if _, ok := etc.mutation.Subject(); !ok {
-		return &ValidationError{Name: "subject", err: errors.New(`ent: missing required field "EmailTemplate.subject"`)}
-	}
-	if _, ok := etc.mutation.Body(); !ok {
-		return &ValidationError{Name: "body", err: errors.New(`ent: missing required field "EmailTemplate.body"`)}
 	}
 	if v, ok := etc.mutation.Body(); ok {
 		if err := emailtemplate.BodyValidator(v); err != nil {
@@ -607,6 +613,12 @@ func (u *EmailTemplateUpsert) UpdateUsedFor() *EmailTemplateUpsert {
 	return u
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *EmailTemplateUpsert) ClearUsedFor() *EmailTemplateUpsert {
+	u.SetNull(emailtemplate.FieldUsedFor)
+	return u
+}
+
 // SetSender sets the "sender" field.
 func (u *EmailTemplateUpsert) SetSender(v string) *EmailTemplateUpsert {
 	u.Set(emailtemplate.FieldSender, v)
@@ -616,6 +628,12 @@ func (u *EmailTemplateUpsert) SetSender(v string) *EmailTemplateUpsert {
 // UpdateSender sets the "sender" field to the value that was provided on create.
 func (u *EmailTemplateUpsert) UpdateSender() *EmailTemplateUpsert {
 	u.SetExcluded(emailtemplate.FieldSender)
+	return u
+}
+
+// ClearSender clears the value of the "sender" field.
+func (u *EmailTemplateUpsert) ClearSender() *EmailTemplateUpsert {
+	u.SetNull(emailtemplate.FieldSender)
 	return u
 }
 
@@ -631,6 +649,12 @@ func (u *EmailTemplateUpsert) UpdateReplyTos() *EmailTemplateUpsert {
 	return u
 }
 
+// ClearReplyTos clears the value of the "reply_tos" field.
+func (u *EmailTemplateUpsert) ClearReplyTos() *EmailTemplateUpsert {
+	u.SetNull(emailtemplate.FieldReplyTos)
+	return u
+}
+
 // SetCcTos sets the "cc_tos" field.
 func (u *EmailTemplateUpsert) SetCcTos(v []string) *EmailTemplateUpsert {
 	u.Set(emailtemplate.FieldCcTos, v)
@@ -640,6 +664,12 @@ func (u *EmailTemplateUpsert) SetCcTos(v []string) *EmailTemplateUpsert {
 // UpdateCcTos sets the "cc_tos" field to the value that was provided on create.
 func (u *EmailTemplateUpsert) UpdateCcTos() *EmailTemplateUpsert {
 	u.SetExcluded(emailtemplate.FieldCcTos)
+	return u
+}
+
+// ClearCcTos clears the value of the "cc_tos" field.
+func (u *EmailTemplateUpsert) ClearCcTos() *EmailTemplateUpsert {
+	u.SetNull(emailtemplate.FieldCcTos)
 	return u
 }
 
@@ -655,6 +685,12 @@ func (u *EmailTemplateUpsert) UpdateSubject() *EmailTemplateUpsert {
 	return u
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (u *EmailTemplateUpsert) ClearSubject() *EmailTemplateUpsert {
+	u.SetNull(emailtemplate.FieldSubject)
+	return u
+}
+
 // SetBody sets the "body" field.
 func (u *EmailTemplateUpsert) SetBody(v string) *EmailTemplateUpsert {
 	u.Set(emailtemplate.FieldBody, v)
@@ -664,6 +700,12 @@ func (u *EmailTemplateUpsert) SetBody(v string) *EmailTemplateUpsert {
 // UpdateBody sets the "body" field to the value that was provided on create.
 func (u *EmailTemplateUpsert) UpdateBody() *EmailTemplateUpsert {
 	u.SetExcluded(emailtemplate.FieldBody)
+	return u
+}
+
+// ClearBody clears the value of the "body" field.
+func (u *EmailTemplateUpsert) ClearBody() *EmailTemplateUpsert {
+	u.SetNull(emailtemplate.FieldBody)
 	return u
 }
 
@@ -836,6 +878,13 @@ func (u *EmailTemplateUpsertOne) UpdateUsedFor() *EmailTemplateUpsertOne {
 	})
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *EmailTemplateUpsertOne) ClearUsedFor() *EmailTemplateUpsertOne {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearUsedFor()
+	})
+}
+
 // SetSender sets the "sender" field.
 func (u *EmailTemplateUpsertOne) SetSender(v string) *EmailTemplateUpsertOne {
 	return u.Update(func(s *EmailTemplateUpsert) {
@@ -847,6 +896,13 @@ func (u *EmailTemplateUpsertOne) SetSender(v string) *EmailTemplateUpsertOne {
 func (u *EmailTemplateUpsertOne) UpdateSender() *EmailTemplateUpsertOne {
 	return u.Update(func(s *EmailTemplateUpsert) {
 		s.UpdateSender()
+	})
+}
+
+// ClearSender clears the value of the "sender" field.
+func (u *EmailTemplateUpsertOne) ClearSender() *EmailTemplateUpsertOne {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearSender()
 	})
 }
 
@@ -864,6 +920,13 @@ func (u *EmailTemplateUpsertOne) UpdateReplyTos() *EmailTemplateUpsertOne {
 	})
 }
 
+// ClearReplyTos clears the value of the "reply_tos" field.
+func (u *EmailTemplateUpsertOne) ClearReplyTos() *EmailTemplateUpsertOne {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearReplyTos()
+	})
+}
+
 // SetCcTos sets the "cc_tos" field.
 func (u *EmailTemplateUpsertOne) SetCcTos(v []string) *EmailTemplateUpsertOne {
 	return u.Update(func(s *EmailTemplateUpsert) {
@@ -875,6 +938,13 @@ func (u *EmailTemplateUpsertOne) SetCcTos(v []string) *EmailTemplateUpsertOne {
 func (u *EmailTemplateUpsertOne) UpdateCcTos() *EmailTemplateUpsertOne {
 	return u.Update(func(s *EmailTemplateUpsert) {
 		s.UpdateCcTos()
+	})
+}
+
+// ClearCcTos clears the value of the "cc_tos" field.
+func (u *EmailTemplateUpsertOne) ClearCcTos() *EmailTemplateUpsertOne {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearCcTos()
 	})
 }
 
@@ -892,6 +962,13 @@ func (u *EmailTemplateUpsertOne) UpdateSubject() *EmailTemplateUpsertOne {
 	})
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (u *EmailTemplateUpsertOne) ClearSubject() *EmailTemplateUpsertOne {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearSubject()
+	})
+}
+
 // SetBody sets the "body" field.
 func (u *EmailTemplateUpsertOne) SetBody(v string) *EmailTemplateUpsertOne {
 	return u.Update(func(s *EmailTemplateUpsert) {
@@ -903,6 +980,13 @@ func (u *EmailTemplateUpsertOne) SetBody(v string) *EmailTemplateUpsertOne {
 func (u *EmailTemplateUpsertOne) UpdateBody() *EmailTemplateUpsertOne {
 	return u.Update(func(s *EmailTemplateUpsert) {
 		s.UpdateBody()
+	})
+}
+
+// ClearBody clears the value of the "body" field.
+func (u *EmailTemplateUpsertOne) ClearBody() *EmailTemplateUpsertOne {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearBody()
 	})
 }
 
@@ -1241,6 +1325,13 @@ func (u *EmailTemplateUpsertBulk) UpdateUsedFor() *EmailTemplateUpsertBulk {
 	})
 }
 
+// ClearUsedFor clears the value of the "used_for" field.
+func (u *EmailTemplateUpsertBulk) ClearUsedFor() *EmailTemplateUpsertBulk {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearUsedFor()
+	})
+}
+
 // SetSender sets the "sender" field.
 func (u *EmailTemplateUpsertBulk) SetSender(v string) *EmailTemplateUpsertBulk {
 	return u.Update(func(s *EmailTemplateUpsert) {
@@ -1252,6 +1343,13 @@ func (u *EmailTemplateUpsertBulk) SetSender(v string) *EmailTemplateUpsertBulk {
 func (u *EmailTemplateUpsertBulk) UpdateSender() *EmailTemplateUpsertBulk {
 	return u.Update(func(s *EmailTemplateUpsert) {
 		s.UpdateSender()
+	})
+}
+
+// ClearSender clears the value of the "sender" field.
+func (u *EmailTemplateUpsertBulk) ClearSender() *EmailTemplateUpsertBulk {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearSender()
 	})
 }
 
@@ -1269,6 +1367,13 @@ func (u *EmailTemplateUpsertBulk) UpdateReplyTos() *EmailTemplateUpsertBulk {
 	})
 }
 
+// ClearReplyTos clears the value of the "reply_tos" field.
+func (u *EmailTemplateUpsertBulk) ClearReplyTos() *EmailTemplateUpsertBulk {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearReplyTos()
+	})
+}
+
 // SetCcTos sets the "cc_tos" field.
 func (u *EmailTemplateUpsertBulk) SetCcTos(v []string) *EmailTemplateUpsertBulk {
 	return u.Update(func(s *EmailTemplateUpsert) {
@@ -1280,6 +1385,13 @@ func (u *EmailTemplateUpsertBulk) SetCcTos(v []string) *EmailTemplateUpsertBulk 
 func (u *EmailTemplateUpsertBulk) UpdateCcTos() *EmailTemplateUpsertBulk {
 	return u.Update(func(s *EmailTemplateUpsert) {
 		s.UpdateCcTos()
+	})
+}
+
+// ClearCcTos clears the value of the "cc_tos" field.
+func (u *EmailTemplateUpsertBulk) ClearCcTos() *EmailTemplateUpsertBulk {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearCcTos()
 	})
 }
 
@@ -1297,6 +1409,13 @@ func (u *EmailTemplateUpsertBulk) UpdateSubject() *EmailTemplateUpsertBulk {
 	})
 }
 
+// ClearSubject clears the value of the "subject" field.
+func (u *EmailTemplateUpsertBulk) ClearSubject() *EmailTemplateUpsertBulk {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearSubject()
+	})
+}
+
 // SetBody sets the "body" field.
 func (u *EmailTemplateUpsertBulk) SetBody(v string) *EmailTemplateUpsertBulk {
 	return u.Update(func(s *EmailTemplateUpsert) {
@@ -1308,6 +1427,13 @@ func (u *EmailTemplateUpsertBulk) SetBody(v string) *EmailTemplateUpsertBulk {
 func (u *EmailTemplateUpsertBulk) UpdateBody() *EmailTemplateUpsertBulk {
 	return u.Update(func(s *EmailTemplateUpsert) {
 		s.UpdateBody()
+	})
+}
+
+// ClearBody clears the value of the "body" field.
+func (u *EmailTemplateUpsertBulk) ClearBody() *EmailTemplateUpsertBulk {
+	return u.Update(func(s *EmailTemplateUpsert) {
+		s.ClearBody()
 	})
 }
 
