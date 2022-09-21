@@ -3,8 +3,9 @@ package constant
 import (
 	"context"
 	"fmt"
-	"github.com/NpoolPlatform/message/npool/appuser/mgr/v2/signmethod"
 	"time"
+
+	"github.com/NpoolPlatform/message/npool/appuser/mgr/v2/signmethod"
 
 	tracer "github.com/NpoolPlatform/third-manager/pkg/tracer/contact"
 
