@@ -104,6 +104,10 @@ func (s *Server) UpdateSMSTemplate(ctx context.Context, in *npool.UpdateSMSTempl
 		logger.Sugar().Errorw("UpdateSMSTemplate", "ID", in.GetInfo().GetID(), "error", err)
 		return &npool.UpdateSMSTemplateResponse{}, status.Error(codes.InvalidArgument, err.Error())
 	}
+	if _, err := uuid.Parse(in.GetInfo().GetLangID()); err != nil {
+		logger.Sugar().Errorw("UpdateSMSTemplate", "LangID", in.GetInfo().GetLangID(), "error", err)
+		return &npool.UpdateSMSTemplateResponse{}, status.Error(codes.InvalidArgument, err.Error())
+	}
 
 	span = commontracer.TraceInvoker(span, "app", "crud", "Update")
 
