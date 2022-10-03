@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 	"github.com/NpoolPlatform/third-manager/pkg/db/mixin"
 
 	"github.com/google/uuid"
@@ -29,7 +30,7 @@ func (SMSTemplate) Fields() []ent.Field {
 		field.UUID("lang_id", uuid.UUID{}),
 		field.String("used_for").
 			Optional().
-			Default(""),
+			Default(usedfor.UsedFor_DefaultUsedFor.String()),
 		field.String("subject").
 			Optional().
 			Default(""),
