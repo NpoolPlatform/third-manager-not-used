@@ -59,14 +59,9 @@ func validate(info *npool.EmailTemplateReq) error { //nolint
 		return status.Error(codes.InvalidArgument, "Sender is empty")
 	}
 
-	if info.Subject == nil || info.GetSender() == "" {
-		logger.Sugar().Errorw("validate", "Subject", info.Sender, "GetSubject", info.GetSender())
+	if info.Subject == nil || info.GetSubject() == "" {
+		logger.Sugar().Errorw("validate", "Subject", info.Sender, "GetSubject", info.GetSubject())
 		return status.Error(codes.InvalidArgument, "Subject is empty")
-	}
-
-	if info.Body == nil || info.GetBody() == "" {
-		logger.Sugar().Errorw("validate", "Body", info.Body, "GetBody", info.GetBody())
-		return status.Error(codes.InvalidArgument, "Body is empty")
 	}
 
 	return nil

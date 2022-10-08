@@ -54,11 +54,6 @@ func validate(info *npool.SMSTemplateReq) error { //nolint
 		return status.Error(codes.InvalidArgument, "Subject is empty")
 	}
 
-	if info.Message == nil || info.GetMessage() == "" {
-		logger.Sugar().Errorw("validate", "Message", info.Message, "GetMessage", info.GetMessage())
-		return status.Error(codes.InvalidArgument, "Message is empty")
-	}
-
 	return nil
 }
 
