@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent"
+
 	"github.com/NpoolPlatform/message/npool/appuser/mgr/v2/signmethod"
 	"github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 
@@ -21,14 +23,6 @@ import (
 	gwconst "github.com/NpoolPlatform/third-gateway/pkg/message/const"
 
 	gwcconst "github.com/NpoolPlatform/third-gateway/pkg/const"
-
-	crudcontact "github.com/NpoolPlatform/third-manager/pkg/crud/v1/contact"
-	crudemail "github.com/NpoolPlatform/third-manager/pkg/crud/v1/template/email"
-	crudsms "github.com/NpoolPlatform/third-manager/pkg/crud/v1/template/sms"
-
-	contactpb "github.com/NpoolPlatform/message/npool/third/mgr/v1/contact"
-	emailpb "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/email"
-	smspb "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/sms"
 )
 
 func Migrate(ctx context.Context) error {
@@ -130,27 +124,30 @@ func migrationThirdGateway(ctx context.Context) (err error) {
 			return err
 		}
 
-		appContactInfosC := []*contactpb.ContactReq{}
+		err = db.WithTx(ctx, func(_ctx context.Context, tx *ent.Tx) error {
+			bulk := make([]*ent.ContactCreate, len(appContactInfos))
+			for i, info := range appContactInfos {
+				usedFor := getUsedFor(appContactInfos[i].UsedFor)
+				accountType := signmethod.SignMethodType_Email
+				if appContactInfos[i].AccountType == "mobile" {
+					accountType = signmethod.SignMethodType_Mobile
+				}
 
-		for key := range appContactInfos {
-			id := appContactInfos[key].ID.String()
-			appID := appContactInfos[key].AppID.String()
-			usedFor := getUsedFor(appContactInfos[key].UsedFor)
-			accountType := signmethod.SignMethodType_Email
-			if appContactInfos[key].AccountType == "mobile" {
-				accountType = signmethod.SignMethodType_Mobile
+				bulk[i] = tx.Contact.
+					Create().
+					SetID(info.ID).
+					SetAppID(info.AppID).
+					SetUsedFor(usedFor.String()).
+					SetSender(info.Sender).
+					SetAccount(info.Account).
+					SetAccountType(accountType.String()).
+					SetCreatedAt(info.CreateAt).
+					SetUpdatedAt(info.UpdateAt)
 			}
-			appContactInfosC = append(appContactInfosC, &contactpb.ContactReq{
-				ID:          &id,
-				AppID:       &appID,
-				UsedFor:     &usedFor,
-				Account:     &appContactInfos[key].Account,
-				AccountType: &accountType,
-				Sender:      &appContactInfos[key].Sender,
-			})
-		}
+			_, err = tx.Contact.CreateBulk(bulk...).Save(_ctx)
+			return err
+		})
 
-		_, err = crudcontact.CreateBulk(ctx, appContactInfosC)
 		if err != nil {
 			return err
 		}
@@ -171,24 +168,26 @@ func migrationThirdGateway(ctx context.Context) (err error) {
 			return err
 		}
 
-		appSMSTemplateInfosC := []*smspb.SMSTemplateReq{}
+		err = db.WithTx(ctx, func(_ctx context.Context, tx *ent.Tx) error {
+			bulk := make([]*ent.SMSTemplateCreate, len(appSMSTemplateInfos))
+			for i, info := range appSMSTemplateInfos {
+				usedFor := getUsedFor(appSMSTemplateInfos[i].UsedFor)
 
-		for key := range appSMSTemplateInfos {
-			id := appSMSTemplateInfos[key].ID.String()
-			appID := appSMSTemplateInfos[key].AppID.String()
-			usedFor := getUsedFor(appSMSTemplateInfos[key].UsedFor)
-			langID := appSMSTemplateInfos[key].LangID.String()
-			appSMSTemplateInfosC = append(appSMSTemplateInfosC, &smspb.SMSTemplateReq{
-				ID:      &id,
-				AppID:   &appID,
-				LangID:  &langID,
-				UsedFor: &usedFor,
-				Subject: &appSMSTemplateInfos[key].Subject,
-				Message: &appSMSTemplateInfos[key].Message,
-			})
-		}
+				bulk[i] = tx.SMSTemplate.
+					Create().
+					SetID(info.ID).
+					SetAppID(info.AppID).
+					SetLangID(info.LangID).
+					SetUsedFor(usedFor.String()).
+					SetSubject(info.Subject).
+					SetMessage(info.Message).
+					SetCreatedAt(info.CreateAt).
+					SetUpdatedAt(info.UpdateAt)
+			}
+			_, err = tx.SMSTemplate.CreateBulk(bulk...).Save(_ctx)
+			return err
+		})
 
-		_, err = crudsms.CreateBulk(ctx, appSMSTemplateInfosC)
 		if err != nil {
 			return err
 		}
@@ -208,29 +207,30 @@ func migrationThirdGateway(ctx context.Context) (err error) {
 		if err != nil {
 			return err
 		}
+		err = db.WithTx(ctx, func(_ctx context.Context, tx *ent.Tx) error {
+			bulk := make([]*ent.EmailTemplateCreate, len(appEmailTemplateInfos))
+			for i, info := range appEmailTemplateInfos {
+				usedFor := getUsedFor(appEmailTemplateInfos[i].UsedFor)
 
-		appEmailTemplateInfosC := []*emailpb.EmailTemplateReq{}
+				bulk[i] = tx.EmailTemplate.
+					Create().
+					SetID(info.ID).
+					SetAppID(info.AppID).
+					SetLangID(info.LangID).
+					SetDefaultToUsername(info.DefaultToUsername).
+					SetUsedFor(usedFor.String()).
+					SetSender(info.Sender).
+					SetReplyTos(info.ReplyTos).
+					SetCcTos(info.CcTos).
+					SetSubject(info.Subject).
+					SetBody(info.Body).
+					SetCreatedAt(info.CreateAt).
+					SetUpdatedAt(info.UpdateAt)
+			}
+			_, err = tx.EmailTemplate.CreateBulk(bulk...).Save(_ctx)
+			return err
+		})
 
-		for key := range appEmailTemplateInfos {
-			id := appEmailTemplateInfos[key].ID.String()
-			appID := appEmailTemplateInfos[key].AppID.String()
-			usedFor := getUsedFor(appEmailTemplateInfos[key].UsedFor)
-			langID := appEmailTemplateInfos[key].LangID.String()
-			appEmailTemplateInfosC = append(appEmailTemplateInfosC, &emailpb.EmailTemplateReq{
-				ID:                &id,
-				AppID:             &appID,
-				LangID:            &langID,
-				UsedFor:           &usedFor,
-				Sender:            &appEmailTemplateInfos[key].Sender,
-				ReplyTos:          appEmailTemplateInfos[key].ReplyTos,
-				CCTos:             appEmailTemplateInfos[key].CcTos,
-				Subject:           &appEmailTemplateInfos[key].Subject,
-				Body:              &appEmailTemplateInfos[key].Body,
-				DefaultToUsername: &appEmailTemplateInfos[key].DefaultToUsername,
-			})
-		}
-
-		_, err = crudemail.CreateBulk(ctx, appEmailTemplateInfosC)
 		if err != nil {
 			return err
 		}
