@@ -48,6 +48,25 @@ var (
 		Columns:    EmailTemplatesColumns,
 		PrimaryKey: []*schema.Column{EmailTemplatesColumns[0]},
 	}
+	// NotifTemplatesColumns holds the columns for the "notif_templates" table.
+	NotifTemplatesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeUint32},
+		{Name: "updated_at", Type: field.TypeUint32},
+		{Name: "deleted_at", Type: field.TypeUint32},
+		{Name: "app_id", Type: field.TypeUUID},
+		{Name: "user_id", Type: field.TypeUUID},
+		{Name: "lang_id", Type: field.TypeUUID},
+		{Name: "used_for", Type: field.TypeString, Nullable: true, Default: "DefaultEventType"},
+		{Name: "title", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "content", Type: field.TypeString, Nullable: true, Size: 2147483647, Default: ""},
+	}
+	// NotifTemplatesTable holds the schema information for the "notif_templates" table.
+	NotifTemplatesTable = &schema.Table{
+		Name:       "notif_templates",
+		Columns:    NotifTemplatesColumns,
+		PrimaryKey: []*schema.Column{NotifTemplatesColumns[0]},
+	}
 	// SmsTemplatesColumns holds the columns for the "sms_templates" table.
 	SmsTemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -56,7 +75,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeUint32},
 		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "lang_id", Type: field.TypeUUID},
-		{Name: "used_for", Type: field.TypeString, Nullable: true, Default: ""},
+		{Name: "used_for", Type: field.TypeString, Nullable: true, Default: "DefaultUsedFor"},
 		{Name: "subject", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "message", Type: field.TypeString, Nullable: true, Default: ""},
 	}
@@ -70,6 +89,7 @@ var (
 	Tables = []*schema.Table{
 		ContactsTable,
 		EmailTemplatesTable,
+		NotifTemplatesTable,
 		SmsTemplatesTable,
 	}
 )
