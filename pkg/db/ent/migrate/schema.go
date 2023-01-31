@@ -55,7 +55,6 @@ var (
 		{Name: "updated_at", Type: field.TypeUint32},
 		{Name: "deleted_at", Type: field.TypeUint32},
 		{Name: "app_id", Type: field.TypeUUID},
-		{Name: "user_id", Type: field.TypeUUID},
 		{Name: "lang_id", Type: field.TypeUUID},
 		{Name: "used_for", Type: field.TypeString, Nullable: true, Default: "DefaultEventType"},
 		{Name: "title", Type: field.TypeString, Nullable: true, Default: ""},

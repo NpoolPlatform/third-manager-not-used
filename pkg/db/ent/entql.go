@@ -78,7 +78,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notiftemplate.FieldUpdatedAt: {Type: field.TypeUint32, Column: notiftemplate.FieldUpdatedAt},
 			notiftemplate.FieldDeletedAt: {Type: field.TypeUint32, Column: notiftemplate.FieldDeletedAt},
 			notiftemplate.FieldAppID:     {Type: field.TypeUUID, Column: notiftemplate.FieldAppID},
-			notiftemplate.FieldUserID:    {Type: field.TypeUUID, Column: notiftemplate.FieldUserID},
 			notiftemplate.FieldLangID:    {Type: field.TypeUUID, Column: notiftemplate.FieldLangID},
 			notiftemplate.FieldUsedFor:   {Type: field.TypeString, Column: notiftemplate.FieldUsedFor},
 			notiftemplate.FieldTitle:     {Type: field.TypeString, Column: notiftemplate.FieldTitle},
@@ -353,11 +352,6 @@ func (f *NotifTemplateFilter) WhereDeletedAt(p entql.Uint32P) {
 // WhereAppID applies the entql [16]byte predicate on the app_id field.
 func (f *NotifTemplateFilter) WhereAppID(p entql.ValueP) {
 	f.Where(p.Field(notiftemplate.FieldAppID))
-}
-
-// WhereUserID applies the entql [16]byte predicate on the user_id field.
-func (f *NotifTemplateFilter) WhereUserID(p entql.ValueP) {
-	f.Where(p.Field(notiftemplate.FieldUserID))
 }
 
 // WhereLangID applies the entql [16]byte predicate on the lang_id field.

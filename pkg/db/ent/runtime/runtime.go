@@ -155,15 +155,15 @@ func init() {
 	// notiftemplate.DefaultDeletedAt holds the default value on creation for the deleted_at field.
 	notiftemplate.DefaultDeletedAt = notiftemplateDescDeletedAt.Default.(func() uint32)
 	// notiftemplateDescUsedFor is the schema descriptor for used_for field.
-	notiftemplateDescUsedFor := notiftemplateFields[4].Descriptor()
+	notiftemplateDescUsedFor := notiftemplateFields[3].Descriptor()
 	// notiftemplate.DefaultUsedFor holds the default value on creation for the used_for field.
 	notiftemplate.DefaultUsedFor = notiftemplateDescUsedFor.Default.(string)
 	// notiftemplateDescTitle is the schema descriptor for title field.
-	notiftemplateDescTitle := notiftemplateFields[5].Descriptor()
+	notiftemplateDescTitle := notiftemplateFields[4].Descriptor()
 	// notiftemplate.DefaultTitle holds the default value on creation for the title field.
 	notiftemplate.DefaultTitle = notiftemplateDescTitle.Default.(string)
 	// notiftemplateDescContent is the schema descriptor for content field.
-	notiftemplateDescContent := notiftemplateFields[6].Descriptor()
+	notiftemplateDescContent := notiftemplateFields[5].Descriptor()
 	// notiftemplate.DefaultContent holds the default value on creation for the content field.
 	notiftemplate.DefaultContent = notiftemplateDescContent.Default.(string)
 	// notiftemplateDescID is the schema descriptor for id field.

@@ -2052,7 +2052,6 @@ type NotifTemplateMutation struct {
 	deleted_at    *uint32
 	adddeleted_at *int32
 	app_id        *uuid.UUID
-	user_id       *uuid.UUID
 	lang_id       *uuid.UUID
 	used_for      *string
 	title         *string
@@ -2371,42 +2370,6 @@ func (m *NotifTemplateMutation) ResetAppID() {
 	m.app_id = nil
 }
 
-// SetUserID sets the "user_id" field.
-func (m *NotifTemplateMutation) SetUserID(u uuid.UUID) {
-	m.user_id = &u
-}
-
-// UserID returns the value of the "user_id" field in the mutation.
-func (m *NotifTemplateMutation) UserID() (r uuid.UUID, exists bool) {
-	v := m.user_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUserID returns the old "user_id" field's value of the NotifTemplate entity.
-// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotifTemplateMutation) OldUserID(ctx context.Context) (v uuid.UUID, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUserID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
-	}
-	return oldValue.UserID, nil
-}
-
-// ResetUserID resets all changes to the "user_id" field.
-func (m *NotifTemplateMutation) ResetUserID() {
-	m.user_id = nil
-}
-
 // SetLangID sets the "lang_id" field.
 func (m *NotifTemplateMutation) SetLangID(u uuid.UUID) {
 	m.lang_id = &u
@@ -2609,7 +2572,7 @@ func (m *NotifTemplateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NotifTemplateMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, notiftemplate.FieldCreatedAt)
 	}
@@ -2621,9 +2584,6 @@ func (m *NotifTemplateMutation) Fields() []string {
 	}
 	if m.app_id != nil {
 		fields = append(fields, notiftemplate.FieldAppID)
-	}
-	if m.user_id != nil {
-		fields = append(fields, notiftemplate.FieldUserID)
 	}
 	if m.lang_id != nil {
 		fields = append(fields, notiftemplate.FieldLangID)
@@ -2653,8 +2613,6 @@ func (m *NotifTemplateMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedAt()
 	case notiftemplate.FieldAppID:
 		return m.AppID()
-	case notiftemplate.FieldUserID:
-		return m.UserID()
 	case notiftemplate.FieldLangID:
 		return m.LangID()
 	case notiftemplate.FieldUsedFor:
@@ -2680,8 +2638,6 @@ func (m *NotifTemplateMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldDeletedAt(ctx)
 	case notiftemplate.FieldAppID:
 		return m.OldAppID(ctx)
-	case notiftemplate.FieldUserID:
-		return m.OldUserID(ctx)
 	case notiftemplate.FieldLangID:
 		return m.OldLangID(ctx)
 	case notiftemplate.FieldUsedFor:
@@ -2726,13 +2682,6 @@ func (m *NotifTemplateMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAppID(v)
-		return nil
-	case notiftemplate.FieldUserID:
-		v, ok := value.(uuid.UUID)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUserID(v)
 		return nil
 	case notiftemplate.FieldLangID:
 		v, ok := value.(uuid.UUID)
@@ -2882,9 +2831,6 @@ func (m *NotifTemplateMutation) ResetField(name string) error {
 		return nil
 	case notiftemplate.FieldAppID:
 		m.ResetAppID()
-		return nil
-	case notiftemplate.FieldUserID:
-		m.ResetUserID()
 		return nil
 	case notiftemplate.FieldLangID:
 		m.ResetLangID()

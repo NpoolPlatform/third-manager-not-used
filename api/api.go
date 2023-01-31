@@ -3,6 +3,8 @@ package api
 import (
 	"context"
 
+	"github.com/NpoolPlatform/third-manager/api/template/notif"
+
 	"github.com/NpoolPlatform/third-manager/api/template/email"
 	"github.com/NpoolPlatform/third-manager/api/template/sms"
 
@@ -22,6 +24,7 @@ func Register(server grpc.ServiceRegistrar) {
 	contact.Register(server)
 	email.Register(server)
 	sms.Register(server)
+	notif.Register(server)
 }
 
 func RegisterGateway(mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {

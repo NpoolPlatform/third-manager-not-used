@@ -1,3 +1,4 @@
+//nolint:dupl
 package schema
 
 import (
@@ -27,7 +28,6 @@ func (NotifTemplate) Fields() []ent.Field {
 			Default(uuid.New).
 			Unique(),
 		field.UUID("app_id", uuid.UUID{}),
-		field.UUID("user_id", uuid.UUID{}),
 		field.UUID("lang_id", uuid.UUID{}),
 		field.String("used_for").
 			Optional().
