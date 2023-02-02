@@ -227,6 +227,11 @@ func (s *Server) GetNotifTemplateOnly(
 	span = tracer.TraceConds(span, in.GetConds())
 	span = commontracer.TraceInvoker(span, "app", "crud", "RowOnly")
 
+	err = validateConds(in.GetConds())
+	if err != nil {
+		logger.Sugar().Errorw("GetNotifTemplateOnly", "error", err)
+		return &npool.GetNotifTemplateOnlyResponse{}, status.Error(codes.InvalidArgument, err.Error())
+	}
 	info, err := crud.RowOnly(ctx, in.GetConds())
 	if err != nil {
 		logger.Sugar().Errorw("GetNotifTemplateOnly", "error", err)
@@ -259,6 +264,12 @@ func (s *Server) GetNotifTemplates(
 	span = tracer.TraceConds(span, in.GetConds())
 	span = commontracer.TraceOffsetLimit(span, int(in.GetOffset()), int(in.GetLimit()))
 	span = commontracer.TraceInvoker(span, "app", "crud", "Rows")
+
+	err = validateConds(in.GetConds())
+	if err != nil {
+		logger.Sugar().Errorw("GetNotifTemplateOnly", "error", err)
+		return &npool.GetNotifTemplatesResponse{}, status.Error(codes.InvalidArgument, err.Error())
+	}
 
 	rows, total, err := crud.Rows(ctx, in.GetConds(), int(in.GetOffset()), int(in.GetLimit()))
 	if err != nil {
@@ -331,6 +342,12 @@ func (s *Server) ExistNotifTemplateConds(
 
 	span = tracer.TraceConds(span, in.GetConds())
 	span = commontracer.TraceInvoker(span, "app", "crud", "ExistNotifTemplateConds")
+
+	err = validateConds(in.GetConds())
+	if err != nil {
+		logger.Sugar().Errorw("GetNotifTemplateOnly", "error", err)
+		return &npool.ExistNotifTemplateCondsResponse{}, status.Error(codes.InvalidArgument, err.Error())
+	}
 
 	exist, err := crud.ExistConds(ctx, in.GetConds())
 	if err != nil {

@@ -50,3 +50,36 @@ func validate(info *npool.NotifTemplateReq) error {
 
 	return nil
 }
+
+func validateConds(in *npool.Conds) error {
+	if in.ID != nil {
+		if _, err := uuid.Parse(in.GetID().GetValue()); err != nil {
+			logger.Sugar().Errorw("validateConds", "ID", in.GetID().GetValue(), "error", err)
+			return err
+		}
+	}
+	if in.AppID != nil {
+		if _, err := uuid.Parse(in.GetAppID().GetValue()); err != nil {
+			logger.Sugar().Errorw("validateConds", "AppID", in.GetAppID().GetValue(), "error", err)
+			return err
+		}
+	}
+	if in.LangID != nil {
+		if _, err := uuid.Parse(in.GetLangID().GetValue()); err != nil {
+			logger.Sugar().Errorw("validateConds", "LangID", in.GetLangID().GetValue(), "error", err)
+			return err
+		}
+	}
+	if in.UsedFor != nil {
+		switch in.GetUsedFor().GetValue() {
+		case uint32(usedfor.EventType_WithdrawalRequest):
+		case uint32(usedfor.EventType_WithdrawalCompleted):
+		case uint32(usedfor.EventType_DepositReceived):
+		case uint32(usedfor.EventType_KYCApproved):
+		case uint32(usedfor.EventType_KYCRejected):
+		default:
+			return fmt.Errorf("EventType is invalid")
+		}
+	}
+	return nil
+}
