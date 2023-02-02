@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
+	usedfor "github.com/NpoolPlatform/message/npool/notif/mgr/v1/notif"
 
 	tracer "github.com/NpoolPlatform/third-manager/pkg/tracer/template/notif"
 
@@ -227,7 +227,7 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.NotifTemplateQuery
 	if conds.UsedFor != nil {
 		switch conds.GetUsedFor().GetOp() {
 		case cruder.EQ:
-			stm.Where(notiftemplate.UsedFor(usedfor.UsedFor(conds.GetUsedFor().GetValue()).String()))
+			stm.Where(notiftemplate.UsedFor(usedfor.EventType(conds.GetUsedFor().GetValue()).String()))
 		default:
 			return nil, fmt.Errorf("invalid notif field")
 		}
