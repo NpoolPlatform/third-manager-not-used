@@ -28,6 +28,8 @@ const (
 	FieldTitle = "title"
 	// FieldContent holds the string denoting the content field in the database.
 	FieldContent = "content"
+	// FieldSender holds the string denoting the sender field in the database.
+	FieldSender = "sender"
 	// Table holds the table name of the notiftemplate in the database.
 	Table = "notif_templates"
 )
@@ -43,6 +45,7 @@ var Columns = []string{
 	FieldUsedFor,
 	FieldTitle,
 	FieldContent,
+	FieldSender,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -78,6 +81,8 @@ var (
 	DefaultTitle string
 	// DefaultContent holds the default value on creation for the "content" field.
 	DefaultContent string
+	// DefaultSender holds the default value on creation for the "sender" field.
+	DefaultSender string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

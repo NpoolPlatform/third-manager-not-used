@@ -119,6 +119,20 @@ func (ntc *NotifTemplateCreate) SetNillableContent(s *string) *NotifTemplateCrea
 	return ntc
 }
 
+// SetSender sets the "sender" field.
+func (ntc *NotifTemplateCreate) SetSender(s string) *NotifTemplateCreate {
+	ntc.mutation.SetSender(s)
+	return ntc
+}
+
+// SetNillableSender sets the "sender" field if the given value is not nil.
+func (ntc *NotifTemplateCreate) SetNillableSender(s *string) *NotifTemplateCreate {
+	if s != nil {
+		ntc.SetSender(*s)
+	}
+	return ntc
+}
+
 // SetID sets the "id" field.
 func (ntc *NotifTemplateCreate) SetID(u uuid.UUID) *NotifTemplateCreate {
 	ntc.mutation.SetID(u)
@@ -244,6 +258,10 @@ func (ntc *NotifTemplateCreate) defaults() error {
 	if _, ok := ntc.mutation.Content(); !ok {
 		v := notiftemplate.DefaultContent
 		ntc.mutation.SetContent(v)
+	}
+	if _, ok := ntc.mutation.Sender(); !ok {
+		v := notiftemplate.DefaultSender
+		ntc.mutation.SetSender(v)
 	}
 	if _, ok := ntc.mutation.ID(); !ok {
 		if notiftemplate.DefaultID == nil {
@@ -372,6 +390,14 @@ func (ntc *NotifTemplateCreate) createSpec() (*NotifTemplate, *sqlgraph.CreateSp
 			Column: notiftemplate.FieldContent,
 		})
 		_node.Content = value
+	}
+	if value, ok := ntc.mutation.Sender(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: notiftemplate.FieldSender,
+		})
+		_node.Sender = value
 	}
 	return _node, _spec
 }
@@ -556,6 +582,24 @@ func (u *NotifTemplateUpsert) UpdateContent() *NotifTemplateUpsert {
 // ClearContent clears the value of the "content" field.
 func (u *NotifTemplateUpsert) ClearContent() *NotifTemplateUpsert {
 	u.SetNull(notiftemplate.FieldContent)
+	return u
+}
+
+// SetSender sets the "sender" field.
+func (u *NotifTemplateUpsert) SetSender(v string) *NotifTemplateUpsert {
+	u.Set(notiftemplate.FieldSender, v)
+	return u
+}
+
+// UpdateSender sets the "sender" field to the value that was provided on create.
+func (u *NotifTemplateUpsert) UpdateSender() *NotifTemplateUpsert {
+	u.SetExcluded(notiftemplate.FieldSender)
+	return u
+}
+
+// ClearSender clears the value of the "sender" field.
+func (u *NotifTemplateUpsert) ClearSender() *NotifTemplateUpsert {
+	u.SetNull(notiftemplate.FieldSender)
 	return u
 }
 
@@ -760,6 +804,27 @@ func (u *NotifTemplateUpsertOne) UpdateContent() *NotifTemplateUpsertOne {
 func (u *NotifTemplateUpsertOne) ClearContent() *NotifTemplateUpsertOne {
 	return u.Update(func(s *NotifTemplateUpsert) {
 		s.ClearContent()
+	})
+}
+
+// SetSender sets the "sender" field.
+func (u *NotifTemplateUpsertOne) SetSender(v string) *NotifTemplateUpsertOne {
+	return u.Update(func(s *NotifTemplateUpsert) {
+		s.SetSender(v)
+	})
+}
+
+// UpdateSender sets the "sender" field to the value that was provided on create.
+func (u *NotifTemplateUpsertOne) UpdateSender() *NotifTemplateUpsertOne {
+	return u.Update(func(s *NotifTemplateUpsert) {
+		s.UpdateSender()
+	})
+}
+
+// ClearSender clears the value of the "sender" field.
+func (u *NotifTemplateUpsertOne) ClearSender() *NotifTemplateUpsertOne {
+	return u.Update(func(s *NotifTemplateUpsert) {
+		s.ClearSender()
 	})
 }
 
@@ -1130,6 +1195,27 @@ func (u *NotifTemplateUpsertBulk) UpdateContent() *NotifTemplateUpsertBulk {
 func (u *NotifTemplateUpsertBulk) ClearContent() *NotifTemplateUpsertBulk {
 	return u.Update(func(s *NotifTemplateUpsert) {
 		s.ClearContent()
+	})
+}
+
+// SetSender sets the "sender" field.
+func (u *NotifTemplateUpsertBulk) SetSender(v string) *NotifTemplateUpsertBulk {
+	return u.Update(func(s *NotifTemplateUpsert) {
+		s.SetSender(v)
+	})
+}
+
+// UpdateSender sets the "sender" field to the value that was provided on create.
+func (u *NotifTemplateUpsertBulk) UpdateSender() *NotifTemplateUpsertBulk {
+	return u.Update(func(s *NotifTemplateUpsert) {
+		s.UpdateSender()
+	})
+}
+
+// ClearSender clears the value of the "sender" field.
+func (u *NotifTemplateUpsertBulk) ClearSender() *NotifTemplateUpsertBulk {
+	return u.Update(func(s *NotifTemplateUpsert) {
+		s.ClearSender()
 	})
 }
 

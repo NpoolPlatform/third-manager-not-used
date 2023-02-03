@@ -42,6 +42,9 @@ func CreateSet(c *ent.NotifTemplateCreate, info *npool.NotifTemplateReq) *ent.No
 	if info.Content != nil {
 		c.SetContent(info.GetContent())
 	}
+	if info.Sender != nil {
+		c.SetSender(info.GetSender())
+	}
 
 	return c
 }
@@ -143,6 +146,9 @@ func UpdateSet(u *ent.NotifTemplateUpdateOne, in *npool.NotifTemplateReq) *ent.N
 	}
 	if in.Content != nil {
 		u.SetContent(in.GetContent())
+	}
+	if in.Sender != nil {
+		u.SetSender(in.GetSender())
 	}
 	return u
 }

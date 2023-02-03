@@ -2056,6 +2056,7 @@ type NotifTemplateMutation struct {
 	used_for      *string
 	title         *string
 	content       *string
+	sender        *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*NotifTemplate, error)
@@ -2553,6 +2554,55 @@ func (m *NotifTemplateMutation) ResetContent() {
 	delete(m.clearedFields, notiftemplate.FieldContent)
 }
 
+// SetSender sets the "sender" field.
+func (m *NotifTemplateMutation) SetSender(s string) {
+	m.sender = &s
+}
+
+// Sender returns the value of the "sender" field in the mutation.
+func (m *NotifTemplateMutation) Sender() (r string, exists bool) {
+	v := m.sender
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSender returns the old "sender" field's value of the NotifTemplate entity.
+// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NotifTemplateMutation) OldSender(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSender is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSender requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSender: %w", err)
+	}
+	return oldValue.Sender, nil
+}
+
+// ClearSender clears the value of the "sender" field.
+func (m *NotifTemplateMutation) ClearSender() {
+	m.sender = nil
+	m.clearedFields[notiftemplate.FieldSender] = struct{}{}
+}
+
+// SenderCleared returns if the "sender" field was cleared in this mutation.
+func (m *NotifTemplateMutation) SenderCleared() bool {
+	_, ok := m.clearedFields[notiftemplate.FieldSender]
+	return ok
+}
+
+// ResetSender resets all changes to the "sender" field.
+func (m *NotifTemplateMutation) ResetSender() {
+	m.sender = nil
+	delete(m.clearedFields, notiftemplate.FieldSender)
+}
+
 // Where appends a list predicates to the NotifTemplateMutation builder.
 func (m *NotifTemplateMutation) Where(ps ...predicate.NotifTemplate) {
 	m.predicates = append(m.predicates, ps...)
@@ -2572,7 +2622,7 @@ func (m *NotifTemplateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NotifTemplateMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, notiftemplate.FieldCreatedAt)
 	}
@@ -2596,6 +2646,9 @@ func (m *NotifTemplateMutation) Fields() []string {
 	}
 	if m.content != nil {
 		fields = append(fields, notiftemplate.FieldContent)
+	}
+	if m.sender != nil {
+		fields = append(fields, notiftemplate.FieldSender)
 	}
 	return fields
 }
@@ -2621,6 +2674,8 @@ func (m *NotifTemplateMutation) Field(name string) (ent.Value, bool) {
 		return m.Title()
 	case notiftemplate.FieldContent:
 		return m.Content()
+	case notiftemplate.FieldSender:
+		return m.Sender()
 	}
 	return nil, false
 }
@@ -2646,6 +2701,8 @@ func (m *NotifTemplateMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldTitle(ctx)
 	case notiftemplate.FieldContent:
 		return m.OldContent(ctx)
+	case notiftemplate.FieldSender:
+		return m.OldSender(ctx)
 	}
 	return nil, fmt.Errorf("unknown NotifTemplate field %s", name)
 }
@@ -2710,6 +2767,13 @@ func (m *NotifTemplateMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetContent(v)
+		return nil
+	case notiftemplate.FieldSender:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSender(v)
 		return nil
 	}
 	return fmt.Errorf("unknown NotifTemplate field %s", name)
@@ -2789,6 +2853,9 @@ func (m *NotifTemplateMutation) ClearedFields() []string {
 	if m.FieldCleared(notiftemplate.FieldContent) {
 		fields = append(fields, notiftemplate.FieldContent)
 	}
+	if m.FieldCleared(notiftemplate.FieldSender) {
+		fields = append(fields, notiftemplate.FieldSender)
+	}
 	return fields
 }
 
@@ -2811,6 +2878,9 @@ func (m *NotifTemplateMutation) ClearField(name string) error {
 		return nil
 	case notiftemplate.FieldContent:
 		m.ClearContent()
+		return nil
+	case notiftemplate.FieldSender:
+		m.ClearSender()
 		return nil
 	}
 	return fmt.Errorf("unknown NotifTemplate nullable field %s", name)
@@ -2843,6 +2913,9 @@ func (m *NotifTemplateMutation) ResetField(name string) error {
 		return nil
 	case notiftemplate.FieldContent:
 		m.ResetContent()
+		return nil
+	case notiftemplate.FieldSender:
+		m.ResetSender()
 		return nil
 	}
 	return fmt.Errorf("unknown NotifTemplate field %s", name)

@@ -166,6 +166,10 @@ func init() {
 	notiftemplateDescContent := notiftemplateFields[5].Descriptor()
 	// notiftemplate.DefaultContent holds the default value on creation for the content field.
 	notiftemplate.DefaultContent = notiftemplateDescContent.Default.(string)
+	// notiftemplateDescSender is the schema descriptor for sender field.
+	notiftemplateDescSender := notiftemplateFields[6].Descriptor()
+	// notiftemplate.DefaultSender holds the default value on creation for the sender field.
+	notiftemplate.DefaultSender = notiftemplateDescSender.Default.(string)
 	// notiftemplateDescID is the schema descriptor for id field.
 	notiftemplateDescID := notiftemplateFields[0].Descriptor()
 	// notiftemplate.DefaultID holds the default value on creation for the id field.

@@ -135,6 +135,13 @@ func Content(v string) predicate.NotifTemplate {
 	})
 }
 
+// Sender applies equality check predicate on the "sender" field. It's identical to SenderEQ.
+func Sender(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSender), v))
+	})
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v uint32) predicate.NotifTemplate {
 	return predicate.NotifTemplate(func(s *sql.Selector) {
@@ -791,6 +798,119 @@ func ContentEqualFold(v string) predicate.NotifTemplate {
 func ContentContainsFold(v string) predicate.NotifTemplate {
 	return predicate.NotifTemplate(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldContent), v))
+	})
+}
+
+// SenderEQ applies the EQ predicate on the "sender" field.
+func SenderEQ(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSender), v))
+	})
+}
+
+// SenderNEQ applies the NEQ predicate on the "sender" field.
+func SenderNEQ(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSender), v))
+	})
+}
+
+// SenderIn applies the In predicate on the "sender" field.
+func SenderIn(vs ...string) predicate.NotifTemplate {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldSender), v...))
+	})
+}
+
+// SenderNotIn applies the NotIn predicate on the "sender" field.
+func SenderNotIn(vs ...string) predicate.NotifTemplate {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldSender), v...))
+	})
+}
+
+// SenderGT applies the GT predicate on the "sender" field.
+func SenderGT(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSender), v))
+	})
+}
+
+// SenderGTE applies the GTE predicate on the "sender" field.
+func SenderGTE(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSender), v))
+	})
+}
+
+// SenderLT applies the LT predicate on the "sender" field.
+func SenderLT(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSender), v))
+	})
+}
+
+// SenderLTE applies the LTE predicate on the "sender" field.
+func SenderLTE(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSender), v))
+	})
+}
+
+// SenderContains applies the Contains predicate on the "sender" field.
+func SenderContains(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldSender), v))
+	})
+}
+
+// SenderHasPrefix applies the HasPrefix predicate on the "sender" field.
+func SenderHasPrefix(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldSender), v))
+	})
+}
+
+// SenderHasSuffix applies the HasSuffix predicate on the "sender" field.
+func SenderHasSuffix(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldSender), v))
+	})
+}
+
+// SenderIsNil applies the IsNil predicate on the "sender" field.
+func SenderIsNil() predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSender)))
+	})
+}
+
+// SenderNotNil applies the NotNil predicate on the "sender" field.
+func SenderNotNil() predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSender)))
+	})
+}
+
+// SenderEqualFold applies the EqualFold predicate on the "sender" field.
+func SenderEqualFold(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldSender), v))
+	})
+}
+
+// SenderContainsFold applies the ContainsFold predicate on the "sender" field.
+func SenderContainsFold(v string) predicate.NotifTemplate {
+	return predicate.NotifTemplate(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldSender), v))
 	})
 }
 

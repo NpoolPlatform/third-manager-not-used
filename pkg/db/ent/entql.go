@@ -82,6 +82,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notiftemplate.FieldUsedFor:   {Type: field.TypeString, Column: notiftemplate.FieldUsedFor},
 			notiftemplate.FieldTitle:     {Type: field.TypeString, Column: notiftemplate.FieldTitle},
 			notiftemplate.FieldContent:   {Type: field.TypeString, Column: notiftemplate.FieldContent},
+			notiftemplate.FieldSender:    {Type: field.TypeString, Column: notiftemplate.FieldSender},
 		},
 	}
 	graph.Nodes[3] = &sqlgraph.Node{
@@ -372,6 +373,11 @@ func (f *NotifTemplateFilter) WhereTitle(p entql.StringP) {
 // WhereContent applies the entql string predicate on the content field.
 func (f *NotifTemplateFilter) WhereContent(p entql.StringP) {
 	f.Where(p.Field(notiftemplate.FieldContent))
+}
+
+// WhereSender applies the entql string predicate on the sender field.
+func (f *NotifTemplateFilter) WhereSender(p entql.StringP) {
+	f.Where(p.Field(notiftemplate.FieldSender))
 }
 
 // addPredicate implements the predicateAdder interface.

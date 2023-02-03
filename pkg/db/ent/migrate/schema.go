@@ -59,6 +59,7 @@ var (
 		{Name: "used_for", Type: field.TypeString, Nullable: true, Default: "DefaultEventType"},
 		{Name: "title", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "content", Type: field.TypeString, Nullable: true, Size: 2147483647, Default: ""},
+		{Name: "sender", Type: field.TypeString, Nullable: true, Default: ""},
 	}
 	// NotifTemplatesTable holds the schema information for the "notif_templates" table.
 	NotifTemplatesTable = &schema.Table{

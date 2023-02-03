@@ -32,6 +32,8 @@ type NotifTemplate struct {
 	Title string `json:"title,omitempty"`
 	// Content holds the value of the "content" field.
 	Content string `json:"content,omitempty"`
+	// Sender holds the value of the "sender" field.
+	Sender string `json:"sender,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -41,7 +43,7 @@ func (*NotifTemplate) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case notiftemplate.FieldCreatedAt, notiftemplate.FieldUpdatedAt, notiftemplate.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
-		case notiftemplate.FieldUsedFor, notiftemplate.FieldTitle, notiftemplate.FieldContent:
+		case notiftemplate.FieldUsedFor, notiftemplate.FieldTitle, notiftemplate.FieldContent, notiftemplate.FieldSender:
 			values[i] = new(sql.NullString)
 		case notiftemplate.FieldID, notiftemplate.FieldAppID, notiftemplate.FieldLangID:
 			values[i] = new(uuid.UUID)
@@ -114,6 +116,12 @@ func (nt *NotifTemplate) assignValues(columns []string, values []interface{}) er
 			} else if value.Valid {
 				nt.Content = value.String
 			}
+		case notiftemplate.FieldSender:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sender", values[i])
+			} else if value.Valid {
+				nt.Sender = value.String
+			}
 		}
 	}
 	return nil
@@ -165,6 +173,9 @@ func (nt *NotifTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("content=")
 	builder.WriteString(nt.Content)
+	builder.WriteString(", ")
+	builder.WriteString("sender=")
+	builder.WriteString(nt.Sender)
 	builder.WriteByte(')')
 	return builder.String()
 }

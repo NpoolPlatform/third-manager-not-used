@@ -1,4 +1,3 @@
-//nolint:dupl
 package schema
 
 import (
@@ -36,6 +35,9 @@ func (NotifTemplate) Fields() []ent.Field {
 			Optional().
 			Default(""),
 		field.Text("content").
+			Optional().
+			Default(""),
+		field.String("sender").
 			Optional().
 			Default(""),
 	}

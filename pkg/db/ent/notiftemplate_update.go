@@ -156,6 +156,26 @@ func (ntu *NotifTemplateUpdate) ClearContent() *NotifTemplateUpdate {
 	return ntu
 }
 
+// SetSender sets the "sender" field.
+func (ntu *NotifTemplateUpdate) SetSender(s string) *NotifTemplateUpdate {
+	ntu.mutation.SetSender(s)
+	return ntu
+}
+
+// SetNillableSender sets the "sender" field if the given value is not nil.
+func (ntu *NotifTemplateUpdate) SetNillableSender(s *string) *NotifTemplateUpdate {
+	if s != nil {
+		ntu.SetSender(*s)
+	}
+	return ntu
+}
+
+// ClearSender clears the value of the "sender" field.
+func (ntu *NotifTemplateUpdate) ClearSender() *NotifTemplateUpdate {
+	ntu.mutation.ClearSender()
+	return ntu
+}
+
 // Mutation returns the NotifTemplateMutation object of the builder.
 func (ntu *NotifTemplateUpdate) Mutation() *NotifTemplateMutation {
 	return ntu.mutation
@@ -349,6 +369,19 @@ func (ntu *NotifTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) 
 			Column: notiftemplate.FieldContent,
 		})
 	}
+	if value, ok := ntu.mutation.Sender(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: notiftemplate.FieldSender,
+		})
+	}
+	if ntu.mutation.SenderCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: notiftemplate.FieldSender,
+		})
+	}
 	_spec.Modifiers = ntu.modifiers
 	if n, err = sqlgraph.UpdateNodes(ctx, ntu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -494,6 +527,26 @@ func (ntuo *NotifTemplateUpdateOne) SetNillableContent(s *string) *NotifTemplate
 // ClearContent clears the value of the "content" field.
 func (ntuo *NotifTemplateUpdateOne) ClearContent() *NotifTemplateUpdateOne {
 	ntuo.mutation.ClearContent()
+	return ntuo
+}
+
+// SetSender sets the "sender" field.
+func (ntuo *NotifTemplateUpdateOne) SetSender(s string) *NotifTemplateUpdateOne {
+	ntuo.mutation.SetSender(s)
+	return ntuo
+}
+
+// SetNillableSender sets the "sender" field if the given value is not nil.
+func (ntuo *NotifTemplateUpdateOne) SetNillableSender(s *string) *NotifTemplateUpdateOne {
+	if s != nil {
+		ntuo.SetSender(*s)
+	}
+	return ntuo
+}
+
+// ClearSender clears the value of the "sender" field.
+func (ntuo *NotifTemplateUpdateOne) ClearSender() *NotifTemplateUpdateOne {
+	ntuo.mutation.ClearSender()
 	return ntuo
 }
 
@@ -718,6 +771,19 @@ func (ntuo *NotifTemplateUpdateOne) sqlSave(ctx context.Context) (_node *NotifTe
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Column: notiftemplate.FieldContent,
+		})
+	}
+	if value, ok := ntuo.mutation.Sender(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: notiftemplate.FieldSender,
+		})
+	}
+	if ntuo.mutation.SenderCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: notiftemplate.FieldSender,
 		})
 	}
 	_spec.Modifiers = ntuo.modifiers

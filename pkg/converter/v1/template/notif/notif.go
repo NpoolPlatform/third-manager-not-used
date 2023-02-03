@@ -13,12 +13,15 @@ func Ent2Grpc(row *ent.NotifTemplate) *npool.NotifTemplate {
 	}
 
 	return &npool.NotifTemplate{
-		ID:      row.ID.String(),
-		AppID:   row.AppID.String(),
-		LangID:  row.LangID.String(),
-		UsedFor: usedfor.EventType(usedfor.EventType_value[row.UsedFor]),
-		Title:   row.Title,
-		Content: row.Content,
+		ID:        row.ID.String(),
+		AppID:     row.AppID.String(),
+		LangID:    row.LangID.String(),
+		UsedFor:   usedfor.EventType(usedfor.EventType_value[row.UsedFor]),
+		Title:     row.Title,
+		Content:   row.Content,
+		Sender:    row.Sender,
+		CreatedAt: row.CreatedAt,
+		UpdatedAt: row.UpdatedAt,
 	}
 }
 
