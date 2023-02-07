@@ -180,7 +180,7 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.NotifTemplate, error) {
 	return info, nil
 }
 
-//nolint:nolintlint,gocyclo
+//nolint:funlen,gocyclo
 func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.NotifTemplateQuery, error) {
 	stm := cli.NotifTemplate.Query()
 
@@ -239,6 +239,46 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.NotifTemplateQuery
 		}
 	}
 
+	if conds.AppIDs != nil {
+		switch conds.GetAppIDs().GetOp() {
+		case cruder.IN:
+			ids := []uuid.UUID{}
+			for _, val := range conds.GetAppIDs().GetValue() {
+				id, err := uuid.Parse(val)
+				if err != nil {
+					return nil, err
+				}
+				ids = append(ids, id)
+			}
+			stm.Where(notiftemplate.AppIDIn(ids...))
+		default:
+			return nil, fmt.Errorf("invalid notif field")
+		}
+	}
+	if conds.LangIDs != nil {
+		switch conds.GetLangIDs().GetOp() {
+		case cruder.IN:
+			ids := []uuid.UUID{}
+			for _, val := range conds.GetLangIDs().GetValue() {
+				id, err := uuid.Parse(val)
+				if err != nil {
+					return nil, err
+				}
+				ids = append(ids, id)
+			}
+			stm.Where(notiftemplate.LangIDIn(ids...))
+		default:
+			return nil, fmt.Errorf("invalid notif field")
+		}
+	}
+	if conds.UsedFors != nil {
+		switch conds.GetUsedFors().GetOp() {
+		case cruder.IN:
+			stm.Where(notiftemplate.UsedForIn(conds.GetUsedFors().GetValue()...))
+		default:
+			return nil, fmt.Errorf("invalid notif field")
+		}
+	}
 	return stm, nil
 }
 
