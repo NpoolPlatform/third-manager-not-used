@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/contact"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/notiftemplate"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 )
 
@@ -35,6 +36,7 @@ func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
 		contact.Table:       contact.ValidColumn,
 		emailtemplate.Table: emailtemplate.ValidColumn,
+		notiftemplate.Table: notiftemplate.ValidColumn,
 		smstemplate.Table:   smstemplate.ValidColumn,
 	}
 	check, ok := checks[table]

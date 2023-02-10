@@ -30,6 +30,7 @@ type config struct {
 type hooks struct {
 	Contact       []ent.Hook
 	EmailTemplate []ent.Hook
+	NotifTemplate []ent.Hook
 	SMSTemplate   []ent.Hook
 }
 

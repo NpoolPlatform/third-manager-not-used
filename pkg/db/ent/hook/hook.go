@@ -35,6 +35,19 @@ func (f EmailTemplateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Valu
 	return f(ctx, mv)
 }
 
+// The NotifTemplateFunc type is an adapter to allow the use of ordinary
+// function as NotifTemplate mutator.
+type NotifTemplateFunc func(context.Context, *ent.NotifTemplateMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f NotifTemplateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.NotifTemplateMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.NotifTemplateMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The SMSTemplateFunc type is an adapter to allow the use of ordinary
 // function as SMSTemplate mutator.
 type SMSTemplateFunc func(context.Context, *ent.SMSTemplateMutation) (ent.Value, error)
