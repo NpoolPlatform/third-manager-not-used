@@ -138,6 +138,7 @@ func (s *Server) UpdateNotifTemplate(
 		case usedfor.EventType_DepositReceived:
 		case usedfor.EventType_KYCApproved:
 		case usedfor.EventType_KYCRejected:
+		case usedfor.EventType_Announcement:
 		default:
 			logger.Sugar().Errorw("UpdateNotifTemplate", "ID", in.GetInfo().GetID(), "error", "EventType is invalid")
 			return &npool.UpdateNotifTemplateResponse{}, status.Error(codes.Internal, "EventType is invalid")

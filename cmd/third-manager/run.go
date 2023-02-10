@@ -5,7 +5,6 @@ import (
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/third-manager/api"
 	"github.com/NpoolPlatform/third-manager/pkg/db"
-	"github.com/NpoolPlatform/third-manager/pkg/migrator"
 
 	apicli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
 
@@ -24,10 +23,6 @@ var runCmd = &cli.Command{
 	Usage:   "Run the daemon",
 	Action: func(c *cli.Context) error {
 		if err := db.Init(); err != nil {
-			return err
-		}
-
-		if err := migrator.Migrate(c.Context); err != nil {
 			return err
 		}
 
