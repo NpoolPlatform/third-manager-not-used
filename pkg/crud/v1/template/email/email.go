@@ -266,7 +266,7 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.EmailTemplateQuery
 	}
 
 	if conds.AppIDs != nil {
-		switch conds.GetAppID().GetOp() {
+		switch conds.GetAppIDs().GetOp() {
 		case cruder.IN:
 			ids := []uuid.UUID{}
 			for _, val := range conds.GetAppIDs().GetValue() {
@@ -283,7 +283,7 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.EmailTemplateQuery
 	}
 
 	if conds.LangIDs != nil {
-		switch conds.GetLangID().GetOp() {
+		switch conds.GetLangIDs().GetOp() {
 		case cruder.IN:
 			ids := []uuid.UUID{}
 			for _, val := range conds.GetLangIDs().GetValue() {
@@ -300,7 +300,7 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.EmailTemplateQuery
 	}
 
 	if conds.UsedFors != nil {
-		switch conds.GetUsedFor().GetOp() {
+		switch conds.GetUsedFors().GetOp() {
 		case cruder.IN:
 			stm.Where(emailtemplate.UsedForIn(conds.GetUsedFors().GetValue()...))
 		default:
