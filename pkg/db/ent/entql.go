@@ -5,7 +5,7 @@ package ent
 import (
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/contact"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/notiftemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/frontendtemplate"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 
 	"entgo.io/ent/dialect/sql"
@@ -65,24 +65,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[2] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
-			Table:   notiftemplate.Table,
-			Columns: notiftemplate.Columns,
+			Table:   frontendtemplate.Table,
+			Columns: frontendtemplate.Columns,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeUUID,
-				Column: notiftemplate.FieldID,
+				Column: frontendtemplate.FieldID,
 			},
 		},
-		Type: "NotifTemplate",
+		Type: "FrontendTemplate",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			notiftemplate.FieldCreatedAt: {Type: field.TypeUint32, Column: notiftemplate.FieldCreatedAt},
-			notiftemplate.FieldUpdatedAt: {Type: field.TypeUint32, Column: notiftemplate.FieldUpdatedAt},
-			notiftemplate.FieldDeletedAt: {Type: field.TypeUint32, Column: notiftemplate.FieldDeletedAt},
-			notiftemplate.FieldAppID:     {Type: field.TypeUUID, Column: notiftemplate.FieldAppID},
-			notiftemplate.FieldLangID:    {Type: field.TypeUUID, Column: notiftemplate.FieldLangID},
-			notiftemplate.FieldUsedFor:   {Type: field.TypeString, Column: notiftemplate.FieldUsedFor},
-			notiftemplate.FieldTitle:     {Type: field.TypeString, Column: notiftemplate.FieldTitle},
-			notiftemplate.FieldContent:   {Type: field.TypeString, Column: notiftemplate.FieldContent},
-			notiftemplate.FieldSender:    {Type: field.TypeString, Column: notiftemplate.FieldSender},
+			frontendtemplate.FieldCreatedAt: {Type: field.TypeUint32, Column: frontendtemplate.FieldCreatedAt},
+			frontendtemplate.FieldUpdatedAt: {Type: field.TypeUint32, Column: frontendtemplate.FieldUpdatedAt},
+			frontendtemplate.FieldDeletedAt: {Type: field.TypeUint32, Column: frontendtemplate.FieldDeletedAt},
+			frontendtemplate.FieldAppID:     {Type: field.TypeUUID, Column: frontendtemplate.FieldAppID},
+			frontendtemplate.FieldLangID:    {Type: field.TypeUUID, Column: frontendtemplate.FieldLangID},
+			frontendtemplate.FieldUsedFor:   {Type: field.TypeString, Column: frontendtemplate.FieldUsedFor},
+			frontendtemplate.FieldTitle:     {Type: field.TypeString, Column: frontendtemplate.FieldTitle},
+			frontendtemplate.FieldContent:   {Type: field.TypeString, Column: frontendtemplate.FieldContent},
+			frontendtemplate.FieldSender:    {Type: field.TypeString, Column: frontendtemplate.FieldSender},
 		},
 	}
 	graph.Nodes[3] = &sqlgraph.Node{
@@ -296,33 +296,33 @@ func (f *EmailTemplateFilter) WhereBody(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ntq *NotifTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
-	ntq.predicates = append(ntq.predicates, pred)
+func (ftq *FrontendTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
+	ftq.predicates = append(ftq.predicates, pred)
 }
 
-// Filter returns a Filter implementation to apply filters on the NotifTemplateQuery builder.
-func (ntq *NotifTemplateQuery) Filter() *NotifTemplateFilter {
-	return &NotifTemplateFilter{config: ntq.config, predicateAdder: ntq}
+// Filter returns a Filter implementation to apply filters on the FrontendTemplateQuery builder.
+func (ftq *FrontendTemplateQuery) Filter() *FrontendTemplateFilter {
+	return &FrontendTemplateFilter{config: ftq.config, predicateAdder: ftq}
 }
 
 // addPredicate implements the predicateAdder interface.
-func (m *NotifTemplateMutation) addPredicate(pred func(s *sql.Selector)) {
+func (m *FrontendTemplateMutation) addPredicate(pred func(s *sql.Selector)) {
 	m.predicates = append(m.predicates, pred)
 }
 
-// Filter returns an entql.Where implementation to apply filters on the NotifTemplateMutation builder.
-func (m *NotifTemplateMutation) Filter() *NotifTemplateFilter {
-	return &NotifTemplateFilter{config: m.config, predicateAdder: m}
+// Filter returns an entql.Where implementation to apply filters on the FrontendTemplateMutation builder.
+func (m *FrontendTemplateMutation) Filter() *FrontendTemplateFilter {
+	return &FrontendTemplateFilter{config: m.config, predicateAdder: m}
 }
 
-// NotifTemplateFilter provides a generic filtering capability at runtime for NotifTemplateQuery.
-type NotifTemplateFilter struct {
+// FrontendTemplateFilter provides a generic filtering capability at runtime for FrontendTemplateQuery.
+type FrontendTemplateFilter struct {
 	predicateAdder
 	config
 }
 
 // Where applies the entql predicate on the query filter.
-func (f *NotifTemplateFilter) Where(p entql.P) {
+func (f *FrontendTemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
 		if err := schemaGraph.EvalP(schemaGraph.Nodes[2].Type, p, s); err != nil {
 			s.AddError(err)
@@ -331,53 +331,53 @@ func (f *NotifTemplateFilter) Where(p entql.P) {
 }
 
 // WhereID applies the entql [16]byte predicate on the id field.
-func (f *NotifTemplateFilter) WhereID(p entql.ValueP) {
-	f.Where(p.Field(notiftemplate.FieldID))
+func (f *FrontendTemplateFilter) WhereID(p entql.ValueP) {
+	f.Where(p.Field(frontendtemplate.FieldID))
 }
 
 // WhereCreatedAt applies the entql uint32 predicate on the created_at field.
-func (f *NotifTemplateFilter) WhereCreatedAt(p entql.Uint32P) {
-	f.Where(p.Field(notiftemplate.FieldCreatedAt))
+func (f *FrontendTemplateFilter) WhereCreatedAt(p entql.Uint32P) {
+	f.Where(p.Field(frontendtemplate.FieldCreatedAt))
 }
 
 // WhereUpdatedAt applies the entql uint32 predicate on the updated_at field.
-func (f *NotifTemplateFilter) WhereUpdatedAt(p entql.Uint32P) {
-	f.Where(p.Field(notiftemplate.FieldUpdatedAt))
+func (f *FrontendTemplateFilter) WhereUpdatedAt(p entql.Uint32P) {
+	f.Where(p.Field(frontendtemplate.FieldUpdatedAt))
 }
 
 // WhereDeletedAt applies the entql uint32 predicate on the deleted_at field.
-func (f *NotifTemplateFilter) WhereDeletedAt(p entql.Uint32P) {
-	f.Where(p.Field(notiftemplate.FieldDeletedAt))
+func (f *FrontendTemplateFilter) WhereDeletedAt(p entql.Uint32P) {
+	f.Where(p.Field(frontendtemplate.FieldDeletedAt))
 }
 
 // WhereAppID applies the entql [16]byte predicate on the app_id field.
-func (f *NotifTemplateFilter) WhereAppID(p entql.ValueP) {
-	f.Where(p.Field(notiftemplate.FieldAppID))
+func (f *FrontendTemplateFilter) WhereAppID(p entql.ValueP) {
+	f.Where(p.Field(frontendtemplate.FieldAppID))
 }
 
 // WhereLangID applies the entql [16]byte predicate on the lang_id field.
-func (f *NotifTemplateFilter) WhereLangID(p entql.ValueP) {
-	f.Where(p.Field(notiftemplate.FieldLangID))
+func (f *FrontendTemplateFilter) WhereLangID(p entql.ValueP) {
+	f.Where(p.Field(frontendtemplate.FieldLangID))
 }
 
 // WhereUsedFor applies the entql string predicate on the used_for field.
-func (f *NotifTemplateFilter) WhereUsedFor(p entql.StringP) {
-	f.Where(p.Field(notiftemplate.FieldUsedFor))
+func (f *FrontendTemplateFilter) WhereUsedFor(p entql.StringP) {
+	f.Where(p.Field(frontendtemplate.FieldUsedFor))
 }
 
 // WhereTitle applies the entql string predicate on the title field.
-func (f *NotifTemplateFilter) WhereTitle(p entql.StringP) {
-	f.Where(p.Field(notiftemplate.FieldTitle))
+func (f *FrontendTemplateFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(frontendtemplate.FieldTitle))
 }
 
 // WhereContent applies the entql string predicate on the content field.
-func (f *NotifTemplateFilter) WhereContent(p entql.StringP) {
-	f.Where(p.Field(notiftemplate.FieldContent))
+func (f *FrontendTemplateFilter) WhereContent(p entql.StringP) {
+	f.Where(p.Field(frontendtemplate.FieldContent))
 }
 
 // WhereSender applies the entql string predicate on the sender field.
-func (f *NotifTemplateFilter) WhereSender(p entql.StringP) {
-	f.Where(p.Field(notiftemplate.FieldSender))
+func (f *FrontendTemplateFilter) WhereSender(p entql.StringP) {
+	f.Where(p.Field(frontendtemplate.FieldSender))
 }
 
 // addPredicate implements the predicateAdder interface.

@@ -6,10 +6,10 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	trace1 "go.opentelemetry.io/otel/trace"
 
-	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/notif"
+	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/frontend"
 )
 
-func trace(span trace1.Span, in *npool.NotifTemplateReq, index int) trace1.Span {
+func trace(span trace1.Span, in *npool.FrontendTemplateReq, index int) trace1.Span {
 	span.SetAttributes(
 		attribute.String(fmt.Sprintf("ID.%v", index), in.GetID()),
 		attribute.String(fmt.Sprintf("AppID.%v", index), in.GetAppID()),
@@ -21,7 +21,7 @@ func trace(span trace1.Span, in *npool.NotifTemplateReq, index int) trace1.Span 
 	return span
 }
 
-func Trace(span trace1.Span, in *npool.NotifTemplateReq) trace1.Span {
+func Trace(span trace1.Span, in *npool.FrontendTemplateReq) trace1.Span {
 	return trace(span, in, 0)
 }
 
@@ -39,7 +39,7 @@ func TraceConds(span trace1.Span, in *npool.Conds) trace1.Span {
 	return span
 }
 
-func TraceMany(span trace1.Span, infos []*npool.NotifTemplateReq) trace1.Span {
+func TraceMany(span trace1.Span, infos []*npool.FrontendTemplateReq) trace1.Span {
 	for index, info := range infos {
 		span = trace(span, info, index)
 	}

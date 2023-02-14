@@ -1,4 +1,4 @@
-package notif
+package frontend
 
 import (
 	"context"
@@ -13,9 +13,9 @@ import (
 
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	"github.com/NpoolPlatform/message/npool"
-	"github.com/NpoolPlatform/message/npool/third/mgr/v1/template/notif"
+	"github.com/NpoolPlatform/message/npool/third/mgr/v1/template/frontend"
 
-	usedfor "github.com/NpoolPlatform/message/npool/notif/mgr/v1/notif"
+	usedfor "github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 
 	"github.com/google/uuid"
 
@@ -31,34 +31,34 @@ func init() {
 	}
 }
 
-var entNotifTemplate = ent.NotifTemplate{
+var entFrontendTemplate = ent.FrontendTemplate{
 	ID:      uuid.New(),
 	AppID:   uuid.New(),
 	LangID:  uuid.New(),
-	UsedFor: usedfor.EventType_KYCApproved.String(),
+	UsedFor: usedfor.UsedFor_KYCApproved.String(),
 	Title:   uuid.NewString(),
 	Content: uuid.NewString(),
 }
 
 var (
-	id            = entNotifTemplate.ID.String()
-	appID         = entNotifTemplate.AppID.String()
-	langID        = entNotifTemplate.LangID.String()
-	usedFor       = usedfor.EventType_KYCApproved
-	NotifTemplate = notif.NotifTemplateReq{
+	id               = entFrontendTemplate.ID.String()
+	appID            = entFrontendTemplate.AppID.String()
+	langID           = entFrontendTemplate.LangID.String()
+	usedFor          = usedfor.UsedFor_KYCApproved
+	FrontendTemplate = frontend.FrontendTemplateReq{
 		ID:      &id,
 		AppID:   &appID,
 		LangID:  &langID,
 		UsedFor: &usedFor,
-		Title:   &entNotifTemplate.Title,
-		Content: &entNotifTemplate.Content,
+		Title:   &entFrontendTemplate.Title,
+		Content: &entFrontendTemplate.Content,
 	}
 )
 
-var info *ent.NotifTemplate
+var info *ent.FrontendTemplate
 
-func rowToObject(row *ent.NotifTemplate) *ent.NotifTemplate {
-	return &ent.NotifTemplate{
+func rowToObject(row *ent.FrontendTemplate) *ent.FrontendTemplate {
+	return &ent.FrontendTemplate{
 		ID:        row.ID,
 		CreatedAt: row.CreatedAt,
 		UpdatedAt: row.UpdatedAt,
@@ -72,25 +72,25 @@ func rowToObject(row *ent.NotifTemplate) *ent.NotifTemplate {
 
 func create(t *testing.T) {
 	var err error
-	info, err = Create(context.Background(), &NotifTemplate)
+	info, err = Create(context.Background(), &FrontendTemplate)
 	if assert.Nil(t, err) {
 		if assert.NotEqual(t, info.ID, uuid.UUID{}.String()) {
-			entNotifTemplate.ID = info.ID
-			entNotifTemplate.CreatedAt = info.CreatedAt
+			entFrontendTemplate.ID = info.ID
+			entFrontendTemplate.CreatedAt = info.CreatedAt
 		}
-		entNotifTemplate.UpdatedAt = info.UpdatedAt
-		entNotifTemplate.CreatedAt = info.CreatedAt
-		assert.Equal(t, rowToObject(info), &entNotifTemplate)
+		entFrontendTemplate.UpdatedAt = info.UpdatedAt
+		entFrontendTemplate.CreatedAt = info.CreatedAt
+		assert.Equal(t, rowToObject(info), &entFrontendTemplate)
 	}
 }
 
 func createBulk(t *testing.T) {
-	entApp := []ent.NotifTemplate{
+	entApp := []ent.FrontendTemplate{
 		{
 			ID:      uuid.New(),
 			AppID:   uuid.New(),
 			LangID:  uuid.New(),
-			UsedFor: usedfor.EventType_KYCApproved.String(),
+			UsedFor: usedfor.UsedFor_KYCApproved.String(),
 			Title:   uuid.NewString(),
 			Content: uuid.NewString(),
 		},
@@ -98,19 +98,19 @@ func createBulk(t *testing.T) {
 			ID:      uuid.New(),
 			AppID:   uuid.New(),
 			LangID:  uuid.New(),
-			UsedFor: usedfor.EventType_KYCApproved.String(),
+			UsedFor: usedfor.UsedFor_KYCApproved.String(),
 			Title:   uuid.NewString(),
 			Content: uuid.NewString(),
 		},
 	}
 
-	apps := []*notif.NotifTemplateReq{}
+	apps := []*frontend.FrontendTemplateReq{}
 	for key := range entApp {
 		id := entApp[key].ID.String()
 		appID = entApp[key].AppID.String()
 		langID := entApp[key].LangID.String()
-		usedFor = usedfor.EventType_KYCApproved
-		apps = append(apps, &notif.NotifTemplateReq{
+		usedFor = usedfor.UsedFor_KYCApproved
+		apps = append(apps, &frontend.FrontendTemplateReq{
 			ID:      &id,
 			AppID:   &appID,
 			LangID:  &langID,
@@ -129,11 +129,11 @@ func createBulk(t *testing.T) {
 
 func update(t *testing.T) {
 	var err error
-	info, err = Update(context.Background(), &NotifTemplate)
+	info, err = Update(context.Background(), &FrontendTemplate)
 	if assert.Nil(t, err) {
-		entNotifTemplate.UpdatedAt = info.UpdatedAt
-		entNotifTemplate.CreatedAt = info.CreatedAt
-		assert.Equal(t, rowToObject(info), &entNotifTemplate)
+		entFrontendTemplate.UpdatedAt = info.UpdatedAt
+		entFrontendTemplate.CreatedAt = info.CreatedAt
+		assert.Equal(t, rowToObject(info), &entFrontendTemplate)
 	}
 }
 
@@ -141,15 +141,15 @@ func row(t *testing.T) {
 	var err error
 	info, err = Row(context.Background(), info.ID)
 	if assert.Nil(t, err) {
-		entNotifTemplate.UpdatedAt = info.UpdatedAt
-		entNotifTemplate.CreatedAt = info.CreatedAt
-		assert.Equal(t, rowToObject(info), &entNotifTemplate)
+		entFrontendTemplate.UpdatedAt = info.UpdatedAt
+		entFrontendTemplate.CreatedAt = info.CreatedAt
+		assert.Equal(t, rowToObject(info), &entFrontendTemplate)
 	}
 }
 
 func rows(t *testing.T) {
 	infos, total, err := Rows(context.Background(),
-		&notif.Conds{
+		&frontend.Conds{
 			ID: &npool.StringVal{
 				Value: info.ID.String(),
 				Op:    cruder.EQ,
@@ -157,31 +157,31 @@ func rows(t *testing.T) {
 		}, 0, 0)
 	if assert.Nil(t, err) {
 		assert.Equal(t, total, 1)
-		entNotifTemplate.UpdatedAt = infos[0].UpdatedAt
-		entNotifTemplate.CreatedAt = infos[0].CreatedAt
-		assert.Equal(t, rowToObject(infos[0]), &entNotifTemplate)
+		entFrontendTemplate.UpdatedAt = infos[0].UpdatedAt
+		entFrontendTemplate.CreatedAt = infos[0].CreatedAt
+		assert.Equal(t, rowToObject(infos[0]), &entFrontendTemplate)
 	}
 }
 
 func rowOnly(t *testing.T) {
 	var err error
 	info, err = RowOnly(context.Background(),
-		&notif.Conds{
+		&frontend.Conds{
 			ID: &npool.StringVal{
 				Value: info.ID.String(),
 				Op:    cruder.EQ,
 			},
 		})
 	if assert.Nil(t, err) {
-		entNotifTemplate.UpdatedAt = info.UpdatedAt
-		entNotifTemplate.CreatedAt = info.CreatedAt
-		assert.Equal(t, rowToObject(info), &entNotifTemplate)
+		entFrontendTemplate.UpdatedAt = info.UpdatedAt
+		entFrontendTemplate.CreatedAt = info.CreatedAt
+		assert.Equal(t, rowToObject(info), &entFrontendTemplate)
 	}
 }
 
 func count(t *testing.T) {
 	count, err := Count(context.Background(),
-		&notif.Conds{
+		&frontend.Conds{
 			ID: &npool.StringVal{
 				Value: info.ID.String(),
 				Op:    cruder.EQ,
@@ -202,7 +202,7 @@ func exist(t *testing.T) {
 
 func existConds(t *testing.T) {
 	exist, err := ExistConds(context.Background(),
-		&notif.Conds{
+		&frontend.Conds{
 			ID: &npool.StringVal{
 				Value: info.ID.String(),
 				Op:    cruder.EQ,
@@ -217,7 +217,7 @@ func existConds(t *testing.T) {
 func deleteT(t *testing.T) {
 	info, err := Delete(context.Background(), info.ID)
 	if assert.Nil(t, err) {
-		assert.Equal(t, rowToObject(info), &entNotifTemplate)
+		assert.Equal(t, rowToObject(info), &entFrontendTemplate)
 	}
 }
 

@@ -18,8 +18,8 @@ type Tx struct {
 	Contact *ContactClient
 	// EmailTemplate is the client for interacting with the EmailTemplate builders.
 	EmailTemplate *EmailTemplateClient
-	// NotifTemplate is the client for interacting with the NotifTemplate builders.
-	NotifTemplate *NotifTemplateClient
+	// FrontendTemplate is the client for interacting with the FrontendTemplate builders.
+	FrontendTemplate *FrontendTemplateClient
 	// SMSTemplate is the client for interacting with the SMSTemplate builders.
 	SMSTemplate *SMSTemplateClient
 
@@ -159,7 +159,7 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.Contact = NewContactClient(tx.config)
 	tx.EmailTemplate = NewEmailTemplateClient(tx.config)
-	tx.NotifTemplate = NewNotifTemplateClient(tx.config)
+	tx.FrontendTemplate = NewFrontendTemplateClient(tx.config)
 	tx.SMSTemplate = NewSMSTemplateClient(tx.config)
 }
 

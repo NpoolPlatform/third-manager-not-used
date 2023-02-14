@@ -1,13 +1,13 @@
-package notif
+package frontend
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	usedfor "github.com/NpoolPlatform/message/npool/notif/mgr/v1/notif"
+	usedfor "github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 
-	tracer "github.com/NpoolPlatform/third-manager/pkg/tracer/template/notif"
+	tracer "github.com/NpoolPlatform/third-manager/pkg/tracer/template/frontend"
 
 	constant "github.com/NpoolPlatform/third-manager/pkg/message/const"
 	commontracer "github.com/NpoolPlatform/third-manager/pkg/tracer"
@@ -16,14 +16,14 @@ import (
 	"go.opentelemetry.io/otel/codes"
 
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
-	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/notif"
+	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/frontend"
 	"github.com/NpoolPlatform/third-manager/pkg/db"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/notiftemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/frontendtemplate"
 	"github.com/google/uuid"
 )
 
-func CreateSet(c *ent.NotifTemplateCreate, info *npool.NotifTemplateReq) *ent.NotifTemplateCreate {
+func CreateSet(c *ent.FrontendTemplateCreate, info *npool.FrontendTemplateReq) *ent.FrontendTemplateCreate {
 	if info.ID != nil {
 		c.SetID(uuid.MustParse(info.GetID()))
 	}
@@ -48,8 +48,8 @@ func CreateSet(c *ent.NotifTemplateCreate, info *npool.NotifTemplateReq) *ent.No
 
 	return c
 }
-func Create(ctx context.Context, in *npool.NotifTemplateReq) (*ent.NotifTemplate, error) {
-	var info *ent.NotifTemplate
+func Create(ctx context.Context, in *npool.FrontendTemplateReq) (*ent.FrontendTemplate, error) {
+	var info *ent.FrontendTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Create")
@@ -64,7 +64,7 @@ func Create(ctx context.Context, in *npool.NotifTemplateReq) (*ent.NotifTemplate
 	span = tracer.Trace(span, in)
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		c := CreateSet(cli.NotifTemplate.Create(), in)
+		c := CreateSet(cli.FrontendTemplate.Create(), in)
 		info, err = c.Save(_ctx)
 		return err
 	})
@@ -75,9 +75,9 @@ func Create(ctx context.Context, in *npool.NotifTemplateReq) (*ent.NotifTemplate
 	return info, nil
 }
 
-func CreateBulk(ctx context.Context, in []*npool.NotifTemplateReq) ([]*ent.NotifTemplate, error) {
+func CreateBulk(ctx context.Context, in []*npool.FrontendTemplateReq) ([]*ent.FrontendTemplate, error) {
 	var err error
-	rows := []*ent.NotifTemplate{}
+	rows := []*ent.FrontendTemplate{}
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "CreateBulk")
 	defer span.End()
@@ -92,11 +92,11 @@ func CreateBulk(ctx context.Context, in []*npool.NotifTemplateReq) ([]*ent.Notif
 	span = tracer.TraceMany(span, in)
 
 	err = db.WithTx(ctx, func(_ctx context.Context, tx *ent.Tx) error {
-		bulk := make([]*ent.NotifTemplateCreate, len(in))
+		bulk := make([]*ent.FrontendTemplateCreate, len(in))
 		for i, info := range in {
-			bulk[i] = CreateSet(tx.NotifTemplate.Create(), info)
+			bulk[i] = CreateSet(tx.FrontendTemplate.Create(), info)
 		}
-		rows, err = tx.NotifTemplate.CreateBulk(bulk...).Save(_ctx)
+		rows, err = tx.FrontendTemplate.CreateBulk(bulk...).Save(_ctx)
 		return err
 	})
 	if err != nil {
@@ -106,9 +106,9 @@ func CreateBulk(ctx context.Context, in []*npool.NotifTemplateReq) ([]*ent.Notif
 	return rows, nil
 }
 
-func Update(ctx context.Context, in *npool.NotifTemplateReq) (*ent.NotifTemplate, error) {
+func Update(ctx context.Context, in *npool.FrontendTemplateReq) (*ent.FrontendTemplate, error) {
 	var err error
-	var info *ent.NotifTemplate
+	var info *ent.FrontendTemplate
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Update")
 	defer span.End()
@@ -123,7 +123,7 @@ func Update(ctx context.Context, in *npool.NotifTemplateReq) (*ent.NotifTemplate
 	span = tracer.Trace(span, in)
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		u := UpdateSet(cli.NotifTemplate.UpdateOneID(uuid.MustParse(in.GetID())), in)
+		u := UpdateSet(cli.FrontendTemplate.UpdateOneID(uuid.MustParse(in.GetID())), in)
 		info, err = u.Save(_ctx)
 		return err
 	})
@@ -134,7 +134,7 @@ func Update(ctx context.Context, in *npool.NotifTemplateReq) (*ent.NotifTemplate
 	return info, nil
 }
 
-func UpdateSet(u *ent.NotifTemplateUpdateOne, in *npool.NotifTemplateReq) *ent.NotifTemplateUpdateOne {
+func UpdateSet(u *ent.FrontendTemplateUpdateOne, in *npool.FrontendTemplateReq) *ent.FrontendTemplateUpdateOne {
 	if in.LangID != nil {
 		u.SetLangID(uuid.MustParse(in.GetLangID()))
 	}
@@ -153,8 +153,8 @@ func UpdateSet(u *ent.NotifTemplateUpdateOne, in *npool.NotifTemplateReq) *ent.N
 	return u
 }
 
-func Row(ctx context.Context, id uuid.UUID) (*ent.NotifTemplate, error) {
-	var info *ent.NotifTemplate
+func Row(ctx context.Context, id uuid.UUID) (*ent.FrontendTemplate, error) {
+	var info *ent.FrontendTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Row")
@@ -170,7 +170,7 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.NotifTemplate, error) {
 	span = commontracer.TraceID(span, id.String())
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		info, err = cli.NotifTemplate.Query().Where(notiftemplate.ID(id)).Only(_ctx)
+		info, err = cli.FrontendTemplate.Query().Where(frontendtemplate.ID(id)).Only(_ctx)
 		return err
 	})
 	if err != nil {
@@ -181,8 +181,8 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.NotifTemplate, error) {
 }
 
 //nolint:funlen,gocyclo
-func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.NotifTemplateQuery, error) {
-	stm := cli.NotifTemplate.Query()
+func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.FrontendTemplateQuery, error) {
+	stm := cli.FrontendTemplate.Query()
 
 	if conds == nil {
 		return stm, nil
@@ -196,9 +196,9 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.NotifTemplateQuery
 
 		switch conds.GetID().GetOp() {
 		case cruder.EQ:
-			stm.Where(notiftemplate.ID(id))
+			stm.Where(frontendtemplate.ID(id))
 		default:
-			return nil, fmt.Errorf("invalid notif field")
+			return nil, fmt.Errorf("invalid frontend field")
 		}
 	}
 
@@ -210,9 +210,9 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.NotifTemplateQuery
 
 		switch conds.GetAppID().GetOp() {
 		case cruder.EQ:
-			stm.Where(notiftemplate.AppID(id))
+			stm.Where(frontendtemplate.AppID(id))
 		default:
-			return nil, fmt.Errorf("invalid notif field")
+			return nil, fmt.Errorf("invalid frontend field")
 		}
 	}
 
@@ -224,18 +224,18 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.NotifTemplateQuery
 
 		switch conds.GetLangID().GetOp() {
 		case cruder.EQ:
-			stm.Where(notiftemplate.LangID(id))
+			stm.Where(frontendtemplate.LangID(id))
 		default:
-			return nil, fmt.Errorf("invalid notif field")
+			return nil, fmt.Errorf("invalid frontend field")
 		}
 	}
 
 	if conds.UsedFor != nil {
 		switch conds.GetUsedFor().GetOp() {
 		case cruder.EQ:
-			stm.Where(notiftemplate.UsedFor(usedfor.EventType(conds.GetUsedFor().GetValue()).String()))
+			stm.Where(frontendtemplate.UsedFor(usedfor.UsedFor(conds.GetUsedFor().GetValue()).String()))
 		default:
-			return nil, fmt.Errorf("invalid notif field")
+			return nil, fmt.Errorf("invalid frontend field")
 		}
 	}
 
@@ -250,9 +250,9 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.NotifTemplateQuery
 				}
 				ids = append(ids, id)
 			}
-			stm.Where(notiftemplate.AppIDIn(ids...))
+			stm.Where(frontendtemplate.AppIDIn(ids...))
 		default:
-			return nil, fmt.Errorf("invalid notif field")
+			return nil, fmt.Errorf("invalid frontend field")
 		}
 	}
 	if conds.LangIDs != nil {
@@ -266,25 +266,25 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.NotifTemplateQuery
 				}
 				ids = append(ids, id)
 			}
-			stm.Where(notiftemplate.LangIDIn(ids...))
+			stm.Where(frontendtemplate.LangIDIn(ids...))
 		default:
-			return nil, fmt.Errorf("invalid notif field")
+			return nil, fmt.Errorf("invalid frontend field")
 		}
 	}
 	if conds.UsedFors != nil {
 		switch conds.GetUsedFors().GetOp() {
 		case cruder.IN:
-			stm.Where(notiftemplate.UsedForIn(conds.GetUsedFors().GetValue()...))
+			stm.Where(frontendtemplate.UsedForIn(conds.GetUsedFors().GetValue()...))
 		default:
-			return nil, fmt.Errorf("invalid notif field")
+			return nil, fmt.Errorf("invalid frontend field")
 		}
 	}
 	return stm, nil
 }
 
-func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.NotifTemplate, int, error) {
+func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.FrontendTemplate, int, error) {
 	var err error
-	rows := []*ent.NotifTemplate{}
+	rows := []*ent.FrontendTemplate{}
 	var total int
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Rows")
@@ -312,7 +312,7 @@ func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.No
 
 		rows, err = stm.
 			Offset(offset).
-			Order(ent.Desc(notiftemplate.FieldUpdatedAt)).
+			Order(ent.Desc(frontendtemplate.FieldUpdatedAt)).
 			Limit(limit).
 			All(_ctx)
 		if err != nil {
@@ -328,8 +328,8 @@ func Rows(ctx context.Context, conds *npool.Conds, offset, limit int) ([]*ent.No
 	return rows, total, nil
 }
 
-func RowOnly(ctx context.Context, conds *npool.Conds) (*ent.NotifTemplate, error) {
-	var info *ent.NotifTemplate
+func RowOnly(ctx context.Context, conds *npool.Conds) (*ent.FrontendTemplate, error) {
+	var info *ent.FrontendTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "RowOnly")
@@ -419,7 +419,7 @@ func Exist(ctx context.Context, id uuid.UUID) (bool, error) {
 	exist := false
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		exist, err = cli.NotifTemplate.Query().Where(notiftemplate.ID(id)).Exist(_ctx)
+		exist, err = cli.FrontendTemplate.Query().Where(frontendtemplate.ID(id)).Exist(_ctx)
 		return err
 	})
 	if err != nil {
@@ -465,8 +465,8 @@ func ExistConds(ctx context.Context, conds *npool.Conds) (bool, error) {
 	return exist, nil
 }
 
-func Delete(ctx context.Context, id uuid.UUID) (*ent.NotifTemplate, error) {
-	var info *ent.NotifTemplate
+func Delete(ctx context.Context, id uuid.UUID) (*ent.FrontendTemplate, error) {
+	var info *ent.FrontendTemplate
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "Delete")
@@ -482,7 +482,7 @@ func Delete(ctx context.Context, id uuid.UUID) (*ent.NotifTemplate, error) {
 	span = commontracer.TraceID(span, id.String())
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		info, err = cli.NotifTemplate.UpdateOneID(id).
+		info, err = cli.FrontendTemplate.UpdateOneID(id).
 			SetDeletedAt(uint32(time.Now().Unix())).
 			Save(_ctx)
 		return err

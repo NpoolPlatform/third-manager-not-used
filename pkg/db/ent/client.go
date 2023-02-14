@@ -13,7 +13,7 @@ import (
 
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/contact"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/notiftemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/frontendtemplate"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 
 	"entgo.io/ent/dialect"
@@ -29,8 +29,8 @@ type Client struct {
 	Contact *ContactClient
 	// EmailTemplate is the client for interacting with the EmailTemplate builders.
 	EmailTemplate *EmailTemplateClient
-	// NotifTemplate is the client for interacting with the NotifTemplate builders.
-	NotifTemplate *NotifTemplateClient
+	// FrontendTemplate is the client for interacting with the FrontendTemplate builders.
+	FrontendTemplate *FrontendTemplateClient
 	// SMSTemplate is the client for interacting with the SMSTemplate builders.
 	SMSTemplate *SMSTemplateClient
 }
@@ -48,7 +48,7 @@ func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Contact = NewContactClient(c.config)
 	c.EmailTemplate = NewEmailTemplateClient(c.config)
-	c.NotifTemplate = NewNotifTemplateClient(c.config)
+	c.FrontendTemplate = NewFrontendTemplateClient(c.config)
 	c.SMSTemplate = NewSMSTemplateClient(c.config)
 }
 
@@ -81,12 +81,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:           ctx,
-		config:        cfg,
-		Contact:       NewContactClient(cfg),
-		EmailTemplate: NewEmailTemplateClient(cfg),
-		NotifTemplate: NewNotifTemplateClient(cfg),
-		SMSTemplate:   NewSMSTemplateClient(cfg),
+		ctx:              ctx,
+		config:           cfg,
+		Contact:          NewContactClient(cfg),
+		EmailTemplate:    NewEmailTemplateClient(cfg),
+		FrontendTemplate: NewFrontendTemplateClient(cfg),
+		SMSTemplate:      NewSMSTemplateClient(cfg),
 	}, nil
 }
 
@@ -104,12 +104,12 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:           ctx,
-		config:        cfg,
-		Contact:       NewContactClient(cfg),
-		EmailTemplate: NewEmailTemplateClient(cfg),
-		NotifTemplate: NewNotifTemplateClient(cfg),
-		SMSTemplate:   NewSMSTemplateClient(cfg),
+		ctx:              ctx,
+		config:           cfg,
+		Contact:          NewContactClient(cfg),
+		EmailTemplate:    NewEmailTemplateClient(cfg),
+		FrontendTemplate: NewFrontendTemplateClient(cfg),
+		SMSTemplate:      NewSMSTemplateClient(cfg),
 	}, nil
 }
 
@@ -141,7 +141,7 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	c.Contact.Use(hooks...)
 	c.EmailTemplate.Use(hooks...)
-	c.NotifTemplate.Use(hooks...)
+	c.FrontendTemplate.Use(hooks...)
 	c.SMSTemplate.Use(hooks...)
 }
 
@@ -327,84 +327,84 @@ func (c *EmailTemplateClient) Hooks() []Hook {
 	return append(hooks[:len(hooks):len(hooks)], emailtemplate.Hooks[:]...)
 }
 
-// NotifTemplateClient is a client for the NotifTemplate schema.
-type NotifTemplateClient struct {
+// FrontendTemplateClient is a client for the FrontendTemplate schema.
+type FrontendTemplateClient struct {
 	config
 }
 
-// NewNotifTemplateClient returns a client for the NotifTemplate from the given config.
-func NewNotifTemplateClient(c config) *NotifTemplateClient {
-	return &NotifTemplateClient{config: c}
+// NewFrontendTemplateClient returns a client for the FrontendTemplate from the given config.
+func NewFrontendTemplateClient(c config) *FrontendTemplateClient {
+	return &FrontendTemplateClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `notiftemplate.Hooks(f(g(h())))`.
-func (c *NotifTemplateClient) Use(hooks ...Hook) {
-	c.hooks.NotifTemplate = append(c.hooks.NotifTemplate, hooks...)
+// A call to `Use(f, g, h)` equals to `frontendtemplate.Hooks(f(g(h())))`.
+func (c *FrontendTemplateClient) Use(hooks ...Hook) {
+	c.hooks.FrontendTemplate = append(c.hooks.FrontendTemplate, hooks...)
 }
 
-// Create returns a builder for creating a NotifTemplate entity.
-func (c *NotifTemplateClient) Create() *NotifTemplateCreate {
-	mutation := newNotifTemplateMutation(c.config, OpCreate)
-	return &NotifTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a FrontendTemplate entity.
+func (c *FrontendTemplateClient) Create() *FrontendTemplateCreate {
+	mutation := newFrontendTemplateMutation(c.config, OpCreate)
+	return &FrontendTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of NotifTemplate entities.
-func (c *NotifTemplateClient) CreateBulk(builders ...*NotifTemplateCreate) *NotifTemplateCreateBulk {
-	return &NotifTemplateCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of FrontendTemplate entities.
+func (c *FrontendTemplateClient) CreateBulk(builders ...*FrontendTemplateCreate) *FrontendTemplateCreateBulk {
+	return &FrontendTemplateCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for NotifTemplate.
-func (c *NotifTemplateClient) Update() *NotifTemplateUpdate {
-	mutation := newNotifTemplateMutation(c.config, OpUpdate)
-	return &NotifTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for FrontendTemplate.
+func (c *FrontendTemplateClient) Update() *FrontendTemplateUpdate {
+	mutation := newFrontendTemplateMutation(c.config, OpUpdate)
+	return &FrontendTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *NotifTemplateClient) UpdateOne(nt *NotifTemplate) *NotifTemplateUpdateOne {
-	mutation := newNotifTemplateMutation(c.config, OpUpdateOne, withNotifTemplate(nt))
-	return &NotifTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *FrontendTemplateClient) UpdateOne(ft *FrontendTemplate) *FrontendTemplateUpdateOne {
+	mutation := newFrontendTemplateMutation(c.config, OpUpdateOne, withFrontendTemplate(ft))
+	return &FrontendTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *NotifTemplateClient) UpdateOneID(id uuid.UUID) *NotifTemplateUpdateOne {
-	mutation := newNotifTemplateMutation(c.config, OpUpdateOne, withNotifTemplateID(id))
-	return &NotifTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *FrontendTemplateClient) UpdateOneID(id uuid.UUID) *FrontendTemplateUpdateOne {
+	mutation := newFrontendTemplateMutation(c.config, OpUpdateOne, withFrontendTemplateID(id))
+	return &FrontendTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for NotifTemplate.
-func (c *NotifTemplateClient) Delete() *NotifTemplateDelete {
-	mutation := newNotifTemplateMutation(c.config, OpDelete)
-	return &NotifTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for FrontendTemplate.
+func (c *FrontendTemplateClient) Delete() *FrontendTemplateDelete {
+	mutation := newFrontendTemplateMutation(c.config, OpDelete)
+	return &FrontendTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *NotifTemplateClient) DeleteOne(nt *NotifTemplate) *NotifTemplateDeleteOne {
-	return c.DeleteOneID(nt.ID)
+func (c *FrontendTemplateClient) DeleteOne(ft *FrontendTemplate) *FrontendTemplateDeleteOne {
+	return c.DeleteOneID(ft.ID)
 }
 
 // DeleteOne returns a builder for deleting the given entity by its id.
-func (c *NotifTemplateClient) DeleteOneID(id uuid.UUID) *NotifTemplateDeleteOne {
-	builder := c.Delete().Where(notiftemplate.ID(id))
+func (c *FrontendTemplateClient) DeleteOneID(id uuid.UUID) *FrontendTemplateDeleteOne {
+	builder := c.Delete().Where(frontendtemplate.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &NotifTemplateDeleteOne{builder}
+	return &FrontendTemplateDeleteOne{builder}
 }
 
-// Query returns a query builder for NotifTemplate.
-func (c *NotifTemplateClient) Query() *NotifTemplateQuery {
-	return &NotifTemplateQuery{
+// Query returns a query builder for FrontendTemplate.
+func (c *FrontendTemplateClient) Query() *FrontendTemplateQuery {
+	return &FrontendTemplateQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a NotifTemplate entity by its id.
-func (c *NotifTemplateClient) Get(ctx context.Context, id uuid.UUID) (*NotifTemplate, error) {
-	return c.Query().Where(notiftemplate.ID(id)).Only(ctx)
+// Get returns a FrontendTemplate entity by its id.
+func (c *FrontendTemplateClient) Get(ctx context.Context, id uuid.UUID) (*FrontendTemplate, error) {
+	return c.Query().Where(frontendtemplate.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *NotifTemplateClient) GetX(ctx context.Context, id uuid.UUID) *NotifTemplate {
+func (c *FrontendTemplateClient) GetX(ctx context.Context, id uuid.UUID) *FrontendTemplate {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -413,9 +413,9 @@ func (c *NotifTemplateClient) GetX(ctx context.Context, id uuid.UUID) *NotifTemp
 }
 
 // Hooks returns the client hooks.
-func (c *NotifTemplateClient) Hooks() []Hook {
-	hooks := c.hooks.NotifTemplate
-	return append(hooks[:len(hooks):len(hooks)], notiftemplate.Hooks[:]...)
+func (c *FrontendTemplateClient) Hooks() []Hook {
+	hooks := c.hooks.FrontendTemplate
+	return append(hooks[:len(hooks):len(hooks)], frontendtemplate.Hooks[:]...)
 }
 
 // SMSTemplateClient is a client for the SMSTemplate schema.

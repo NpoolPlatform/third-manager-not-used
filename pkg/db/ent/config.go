@@ -28,10 +28,10 @@ type config struct {
 
 // hooks per client, for fast access.
 type hooks struct {
-	Contact       []ent.Hook
-	EmailTemplate []ent.Hook
-	NotifTemplate []ent.Hook
-	SMSTemplate   []ent.Hook
+	Contact          []ent.Hook
+	EmailTemplate    []ent.Hook
+	FrontendTemplate []ent.Hook
+	SMSTemplate      []ent.Hook
 }
 
 // Options applies the options on the config object.

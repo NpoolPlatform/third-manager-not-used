@@ -7,12 +7,12 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/notiftemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/frontendtemplate"
 	"github.com/google/uuid"
 )
 
-// NotifTemplate is the model entity for the NotifTemplate schema.
-type NotifTemplate struct {
+// FrontendTemplate is the model entity for the FrontendTemplate schema.
+type FrontendTemplate struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
@@ -37,154 +37,154 @@ type NotifTemplate struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*NotifTemplate) scanValues(columns []string) ([]interface{}, error) {
+func (*FrontendTemplate) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case notiftemplate.FieldCreatedAt, notiftemplate.FieldUpdatedAt, notiftemplate.FieldDeletedAt:
+		case frontendtemplate.FieldCreatedAt, frontendtemplate.FieldUpdatedAt, frontendtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
-		case notiftemplate.FieldUsedFor, notiftemplate.FieldTitle, notiftemplate.FieldContent, notiftemplate.FieldSender:
+		case frontendtemplate.FieldUsedFor, frontendtemplate.FieldTitle, frontendtemplate.FieldContent, frontendtemplate.FieldSender:
 			values[i] = new(sql.NullString)
-		case notiftemplate.FieldID, notiftemplate.FieldAppID, notiftemplate.FieldLangID:
+		case frontendtemplate.FieldID, frontendtemplate.FieldAppID, frontendtemplate.FieldLangID:
 			values[i] = new(uuid.UUID)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type NotifTemplate", columns[i])
+			return nil, fmt.Errorf("unexpected column %q for type FrontendTemplate", columns[i])
 		}
 	}
 	return values, nil
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the NotifTemplate fields.
-func (nt *NotifTemplate) assignValues(columns []string, values []interface{}) error {
+// to the FrontendTemplate fields.
+func (ft *FrontendTemplate) assignValues(columns []string, values []interface{}) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case notiftemplate.FieldID:
+		case frontendtemplate.FieldID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				nt.ID = *value
+				ft.ID = *value
 			}
-		case notiftemplate.FieldCreatedAt:
+		case frontendtemplate.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				nt.CreatedAt = uint32(value.Int64)
+				ft.CreatedAt = uint32(value.Int64)
 			}
-		case notiftemplate.FieldUpdatedAt:
+		case frontendtemplate.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				nt.UpdatedAt = uint32(value.Int64)
+				ft.UpdatedAt = uint32(value.Int64)
 			}
-		case notiftemplate.FieldDeletedAt:
+		case frontendtemplate.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				nt.DeletedAt = uint32(value.Int64)
+				ft.DeletedAt = uint32(value.Int64)
 			}
-		case notiftemplate.FieldAppID:
+		case frontendtemplate.FieldAppID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
 			} else if value != nil {
-				nt.AppID = *value
+				ft.AppID = *value
 			}
-		case notiftemplate.FieldLangID:
+		case frontendtemplate.FieldLangID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field lang_id", values[i])
 			} else if value != nil {
-				nt.LangID = *value
+				ft.LangID = *value
 			}
-		case notiftemplate.FieldUsedFor:
+		case frontendtemplate.FieldUsedFor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field used_for", values[i])
 			} else if value.Valid {
-				nt.UsedFor = value.String
+				ft.UsedFor = value.String
 			}
-		case notiftemplate.FieldTitle:
+		case frontendtemplate.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
-				nt.Title = value.String
+				ft.Title = value.String
 			}
-		case notiftemplate.FieldContent:
+		case frontendtemplate.FieldContent:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field content", values[i])
 			} else if value.Valid {
-				nt.Content = value.String
+				ft.Content = value.String
 			}
-		case notiftemplate.FieldSender:
+		case frontendtemplate.FieldSender:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field sender", values[i])
 			} else if value.Valid {
-				nt.Sender = value.String
+				ft.Sender = value.String
 			}
 		}
 	}
 	return nil
 }
 
-// Update returns a builder for updating this NotifTemplate.
-// Note that you need to call NotifTemplate.Unwrap() before calling this method if this NotifTemplate
+// Update returns a builder for updating this FrontendTemplate.
+// Note that you need to call FrontendTemplate.Unwrap() before calling this method if this FrontendTemplate
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (nt *NotifTemplate) Update() *NotifTemplateUpdateOne {
-	return (&NotifTemplateClient{config: nt.config}).UpdateOne(nt)
+func (ft *FrontendTemplate) Update() *FrontendTemplateUpdateOne {
+	return (&FrontendTemplateClient{config: ft.config}).UpdateOne(ft)
 }
 
-// Unwrap unwraps the NotifTemplate entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the FrontendTemplate entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (nt *NotifTemplate) Unwrap() *NotifTemplate {
-	_tx, ok := nt.config.driver.(*txDriver)
+func (ft *FrontendTemplate) Unwrap() *FrontendTemplate {
+	_tx, ok := ft.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: NotifTemplate is not a transactional entity")
+		panic("ent: FrontendTemplate is not a transactional entity")
 	}
-	nt.config.driver = _tx.drv
-	return nt
+	ft.config.driver = _tx.drv
+	return ft
 }
 
 // String implements the fmt.Stringer.
-func (nt *NotifTemplate) String() string {
+func (ft *FrontendTemplate) String() string {
 	var builder strings.Builder
-	builder.WriteString("NotifTemplate(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", nt.ID))
+	builder.WriteString("FrontendTemplate(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", ft.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", nt.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", ft.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", nt.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", ft.UpdatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(fmt.Sprintf("%v", nt.DeletedAt))
+	builder.WriteString(fmt.Sprintf("%v", ft.DeletedAt))
 	builder.WriteString(", ")
 	builder.WriteString("app_id=")
-	builder.WriteString(fmt.Sprintf("%v", nt.AppID))
+	builder.WriteString(fmt.Sprintf("%v", ft.AppID))
 	builder.WriteString(", ")
 	builder.WriteString("lang_id=")
-	builder.WriteString(fmt.Sprintf("%v", nt.LangID))
+	builder.WriteString(fmt.Sprintf("%v", ft.LangID))
 	builder.WriteString(", ")
 	builder.WriteString("used_for=")
-	builder.WriteString(nt.UsedFor)
+	builder.WriteString(ft.UsedFor)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
-	builder.WriteString(nt.Title)
+	builder.WriteString(ft.Title)
 	builder.WriteString(", ")
 	builder.WriteString("content=")
-	builder.WriteString(nt.Content)
+	builder.WriteString(ft.Content)
 	builder.WriteString(", ")
 	builder.WriteString("sender=")
-	builder.WriteString(nt.Sender)
+	builder.WriteString(ft.Sender)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// NotifTemplates is a parsable slice of NotifTemplate.
-type NotifTemplates []*NotifTemplate
+// FrontendTemplates is a parsable slice of FrontendTemplate.
+type FrontendTemplates []*FrontendTemplate
 
-func (nt NotifTemplates) config(cfg config) {
-	for _i := range nt {
-		nt[_i].config = cfg
+func (ft FrontendTemplates) config(cfg config) {
+	for _i := range ft {
+		ft[_i].config = cfg
 	}
 }
