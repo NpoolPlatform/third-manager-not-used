@@ -197,7 +197,7 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.EmailTemplate, error) {
 	return info, nil
 }
 
-//nolint:nolintlint,gocyclo
+//nolint:nolintlint,gocyclo,funlen
 func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.EmailTemplateQuery, error) {
 	stm := cli.EmailTemplate.Query()
 
@@ -260,6 +260,49 @@ func SetQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.EmailTemplateQuery
 		switch conds.GetSender().GetOp() {
 		case cruder.EQ:
 			stm.Where(emailtemplate.Sender(conds.GetSender().GetValue()))
+		default:
+			return nil, fmt.Errorf("invalid email field")
+		}
+	}
+
+	if conds.AppIDs != nil {
+		switch conds.GetAppIDs().GetOp() {
+		case cruder.IN:
+			ids := []uuid.UUID{}
+			for _, val := range conds.GetAppIDs().GetValue() {
+				id, err := uuid.Parse(val)
+				if err != nil {
+					return nil, err
+				}
+				ids = append(ids, id)
+			}
+			stm.Where(emailtemplate.AppIDIn(ids...))
+		default:
+			return nil, fmt.Errorf("invalid email field")
+		}
+	}
+
+	if conds.LangIDs != nil {
+		switch conds.GetLangIDs().GetOp() {
+		case cruder.IN:
+			ids := []uuid.UUID{}
+			for _, val := range conds.GetLangIDs().GetValue() {
+				id, err := uuid.Parse(val)
+				if err != nil {
+					return nil, err
+				}
+				ids = append(ids, id)
+			}
+			stm.Where(emailtemplate.LangIDIn(ids...))
+		default:
+			return nil, fmt.Errorf("invalid email field")
+		}
+	}
+
+	if conds.UsedFors != nil {
+		switch conds.GetUsedFors().GetOp() {
+		case cruder.IN:
+			stm.Where(emailtemplate.UsedForIn(conds.GetUsedFors().GetValue()...))
 		default:
 			return nil, fmt.Errorf("invalid email field")
 		}

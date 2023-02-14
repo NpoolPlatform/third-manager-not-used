@@ -1,4 +1,4 @@
-package notif
+package frontend
 
 import (
 	"context"
@@ -18,13 +18,13 @@ import (
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	val "github.com/NpoolPlatform/message/npool"
 
-	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/notif"
+	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/frontend"
 	testinit "github.com/NpoolPlatform/third-manager/pkg/testinit"
 	"github.com/google/uuid"
 
 	"github.com/stretchr/testify/assert"
 
-	usedfor "github.com/NpoolPlatform/message/npool/notif/mgr/v1/notif"
+	usedfor "github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 )
 
 func init() {
@@ -36,17 +36,17 @@ func init() {
 	}
 }
 
-var appDate = npool.NotifTemplate{
+var appDate = npool.FrontendTemplate{
 	ID:      uuid.NewString(),
 	AppID:   uuid.NewString(),
 	LangID:  uuid.NewString(),
-	UsedFor: usedfor.EventType_KYCApproved,
+	UsedFor: usedfor.UsedFor_KYCApproved,
 	Title:   uuid.NewString(),
 	Content: uuid.NewString(),
 }
 
 var (
-	appInfo = npool.NotifTemplateReq{
+	appInfo = npool.FrontendTemplateReq{
 		ID:      &appDate.ID,
 		AppID:   &appDate.AppID,
 		LangID:  &appDate.LangID,
@@ -56,11 +56,11 @@ var (
 	}
 )
 
-var info *npool.NotifTemplate
+var info *npool.FrontendTemplate
 
-func createNotifTemplate(t *testing.T) {
+func createFrontendTemplate(t *testing.T) {
 	var err error
-	info, err = CreateNotifTemplate(context.Background(), &appInfo)
+	info, err = CreateFrontendTemplate(context.Background(), &appInfo)
 	if assert.Nil(t, err) {
 		appDate.UpdatedAt = info.UpdatedAt
 		appDate.CreatedAt = info.CreatedAt
@@ -68,13 +68,13 @@ func createNotifTemplate(t *testing.T) {
 	}
 }
 
-func createNotifTemplates(t *testing.T) {
-	appDates := []npool.NotifTemplate{
+func createFrontendTemplates(t *testing.T) {
+	appDates := []npool.FrontendTemplate{
 		{
 			ID:      uuid.NewString(),
 			AppID:   uuid.NewString(),
 			LangID:  uuid.NewString(),
-			UsedFor: usedfor.EventType_KYCApproved,
+			UsedFor: usedfor.UsedFor_KYCApproved,
 			Title:   uuid.NewString(),
 			Content: uuid.NewString(),
 		},
@@ -82,15 +82,15 @@ func createNotifTemplates(t *testing.T) {
 			ID:      uuid.NewString(),
 			AppID:   uuid.NewString(),
 			LangID:  uuid.NewString(),
-			UsedFor: usedfor.EventType_KYCApproved,
+			UsedFor: usedfor.UsedFor_KYCApproved,
 			Title:   uuid.NewString(),
 			Content: uuid.NewString(),
 		},
 	}
 
-	apps := []*npool.NotifTemplateReq{}
+	apps := []*npool.FrontendTemplateReq{}
 	for key := range appDates {
-		apps = append(apps, &npool.NotifTemplateReq{
+		apps = append(apps, &npool.FrontendTemplateReq{
 			ID:      &appDates[key].ID,
 			AppID:   &appDates[key].AppID,
 			LangID:  &appDates[key].LangID,
@@ -100,15 +100,15 @@ func createNotifTemplates(t *testing.T) {
 		})
 	}
 
-	infos, err := CreateNotifTemplates(context.Background(), apps)
+	infos, err := CreateFrontendTemplates(context.Background(), apps)
 	if assert.Nil(t, err) {
 		assert.Equal(t, len(infos), 2)
 	}
 }
 
-func updateNotifTemplate(t *testing.T) {
+func updateFrontendTemplate(t *testing.T) {
 	var err error
-	info, err = UpdateNotifTemplate(context.Background(), &appInfo)
+	info, err = UpdateFrontendTemplate(context.Background(), &appInfo)
 	if assert.Nil(t, err) {
 		appDate.UpdatedAt = info.UpdatedAt
 		appDate.CreatedAt = info.CreatedAt
@@ -116,9 +116,9 @@ func updateNotifTemplate(t *testing.T) {
 	}
 }
 
-func getNotifTemplate(t *testing.T) {
+func getFrontendTemplate(t *testing.T) {
 	var err error
-	info, err = GetNotifTemplate(context.Background(), info.ID)
+	info, err = GetFrontendTemplate(context.Background(), info.ID)
 	if assert.Nil(t, err) {
 		appDate.UpdatedAt = info.UpdatedAt
 		appDate.CreatedAt = info.CreatedAt
@@ -126,8 +126,8 @@ func getNotifTemplate(t *testing.T) {
 	}
 }
 
-func getNotifTemplates(t *testing.T) {
-	infos, total, err := GetNotifTemplates(context.Background(),
+func getFrontendTemplates(t *testing.T) {
+	infos, total, err := GetFrontendTemplates(context.Background(),
 		&npool.Conds{
 			ID: &val.StringVal{
 				Value: info.ID,
@@ -142,9 +142,9 @@ func getNotifTemplates(t *testing.T) {
 	}
 }
 
-func getNotifTemplateOnly(t *testing.T) {
+func getFrontendTemplateOnly(t *testing.T) {
 	var err error
-	info, err = GetNotifTemplateOnly(context.Background(),
+	info, err = GetFrontendTemplateOnly(context.Background(),
 		&npool.Conds{
 			ID: &val.StringVal{
 				Value: info.ID,
@@ -158,15 +158,15 @@ func getNotifTemplateOnly(t *testing.T) {
 	}
 }
 
-func existNotifTemplate(t *testing.T) {
-	exist, err := ExistNotifTemplate(context.Background(), info.ID)
+func existFrontendTemplate(t *testing.T) {
+	exist, err := ExistFrontendTemplate(context.Background(), info.ID)
 	if assert.Nil(t, err) {
 		assert.Equal(t, exist, true)
 	}
 }
 
-func existNotifTemplateConds(t *testing.T) {
-	exist, err := ExistNotifTemplateConds(context.Background(),
+func existFrontendTemplateConds(t *testing.T) {
+	exist, err := ExistFrontendTemplateConds(context.Background(),
 		&npool.Conds{
 			ID: &val.StringVal{
 				Value: info.ID,
@@ -179,8 +179,8 @@ func existNotifTemplateConds(t *testing.T) {
 	}
 }
 
-func deleteNotifTemplate(t *testing.T) {
-	info, err := DeleteNotifTemplate(context.Background(), info.ID)
+func deleteFrontendTemplate(t *testing.T) {
+	info, err := DeleteFrontendTemplate(context.Background(), info.ID)
 	if assert.Nil(t, err) {
 		appDate.UpdatedAt = info.UpdatedAt
 		appDate.CreatedAt = info.CreatedAt
@@ -199,13 +199,13 @@ func TestMainOrder(t *testing.T) {
 		return grpc.Dial(fmt.Sprintf("localhost:%v", gport), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	})
 
-	t.Run("createNotifTemplate", createNotifTemplate)
-	t.Run("createNotifTemplates", createNotifTemplates)
-	t.Run("getNotifTemplate", getNotifTemplate)
-	t.Run("getNotifTemplates", getNotifTemplates)
-	t.Run("getNotifTemplateOnly", getNotifTemplateOnly)
-	t.Run("updateNotifTemplate", updateNotifTemplate)
-	t.Run("existNotifTemplate", existNotifTemplate)
-	t.Run("existNotifTemplateConds", existNotifTemplateConds)
-	t.Run("delete", deleteNotifTemplate)
+	t.Run("createFrontendTemplate", createFrontendTemplate)
+	t.Run("createFrontendTemplates", createFrontendTemplates)
+	t.Run("getFrontendTemplate", getFrontendTemplate)
+	t.Run("getFrontendTemplates", getFrontendTemplates)
+	t.Run("getFrontendTemplateOnly", getFrontendTemplateOnly)
+	t.Run("updateFrontendTemplate", updateFrontendTemplate)
+	t.Run("existFrontendTemplate", existFrontendTemplate)
+	t.Run("existFrontendTemplateConds", existFrontendTemplateConds)
+	t.Run("delete", deleteFrontendTemplate)
 }

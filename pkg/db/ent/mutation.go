@@ -10,7 +10,7 @@ import (
 
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/contact"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/notiftemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/frontendtemplate"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/predicate"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 	"github.com/google/uuid"
@@ -27,10 +27,10 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeContact       = "Contact"
-	TypeEmailTemplate = "EmailTemplate"
-	TypeNotifTemplate = "NotifTemplate"
-	TypeSMSTemplate   = "SMSTemplate"
+	TypeContact          = "Contact"
+	TypeEmailTemplate    = "EmailTemplate"
+	TypeFrontendTemplate = "FrontendTemplate"
+	TypeSMSTemplate      = "SMSTemplate"
 )
 
 // ContactMutation represents an operation that mutates the Contact nodes in the graph.
@@ -2039,8 +2039,8 @@ func (m *EmailTemplateMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown EmailTemplate edge %s", name)
 }
 
-// NotifTemplateMutation represents an operation that mutates the NotifTemplate nodes in the graph.
-type NotifTemplateMutation struct {
+// FrontendTemplateMutation represents an operation that mutates the FrontendTemplate nodes in the graph.
+type FrontendTemplateMutation struct {
 	config
 	op            Op
 	typ           string
@@ -2059,21 +2059,21 @@ type NotifTemplateMutation struct {
 	sender        *string
 	clearedFields map[string]struct{}
 	done          bool
-	oldValue      func(context.Context) (*NotifTemplate, error)
-	predicates    []predicate.NotifTemplate
+	oldValue      func(context.Context) (*FrontendTemplate, error)
+	predicates    []predicate.FrontendTemplate
 }
 
-var _ ent.Mutation = (*NotifTemplateMutation)(nil)
+var _ ent.Mutation = (*FrontendTemplateMutation)(nil)
 
-// notiftemplateOption allows management of the mutation configuration using functional options.
-type notiftemplateOption func(*NotifTemplateMutation)
+// frontendtemplateOption allows management of the mutation configuration using functional options.
+type frontendtemplateOption func(*FrontendTemplateMutation)
 
-// newNotifTemplateMutation creates new mutation for the NotifTemplate entity.
-func newNotifTemplateMutation(c config, op Op, opts ...notiftemplateOption) *NotifTemplateMutation {
-	m := &NotifTemplateMutation{
+// newFrontendTemplateMutation creates new mutation for the FrontendTemplate entity.
+func newFrontendTemplateMutation(c config, op Op, opts ...frontendtemplateOption) *FrontendTemplateMutation {
+	m := &FrontendTemplateMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeNotifTemplate,
+		typ:           TypeFrontendTemplate,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -2082,20 +2082,20 @@ func newNotifTemplateMutation(c config, op Op, opts ...notiftemplateOption) *Not
 	return m
 }
 
-// withNotifTemplateID sets the ID field of the mutation.
-func withNotifTemplateID(id uuid.UUID) notiftemplateOption {
-	return func(m *NotifTemplateMutation) {
+// withFrontendTemplateID sets the ID field of the mutation.
+func withFrontendTemplateID(id uuid.UUID) frontendtemplateOption {
+	return func(m *FrontendTemplateMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *NotifTemplate
+			value *FrontendTemplate
 		)
-		m.oldValue = func(ctx context.Context) (*NotifTemplate, error) {
+		m.oldValue = func(ctx context.Context) (*FrontendTemplate, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().NotifTemplate.Get(ctx, id)
+					value, err = m.Client().FrontendTemplate.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -2104,10 +2104,10 @@ func withNotifTemplateID(id uuid.UUID) notiftemplateOption {
 	}
 }
 
-// withNotifTemplate sets the old NotifTemplate of the mutation.
-func withNotifTemplate(node *NotifTemplate) notiftemplateOption {
-	return func(m *NotifTemplateMutation) {
-		m.oldValue = func(context.Context) (*NotifTemplate, error) {
+// withFrontendTemplate sets the old FrontendTemplate of the mutation.
+func withFrontendTemplate(node *FrontendTemplate) frontendtemplateOption {
+	return func(m *FrontendTemplateMutation) {
+		m.oldValue = func(context.Context) (*FrontendTemplate, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -2116,7 +2116,7 @@ func withNotifTemplate(node *NotifTemplate) notiftemplateOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m NotifTemplateMutation) Client() *Client {
+func (m FrontendTemplateMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -2124,7 +2124,7 @@ func (m NotifTemplateMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m NotifTemplateMutation) Tx() (*Tx, error) {
+func (m FrontendTemplateMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -2134,14 +2134,14 @@ func (m NotifTemplateMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of NotifTemplate entities.
-func (m *NotifTemplateMutation) SetID(id uuid.UUID) {
+// operation is only accepted on creation of FrontendTemplate entities.
+func (m *FrontendTemplateMutation) SetID(id uuid.UUID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *NotifTemplateMutation) ID() (id uuid.UUID, exists bool) {
+func (m *FrontendTemplateMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2152,7 +2152,7 @@ func (m *NotifTemplateMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *NotifTemplateMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *FrontendTemplateMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -2161,20 +2161,20 @@ func (m *NotifTemplateMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().NotifTemplate.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().FrontendTemplate.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (m *NotifTemplateMutation) SetCreatedAt(u uint32) {
+func (m *FrontendTemplateMutation) SetCreatedAt(u uint32) {
 	m.created_at = &u
 	m.addcreated_at = nil
 }
 
 // CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *NotifTemplateMutation) CreatedAt() (r uint32, exists bool) {
+func (m *FrontendTemplateMutation) CreatedAt() (r uint32, exists bool) {
 	v := m.created_at
 	if v == nil {
 		return
@@ -2182,10 +2182,10 @@ func (m *NotifTemplateMutation) CreatedAt() (r uint32, exists bool) {
 	return *v, true
 }
 
-// OldCreatedAt returns the old "created_at" field's value of the NotifTemplate entity.
-// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
+// OldCreatedAt returns the old "created_at" field's value of the FrontendTemplate entity.
+// If the FrontendTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotifTemplateMutation) OldCreatedAt(ctx context.Context) (v uint32, err error) {
+func (m *FrontendTemplateMutation) OldCreatedAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
 	}
@@ -2200,7 +2200,7 @@ func (m *NotifTemplateMutation) OldCreatedAt(ctx context.Context) (v uint32, err
 }
 
 // AddCreatedAt adds u to the "created_at" field.
-func (m *NotifTemplateMutation) AddCreatedAt(u int32) {
+func (m *FrontendTemplateMutation) AddCreatedAt(u int32) {
 	if m.addcreated_at != nil {
 		*m.addcreated_at += u
 	} else {
@@ -2209,7 +2209,7 @@ func (m *NotifTemplateMutation) AddCreatedAt(u int32) {
 }
 
 // AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
-func (m *NotifTemplateMutation) AddedCreatedAt() (r int32, exists bool) {
+func (m *FrontendTemplateMutation) AddedCreatedAt() (r int32, exists bool) {
 	v := m.addcreated_at
 	if v == nil {
 		return
@@ -2218,19 +2218,19 @@ func (m *NotifTemplateMutation) AddedCreatedAt() (r int32, exists bool) {
 }
 
 // ResetCreatedAt resets all changes to the "created_at" field.
-func (m *NotifTemplateMutation) ResetCreatedAt() {
+func (m *FrontendTemplateMutation) ResetCreatedAt() {
 	m.created_at = nil
 	m.addcreated_at = nil
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (m *NotifTemplateMutation) SetUpdatedAt(u uint32) {
+func (m *FrontendTemplateMutation) SetUpdatedAt(u uint32) {
 	m.updated_at = &u
 	m.addupdated_at = nil
 }
 
 // UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *NotifTemplateMutation) UpdatedAt() (r uint32, exists bool) {
+func (m *FrontendTemplateMutation) UpdatedAt() (r uint32, exists bool) {
 	v := m.updated_at
 	if v == nil {
 		return
@@ -2238,10 +2238,10 @@ func (m *NotifTemplateMutation) UpdatedAt() (r uint32, exists bool) {
 	return *v, true
 }
 
-// OldUpdatedAt returns the old "updated_at" field's value of the NotifTemplate entity.
-// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
+// OldUpdatedAt returns the old "updated_at" field's value of the FrontendTemplate entity.
+// If the FrontendTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotifTemplateMutation) OldUpdatedAt(ctx context.Context) (v uint32, err error) {
+func (m *FrontendTemplateMutation) OldUpdatedAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
 	}
@@ -2256,7 +2256,7 @@ func (m *NotifTemplateMutation) OldUpdatedAt(ctx context.Context) (v uint32, err
 }
 
 // AddUpdatedAt adds u to the "updated_at" field.
-func (m *NotifTemplateMutation) AddUpdatedAt(u int32) {
+func (m *FrontendTemplateMutation) AddUpdatedAt(u int32) {
 	if m.addupdated_at != nil {
 		*m.addupdated_at += u
 	} else {
@@ -2265,7 +2265,7 @@ func (m *NotifTemplateMutation) AddUpdatedAt(u int32) {
 }
 
 // AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
-func (m *NotifTemplateMutation) AddedUpdatedAt() (r int32, exists bool) {
+func (m *FrontendTemplateMutation) AddedUpdatedAt() (r int32, exists bool) {
 	v := m.addupdated_at
 	if v == nil {
 		return
@@ -2274,19 +2274,19 @@ func (m *NotifTemplateMutation) AddedUpdatedAt() (r int32, exists bool) {
 }
 
 // ResetUpdatedAt resets all changes to the "updated_at" field.
-func (m *NotifTemplateMutation) ResetUpdatedAt() {
+func (m *FrontendTemplateMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 	m.addupdated_at = nil
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (m *NotifTemplateMutation) SetDeletedAt(u uint32) {
+func (m *FrontendTemplateMutation) SetDeletedAt(u uint32) {
 	m.deleted_at = &u
 	m.adddeleted_at = nil
 }
 
 // DeletedAt returns the value of the "deleted_at" field in the mutation.
-func (m *NotifTemplateMutation) DeletedAt() (r uint32, exists bool) {
+func (m *FrontendTemplateMutation) DeletedAt() (r uint32, exists bool) {
 	v := m.deleted_at
 	if v == nil {
 		return
@@ -2294,10 +2294,10 @@ func (m *NotifTemplateMutation) DeletedAt() (r uint32, exists bool) {
 	return *v, true
 }
 
-// OldDeletedAt returns the old "deleted_at" field's value of the NotifTemplate entity.
-// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
+// OldDeletedAt returns the old "deleted_at" field's value of the FrontendTemplate entity.
+// If the FrontendTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotifTemplateMutation) OldDeletedAt(ctx context.Context) (v uint32, err error) {
+func (m *FrontendTemplateMutation) OldDeletedAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
 	}
@@ -2312,7 +2312,7 @@ func (m *NotifTemplateMutation) OldDeletedAt(ctx context.Context) (v uint32, err
 }
 
 // AddDeletedAt adds u to the "deleted_at" field.
-func (m *NotifTemplateMutation) AddDeletedAt(u int32) {
+func (m *FrontendTemplateMutation) AddDeletedAt(u int32) {
 	if m.adddeleted_at != nil {
 		*m.adddeleted_at += u
 	} else {
@@ -2321,7 +2321,7 @@ func (m *NotifTemplateMutation) AddDeletedAt(u int32) {
 }
 
 // AddedDeletedAt returns the value that was added to the "deleted_at" field in this mutation.
-func (m *NotifTemplateMutation) AddedDeletedAt() (r int32, exists bool) {
+func (m *FrontendTemplateMutation) AddedDeletedAt() (r int32, exists bool) {
 	v := m.adddeleted_at
 	if v == nil {
 		return
@@ -2330,18 +2330,18 @@ func (m *NotifTemplateMutation) AddedDeletedAt() (r int32, exists bool) {
 }
 
 // ResetDeletedAt resets all changes to the "deleted_at" field.
-func (m *NotifTemplateMutation) ResetDeletedAt() {
+func (m *FrontendTemplateMutation) ResetDeletedAt() {
 	m.deleted_at = nil
 	m.adddeleted_at = nil
 }
 
 // SetAppID sets the "app_id" field.
-func (m *NotifTemplateMutation) SetAppID(u uuid.UUID) {
+func (m *FrontendTemplateMutation) SetAppID(u uuid.UUID) {
 	m.app_id = &u
 }
 
 // AppID returns the value of the "app_id" field in the mutation.
-func (m *NotifTemplateMutation) AppID() (r uuid.UUID, exists bool) {
+func (m *FrontendTemplateMutation) AppID() (r uuid.UUID, exists bool) {
 	v := m.app_id
 	if v == nil {
 		return
@@ -2349,10 +2349,10 @@ func (m *NotifTemplateMutation) AppID() (r uuid.UUID, exists bool) {
 	return *v, true
 }
 
-// OldAppID returns the old "app_id" field's value of the NotifTemplate entity.
-// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
+// OldAppID returns the old "app_id" field's value of the FrontendTemplate entity.
+// If the FrontendTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotifTemplateMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
+func (m *FrontendTemplateMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldAppID is only allowed on UpdateOne operations")
 	}
@@ -2367,17 +2367,17 @@ func (m *NotifTemplateMutation) OldAppID(ctx context.Context) (v uuid.UUID, err 
 }
 
 // ResetAppID resets all changes to the "app_id" field.
-func (m *NotifTemplateMutation) ResetAppID() {
+func (m *FrontendTemplateMutation) ResetAppID() {
 	m.app_id = nil
 }
 
 // SetLangID sets the "lang_id" field.
-func (m *NotifTemplateMutation) SetLangID(u uuid.UUID) {
+func (m *FrontendTemplateMutation) SetLangID(u uuid.UUID) {
 	m.lang_id = &u
 }
 
 // LangID returns the value of the "lang_id" field in the mutation.
-func (m *NotifTemplateMutation) LangID() (r uuid.UUID, exists bool) {
+func (m *FrontendTemplateMutation) LangID() (r uuid.UUID, exists bool) {
 	v := m.lang_id
 	if v == nil {
 		return
@@ -2385,10 +2385,10 @@ func (m *NotifTemplateMutation) LangID() (r uuid.UUID, exists bool) {
 	return *v, true
 }
 
-// OldLangID returns the old "lang_id" field's value of the NotifTemplate entity.
-// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
+// OldLangID returns the old "lang_id" field's value of the FrontendTemplate entity.
+// If the FrontendTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotifTemplateMutation) OldLangID(ctx context.Context) (v uuid.UUID, err error) {
+func (m *FrontendTemplateMutation) OldLangID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLangID is only allowed on UpdateOne operations")
 	}
@@ -2403,17 +2403,17 @@ func (m *NotifTemplateMutation) OldLangID(ctx context.Context) (v uuid.UUID, err
 }
 
 // ResetLangID resets all changes to the "lang_id" field.
-func (m *NotifTemplateMutation) ResetLangID() {
+func (m *FrontendTemplateMutation) ResetLangID() {
 	m.lang_id = nil
 }
 
 // SetUsedFor sets the "used_for" field.
-func (m *NotifTemplateMutation) SetUsedFor(s string) {
+func (m *FrontendTemplateMutation) SetUsedFor(s string) {
 	m.used_for = &s
 }
 
 // UsedFor returns the value of the "used_for" field in the mutation.
-func (m *NotifTemplateMutation) UsedFor() (r string, exists bool) {
+func (m *FrontendTemplateMutation) UsedFor() (r string, exists bool) {
 	v := m.used_for
 	if v == nil {
 		return
@@ -2421,10 +2421,10 @@ func (m *NotifTemplateMutation) UsedFor() (r string, exists bool) {
 	return *v, true
 }
 
-// OldUsedFor returns the old "used_for" field's value of the NotifTemplate entity.
-// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
+// OldUsedFor returns the old "used_for" field's value of the FrontendTemplate entity.
+// If the FrontendTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotifTemplateMutation) OldUsedFor(ctx context.Context) (v string, err error) {
+func (m *FrontendTemplateMutation) OldUsedFor(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUsedFor is only allowed on UpdateOne operations")
 	}
@@ -2439,30 +2439,30 @@ func (m *NotifTemplateMutation) OldUsedFor(ctx context.Context) (v string, err e
 }
 
 // ClearUsedFor clears the value of the "used_for" field.
-func (m *NotifTemplateMutation) ClearUsedFor() {
+func (m *FrontendTemplateMutation) ClearUsedFor() {
 	m.used_for = nil
-	m.clearedFields[notiftemplate.FieldUsedFor] = struct{}{}
+	m.clearedFields[frontendtemplate.FieldUsedFor] = struct{}{}
 }
 
 // UsedForCleared returns if the "used_for" field was cleared in this mutation.
-func (m *NotifTemplateMutation) UsedForCleared() bool {
-	_, ok := m.clearedFields[notiftemplate.FieldUsedFor]
+func (m *FrontendTemplateMutation) UsedForCleared() bool {
+	_, ok := m.clearedFields[frontendtemplate.FieldUsedFor]
 	return ok
 }
 
 // ResetUsedFor resets all changes to the "used_for" field.
-func (m *NotifTemplateMutation) ResetUsedFor() {
+func (m *FrontendTemplateMutation) ResetUsedFor() {
 	m.used_for = nil
-	delete(m.clearedFields, notiftemplate.FieldUsedFor)
+	delete(m.clearedFields, frontendtemplate.FieldUsedFor)
 }
 
 // SetTitle sets the "title" field.
-func (m *NotifTemplateMutation) SetTitle(s string) {
+func (m *FrontendTemplateMutation) SetTitle(s string) {
 	m.title = &s
 }
 
 // Title returns the value of the "title" field in the mutation.
-func (m *NotifTemplateMutation) Title() (r string, exists bool) {
+func (m *FrontendTemplateMutation) Title() (r string, exists bool) {
 	v := m.title
 	if v == nil {
 		return
@@ -2470,10 +2470,10 @@ func (m *NotifTemplateMutation) Title() (r string, exists bool) {
 	return *v, true
 }
 
-// OldTitle returns the old "title" field's value of the NotifTemplate entity.
-// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
+// OldTitle returns the old "title" field's value of the FrontendTemplate entity.
+// If the FrontendTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotifTemplateMutation) OldTitle(ctx context.Context) (v string, err error) {
+func (m *FrontendTemplateMutation) OldTitle(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
 	}
@@ -2488,30 +2488,30 @@ func (m *NotifTemplateMutation) OldTitle(ctx context.Context) (v string, err err
 }
 
 // ClearTitle clears the value of the "title" field.
-func (m *NotifTemplateMutation) ClearTitle() {
+func (m *FrontendTemplateMutation) ClearTitle() {
 	m.title = nil
-	m.clearedFields[notiftemplate.FieldTitle] = struct{}{}
+	m.clearedFields[frontendtemplate.FieldTitle] = struct{}{}
 }
 
 // TitleCleared returns if the "title" field was cleared in this mutation.
-func (m *NotifTemplateMutation) TitleCleared() bool {
-	_, ok := m.clearedFields[notiftemplate.FieldTitle]
+func (m *FrontendTemplateMutation) TitleCleared() bool {
+	_, ok := m.clearedFields[frontendtemplate.FieldTitle]
 	return ok
 }
 
 // ResetTitle resets all changes to the "title" field.
-func (m *NotifTemplateMutation) ResetTitle() {
+func (m *FrontendTemplateMutation) ResetTitle() {
 	m.title = nil
-	delete(m.clearedFields, notiftemplate.FieldTitle)
+	delete(m.clearedFields, frontendtemplate.FieldTitle)
 }
 
 // SetContent sets the "content" field.
-func (m *NotifTemplateMutation) SetContent(s string) {
+func (m *FrontendTemplateMutation) SetContent(s string) {
 	m.content = &s
 }
 
 // Content returns the value of the "content" field in the mutation.
-func (m *NotifTemplateMutation) Content() (r string, exists bool) {
+func (m *FrontendTemplateMutation) Content() (r string, exists bool) {
 	v := m.content
 	if v == nil {
 		return
@@ -2519,10 +2519,10 @@ func (m *NotifTemplateMutation) Content() (r string, exists bool) {
 	return *v, true
 }
 
-// OldContent returns the old "content" field's value of the NotifTemplate entity.
-// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
+// OldContent returns the old "content" field's value of the FrontendTemplate entity.
+// If the FrontendTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotifTemplateMutation) OldContent(ctx context.Context) (v string, err error) {
+func (m *FrontendTemplateMutation) OldContent(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldContent is only allowed on UpdateOne operations")
 	}
@@ -2537,30 +2537,30 @@ func (m *NotifTemplateMutation) OldContent(ctx context.Context) (v string, err e
 }
 
 // ClearContent clears the value of the "content" field.
-func (m *NotifTemplateMutation) ClearContent() {
+func (m *FrontendTemplateMutation) ClearContent() {
 	m.content = nil
-	m.clearedFields[notiftemplate.FieldContent] = struct{}{}
+	m.clearedFields[frontendtemplate.FieldContent] = struct{}{}
 }
 
 // ContentCleared returns if the "content" field was cleared in this mutation.
-func (m *NotifTemplateMutation) ContentCleared() bool {
-	_, ok := m.clearedFields[notiftemplate.FieldContent]
+func (m *FrontendTemplateMutation) ContentCleared() bool {
+	_, ok := m.clearedFields[frontendtemplate.FieldContent]
 	return ok
 }
 
 // ResetContent resets all changes to the "content" field.
-func (m *NotifTemplateMutation) ResetContent() {
+func (m *FrontendTemplateMutation) ResetContent() {
 	m.content = nil
-	delete(m.clearedFields, notiftemplate.FieldContent)
+	delete(m.clearedFields, frontendtemplate.FieldContent)
 }
 
 // SetSender sets the "sender" field.
-func (m *NotifTemplateMutation) SetSender(s string) {
+func (m *FrontendTemplateMutation) SetSender(s string) {
 	m.sender = &s
 }
 
 // Sender returns the value of the "sender" field in the mutation.
-func (m *NotifTemplateMutation) Sender() (r string, exists bool) {
+func (m *FrontendTemplateMutation) Sender() (r string, exists bool) {
 	v := m.sender
 	if v == nil {
 		return
@@ -2568,10 +2568,10 @@ func (m *NotifTemplateMutation) Sender() (r string, exists bool) {
 	return *v, true
 }
 
-// OldSender returns the old "sender" field's value of the NotifTemplate entity.
-// If the NotifTemplate object wasn't provided to the builder, the object is fetched from the database.
+// OldSender returns the old "sender" field's value of the FrontendTemplate entity.
+// If the FrontendTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotifTemplateMutation) OldSender(ctx context.Context) (v string, err error) {
+func (m *FrontendTemplateMutation) OldSender(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldSender is only allowed on UpdateOne operations")
 	}
@@ -2586,69 +2586,69 @@ func (m *NotifTemplateMutation) OldSender(ctx context.Context) (v string, err er
 }
 
 // ClearSender clears the value of the "sender" field.
-func (m *NotifTemplateMutation) ClearSender() {
+func (m *FrontendTemplateMutation) ClearSender() {
 	m.sender = nil
-	m.clearedFields[notiftemplate.FieldSender] = struct{}{}
+	m.clearedFields[frontendtemplate.FieldSender] = struct{}{}
 }
 
 // SenderCleared returns if the "sender" field was cleared in this mutation.
-func (m *NotifTemplateMutation) SenderCleared() bool {
-	_, ok := m.clearedFields[notiftemplate.FieldSender]
+func (m *FrontendTemplateMutation) SenderCleared() bool {
+	_, ok := m.clearedFields[frontendtemplate.FieldSender]
 	return ok
 }
 
 // ResetSender resets all changes to the "sender" field.
-func (m *NotifTemplateMutation) ResetSender() {
+func (m *FrontendTemplateMutation) ResetSender() {
 	m.sender = nil
-	delete(m.clearedFields, notiftemplate.FieldSender)
+	delete(m.clearedFields, frontendtemplate.FieldSender)
 }
 
-// Where appends a list predicates to the NotifTemplateMutation builder.
-func (m *NotifTemplateMutation) Where(ps ...predicate.NotifTemplate) {
+// Where appends a list predicates to the FrontendTemplateMutation builder.
+func (m *FrontendTemplateMutation) Where(ps ...predicate.FrontendTemplate) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // Op returns the operation name.
-func (m *NotifTemplateMutation) Op() Op {
+func (m *FrontendTemplateMutation) Op() Op {
 	return m.op
 }
 
-// Type returns the node type of this mutation (NotifTemplate).
-func (m *NotifTemplateMutation) Type() string {
+// Type returns the node type of this mutation (FrontendTemplate).
+func (m *FrontendTemplateMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *NotifTemplateMutation) Fields() []string {
+func (m *FrontendTemplateMutation) Fields() []string {
 	fields := make([]string, 0, 9)
 	if m.created_at != nil {
-		fields = append(fields, notiftemplate.FieldCreatedAt)
+		fields = append(fields, frontendtemplate.FieldCreatedAt)
 	}
 	if m.updated_at != nil {
-		fields = append(fields, notiftemplate.FieldUpdatedAt)
+		fields = append(fields, frontendtemplate.FieldUpdatedAt)
 	}
 	if m.deleted_at != nil {
-		fields = append(fields, notiftemplate.FieldDeletedAt)
+		fields = append(fields, frontendtemplate.FieldDeletedAt)
 	}
 	if m.app_id != nil {
-		fields = append(fields, notiftemplate.FieldAppID)
+		fields = append(fields, frontendtemplate.FieldAppID)
 	}
 	if m.lang_id != nil {
-		fields = append(fields, notiftemplate.FieldLangID)
+		fields = append(fields, frontendtemplate.FieldLangID)
 	}
 	if m.used_for != nil {
-		fields = append(fields, notiftemplate.FieldUsedFor)
+		fields = append(fields, frontendtemplate.FieldUsedFor)
 	}
 	if m.title != nil {
-		fields = append(fields, notiftemplate.FieldTitle)
+		fields = append(fields, frontendtemplate.FieldTitle)
 	}
 	if m.content != nil {
-		fields = append(fields, notiftemplate.FieldContent)
+		fields = append(fields, frontendtemplate.FieldContent)
 	}
 	if m.sender != nil {
-		fields = append(fields, notiftemplate.FieldSender)
+		fields = append(fields, frontendtemplate.FieldSender)
 	}
 	return fields
 }
@@ -2656,25 +2656,25 @@ func (m *NotifTemplateMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *NotifTemplateMutation) Field(name string) (ent.Value, bool) {
+func (m *FrontendTemplateMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case notiftemplate.FieldCreatedAt:
+	case frontendtemplate.FieldCreatedAt:
 		return m.CreatedAt()
-	case notiftemplate.FieldUpdatedAt:
+	case frontendtemplate.FieldUpdatedAt:
 		return m.UpdatedAt()
-	case notiftemplate.FieldDeletedAt:
+	case frontendtemplate.FieldDeletedAt:
 		return m.DeletedAt()
-	case notiftemplate.FieldAppID:
+	case frontendtemplate.FieldAppID:
 		return m.AppID()
-	case notiftemplate.FieldLangID:
+	case frontendtemplate.FieldLangID:
 		return m.LangID()
-	case notiftemplate.FieldUsedFor:
+	case frontendtemplate.FieldUsedFor:
 		return m.UsedFor()
-	case notiftemplate.FieldTitle:
+	case frontendtemplate.FieldTitle:
 		return m.Title()
-	case notiftemplate.FieldContent:
+	case frontendtemplate.FieldContent:
 		return m.Content()
-	case notiftemplate.FieldSender:
+	case frontendtemplate.FieldSender:
 		return m.Sender()
 	}
 	return nil, false
@@ -2683,92 +2683,92 @@ func (m *NotifTemplateMutation) Field(name string) (ent.Value, bool) {
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *NotifTemplateMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+func (m *FrontendTemplateMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case notiftemplate.FieldCreatedAt:
+	case frontendtemplate.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
-	case notiftemplate.FieldUpdatedAt:
+	case frontendtemplate.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
-	case notiftemplate.FieldDeletedAt:
+	case frontendtemplate.FieldDeletedAt:
 		return m.OldDeletedAt(ctx)
-	case notiftemplate.FieldAppID:
+	case frontendtemplate.FieldAppID:
 		return m.OldAppID(ctx)
-	case notiftemplate.FieldLangID:
+	case frontendtemplate.FieldLangID:
 		return m.OldLangID(ctx)
-	case notiftemplate.FieldUsedFor:
+	case frontendtemplate.FieldUsedFor:
 		return m.OldUsedFor(ctx)
-	case notiftemplate.FieldTitle:
+	case frontendtemplate.FieldTitle:
 		return m.OldTitle(ctx)
-	case notiftemplate.FieldContent:
+	case frontendtemplate.FieldContent:
 		return m.OldContent(ctx)
-	case notiftemplate.FieldSender:
+	case frontendtemplate.FieldSender:
 		return m.OldSender(ctx)
 	}
-	return nil, fmt.Errorf("unknown NotifTemplate field %s", name)
+	return nil, fmt.Errorf("unknown FrontendTemplate field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *NotifTemplateMutation) SetField(name string, value ent.Value) error {
+func (m *FrontendTemplateMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case notiftemplate.FieldCreatedAt:
+	case frontendtemplate.FieldCreatedAt:
 		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreatedAt(v)
 		return nil
-	case notiftemplate.FieldUpdatedAt:
+	case frontendtemplate.FieldUpdatedAt:
 		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
 		return nil
-	case notiftemplate.FieldDeletedAt:
+	case frontendtemplate.FieldDeletedAt:
 		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeletedAt(v)
 		return nil
-	case notiftemplate.FieldAppID:
+	case frontendtemplate.FieldAppID:
 		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAppID(v)
 		return nil
-	case notiftemplate.FieldLangID:
+	case frontendtemplate.FieldLangID:
 		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLangID(v)
 		return nil
-	case notiftemplate.FieldUsedFor:
+	case frontendtemplate.FieldUsedFor:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUsedFor(v)
 		return nil
-	case notiftemplate.FieldTitle:
+	case frontendtemplate.FieldTitle:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTitle(v)
 		return nil
-	case notiftemplate.FieldContent:
+	case frontendtemplate.FieldContent:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetContent(v)
 		return nil
-	case notiftemplate.FieldSender:
+	case frontendtemplate.FieldSender:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -2776,21 +2776,21 @@ func (m *NotifTemplateMutation) SetField(name string, value ent.Value) error {
 		m.SetSender(v)
 		return nil
 	}
-	return fmt.Errorf("unknown NotifTemplate field %s", name)
+	return fmt.Errorf("unknown FrontendTemplate field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *NotifTemplateMutation) AddedFields() []string {
+func (m *FrontendTemplateMutation) AddedFields() []string {
 	var fields []string
 	if m.addcreated_at != nil {
-		fields = append(fields, notiftemplate.FieldCreatedAt)
+		fields = append(fields, frontendtemplate.FieldCreatedAt)
 	}
 	if m.addupdated_at != nil {
-		fields = append(fields, notiftemplate.FieldUpdatedAt)
+		fields = append(fields, frontendtemplate.FieldUpdatedAt)
 	}
 	if m.adddeleted_at != nil {
-		fields = append(fields, notiftemplate.FieldDeletedAt)
+		fields = append(fields, frontendtemplate.FieldDeletedAt)
 	}
 	return fields
 }
@@ -2798,13 +2798,13 @@ func (m *NotifTemplateMutation) AddedFields() []string {
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *NotifTemplateMutation) AddedField(name string) (ent.Value, bool) {
+func (m *FrontendTemplateMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case notiftemplate.FieldCreatedAt:
+	case frontendtemplate.FieldCreatedAt:
 		return m.AddedCreatedAt()
-	case notiftemplate.FieldUpdatedAt:
+	case frontendtemplate.FieldUpdatedAt:
 		return m.AddedUpdatedAt()
-	case notiftemplate.FieldDeletedAt:
+	case frontendtemplate.FieldDeletedAt:
 		return m.AddedDeletedAt()
 	}
 	return nil, false
@@ -2813,23 +2813,23 @@ func (m *NotifTemplateMutation) AddedField(name string) (ent.Value, bool) {
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *NotifTemplateMutation) AddField(name string, value ent.Value) error {
+func (m *FrontendTemplateMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case notiftemplate.FieldCreatedAt:
+	case frontendtemplate.FieldCreatedAt:
 		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreatedAt(v)
 		return nil
-	case notiftemplate.FieldUpdatedAt:
+	case frontendtemplate.FieldUpdatedAt:
 		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUpdatedAt(v)
 		return nil
-	case notiftemplate.FieldDeletedAt:
+	case frontendtemplate.FieldDeletedAt:
 		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -2837,136 +2837,136 @@ func (m *NotifTemplateMutation) AddField(name string, value ent.Value) error {
 		m.AddDeletedAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown NotifTemplate numeric field %s", name)
+	return fmt.Errorf("unknown FrontendTemplate numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *NotifTemplateMutation) ClearedFields() []string {
+func (m *FrontendTemplateMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(notiftemplate.FieldUsedFor) {
-		fields = append(fields, notiftemplate.FieldUsedFor)
+	if m.FieldCleared(frontendtemplate.FieldUsedFor) {
+		fields = append(fields, frontendtemplate.FieldUsedFor)
 	}
-	if m.FieldCleared(notiftemplate.FieldTitle) {
-		fields = append(fields, notiftemplate.FieldTitle)
+	if m.FieldCleared(frontendtemplate.FieldTitle) {
+		fields = append(fields, frontendtemplate.FieldTitle)
 	}
-	if m.FieldCleared(notiftemplate.FieldContent) {
-		fields = append(fields, notiftemplate.FieldContent)
+	if m.FieldCleared(frontendtemplate.FieldContent) {
+		fields = append(fields, frontendtemplate.FieldContent)
 	}
-	if m.FieldCleared(notiftemplate.FieldSender) {
-		fields = append(fields, notiftemplate.FieldSender)
+	if m.FieldCleared(frontendtemplate.FieldSender) {
+		fields = append(fields, frontendtemplate.FieldSender)
 	}
 	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *NotifTemplateMutation) FieldCleared(name string) bool {
+func (m *FrontendTemplateMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *NotifTemplateMutation) ClearField(name string) error {
+func (m *FrontendTemplateMutation) ClearField(name string) error {
 	switch name {
-	case notiftemplate.FieldUsedFor:
+	case frontendtemplate.FieldUsedFor:
 		m.ClearUsedFor()
 		return nil
-	case notiftemplate.FieldTitle:
+	case frontendtemplate.FieldTitle:
 		m.ClearTitle()
 		return nil
-	case notiftemplate.FieldContent:
+	case frontendtemplate.FieldContent:
 		m.ClearContent()
 		return nil
-	case notiftemplate.FieldSender:
+	case frontendtemplate.FieldSender:
 		m.ClearSender()
 		return nil
 	}
-	return fmt.Errorf("unknown NotifTemplate nullable field %s", name)
+	return fmt.Errorf("unknown FrontendTemplate nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *NotifTemplateMutation) ResetField(name string) error {
+func (m *FrontendTemplateMutation) ResetField(name string) error {
 	switch name {
-	case notiftemplate.FieldCreatedAt:
+	case frontendtemplate.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
-	case notiftemplate.FieldUpdatedAt:
+	case frontendtemplate.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
-	case notiftemplate.FieldDeletedAt:
+	case frontendtemplate.FieldDeletedAt:
 		m.ResetDeletedAt()
 		return nil
-	case notiftemplate.FieldAppID:
+	case frontendtemplate.FieldAppID:
 		m.ResetAppID()
 		return nil
-	case notiftemplate.FieldLangID:
+	case frontendtemplate.FieldLangID:
 		m.ResetLangID()
 		return nil
-	case notiftemplate.FieldUsedFor:
+	case frontendtemplate.FieldUsedFor:
 		m.ResetUsedFor()
 		return nil
-	case notiftemplate.FieldTitle:
+	case frontendtemplate.FieldTitle:
 		m.ResetTitle()
 		return nil
-	case notiftemplate.FieldContent:
+	case frontendtemplate.FieldContent:
 		m.ResetContent()
 		return nil
-	case notiftemplate.FieldSender:
+	case frontendtemplate.FieldSender:
 		m.ResetSender()
 		return nil
 	}
-	return fmt.Errorf("unknown NotifTemplate field %s", name)
+	return fmt.Errorf("unknown FrontendTemplate field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *NotifTemplateMutation) AddedEdges() []string {
+func (m *FrontendTemplateMutation) AddedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *NotifTemplateMutation) AddedIDs(name string) []ent.Value {
+func (m *FrontendTemplateMutation) AddedIDs(name string) []ent.Value {
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *NotifTemplateMutation) RemovedEdges() []string {
+func (m *FrontendTemplateMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *NotifTemplateMutation) RemovedIDs(name string) []ent.Value {
+func (m *FrontendTemplateMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *NotifTemplateMutation) ClearedEdges() []string {
+func (m *FrontendTemplateMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *NotifTemplateMutation) EdgeCleared(name string) bool {
+func (m *FrontendTemplateMutation) EdgeCleared(name string) bool {
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *NotifTemplateMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown NotifTemplate unique edge %s", name)
+func (m *FrontendTemplateMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown FrontendTemplate unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *NotifTemplateMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown NotifTemplate edge %s", name)
+func (m *FrontendTemplateMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown FrontendTemplate edge %s", name)
 }
 
 // SMSTemplateMutation represents an operation that mutates the SMSTemplate nodes in the graph.

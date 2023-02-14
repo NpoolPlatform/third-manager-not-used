@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/contact"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/notiftemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/frontendtemplate"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 )
 
@@ -34,10 +34,10 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		contact.Table:       contact.ValidColumn,
-		emailtemplate.Table: emailtemplate.ValidColumn,
-		notiftemplate.Table: notiftemplate.ValidColumn,
-		smstemplate.Table:   smstemplate.ValidColumn,
+		contact.Table:          contact.ValidColumn,
+		emailtemplate.Table:    emailtemplate.ValidColumn,
+		frontendtemplate.Table: frontendtemplate.ValidColumn,
+		smstemplate.Table:      smstemplate.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

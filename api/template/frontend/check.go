@@ -1,19 +1,19 @@
-package notif
+package frontend
 
 import (
 	"fmt"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
-	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/notif"
+	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/frontend"
 
-	usedfor "github.com/NpoolPlatform/message/npool/notif/mgr/v1/notif"
+	usedfor "github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-func validate(info *npool.NotifTemplateReq) error {
+func validate(info *npool.FrontendTemplateReq) error {
 	if info.AppID == nil {
 		logger.Sugar().Errorw("validate", "AppID", info.AppID)
 		return status.Error(codes.InvalidArgument, "AppID is empty")
@@ -39,14 +39,14 @@ func validate(info *npool.NotifTemplateReq) error {
 	}
 
 	switch info.GetUsedFor() {
-	case usedfor.EventType_WithdrawalRequest:
-	case usedfor.EventType_WithdrawalCompleted:
-	case usedfor.EventType_DepositReceived:
-	case usedfor.EventType_KYCApproved:
-	case usedfor.EventType_KYCRejected:
-	case usedfor.EventType_Announcement:
+	case usedfor.UsedFor_WithdrawalRequest:
+	case usedfor.UsedFor_WithdrawalCompleted:
+	case usedfor.UsedFor_DepositReceived:
+	case usedfor.UsedFor_KYCApproved:
+	case usedfor.UsedFor_KYCRejected:
+	case usedfor.UsedFor_Announcement:
 	default:
-		return fmt.Errorf("EventType is invalid")
+		return fmt.Errorf("UsedFor is invalid")
 	}
 
 	return nil
@@ -73,14 +73,14 @@ func validateConds(in *npool.Conds) error {
 	}
 	if in.UsedFor != nil {
 		switch in.GetUsedFor().GetValue() {
-		case uint32(usedfor.EventType_WithdrawalRequest):
-		case uint32(usedfor.EventType_WithdrawalCompleted):
-		case uint32(usedfor.EventType_DepositReceived):
-		case uint32(usedfor.EventType_KYCApproved):
-		case uint32(usedfor.EventType_KYCRejected):
-		case uint32(usedfor.EventType_Announcement):
+		case uint32(usedfor.UsedFor_WithdrawalRequest):
+		case uint32(usedfor.UsedFor_WithdrawalCompleted):
+		case uint32(usedfor.UsedFor_DepositReceived):
+		case uint32(usedfor.UsedFor_KYCApproved):
+		case uint32(usedfor.UsedFor_KYCRejected):
+		case uint32(usedfor.UsedFor_Announcement):
 		default:
-			return fmt.Errorf("EventType is invalid")
+			return fmt.Errorf("UsedFor is invalid")
 		}
 	}
 	return nil

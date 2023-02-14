@@ -3,25 +3,25 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
-	"github.com/NpoolPlatform/message/npool/notif/mgr/v1/notif"
+	"github.com/NpoolPlatform/message/npool/third/mgr/v1/usedfor"
 	"github.com/NpoolPlatform/third-manager/pkg/db/mixin"
 
 	"github.com/google/uuid"
 )
 
-// NotifTemplate holds the schema definition for the NotifTemplate entity.
-type NotifTemplate struct {
+// FrontendTemplate holds the schema definition for the FrontendTemplate entity.
+type FrontendTemplate struct {
 	ent.Schema
 }
 
-func (NotifTemplate) Mixin() []ent.Mixin {
+func (FrontendTemplate) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.TimeMixin{},
 	}
 }
 
-// Fields of the NotifTemplate.
-func (NotifTemplate) Fields() []ent.Field {
+// Fields of the FrontendTemplate.
+func (FrontendTemplate) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New).
@@ -30,7 +30,7 @@ func (NotifTemplate) Fields() []ent.Field {
 		field.UUID("lang_id", uuid.UUID{}),
 		field.String("used_for").
 			Optional().
-			Default(notif.EventType_DefaultEventType.String()),
+			Default(usedfor.UsedFor_DefaultUsedFor.String()),
 		field.String("title").
 			Optional().
 			Default(""),

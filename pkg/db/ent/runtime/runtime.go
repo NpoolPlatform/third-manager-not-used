@@ -7,7 +7,7 @@ import (
 
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/contact"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/emailtemplate"
-	"github.com/NpoolPlatform/third-manager/pkg/db/ent/notiftemplate"
+	"github.com/NpoolPlatform/third-manager/pkg/db/ent/frontendtemplate"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/schema"
 	"github.com/NpoolPlatform/third-manager/pkg/db/ent/smstemplate"
 	"github.com/google/uuid"
@@ -126,54 +126,54 @@ func init() {
 	emailtemplateDescID := emailtemplateFields[0].Descriptor()
 	// emailtemplate.DefaultID holds the default value on creation for the id field.
 	emailtemplate.DefaultID = emailtemplateDescID.Default.(func() uuid.UUID)
-	notiftemplateMixin := schema.NotifTemplate{}.Mixin()
-	notiftemplate.Policy = privacy.NewPolicies(notiftemplateMixin[0], schema.NotifTemplate{})
-	notiftemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+	frontendtemplateMixin := schema.FrontendTemplate{}.Mixin()
+	frontendtemplate.Policy = privacy.NewPolicies(frontendtemplateMixin[0], schema.FrontendTemplate{})
+	frontendtemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := notiftemplate.Policy.EvalMutation(ctx, m); err != nil {
+			if err := frontendtemplate.Policy.EvalMutation(ctx, m); err != nil {
 				return nil, err
 			}
 			return next.Mutate(ctx, m)
 		})
 	}
-	notiftemplateMixinFields0 := notiftemplateMixin[0].Fields()
-	_ = notiftemplateMixinFields0
-	notiftemplateFields := schema.NotifTemplate{}.Fields()
-	_ = notiftemplateFields
-	// notiftemplateDescCreatedAt is the schema descriptor for created_at field.
-	notiftemplateDescCreatedAt := notiftemplateMixinFields0[0].Descriptor()
-	// notiftemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
-	notiftemplate.DefaultCreatedAt = notiftemplateDescCreatedAt.Default.(func() uint32)
-	// notiftemplateDescUpdatedAt is the schema descriptor for updated_at field.
-	notiftemplateDescUpdatedAt := notiftemplateMixinFields0[1].Descriptor()
-	// notiftemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	notiftemplate.DefaultUpdatedAt = notiftemplateDescUpdatedAt.Default.(func() uint32)
-	// notiftemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	notiftemplate.UpdateDefaultUpdatedAt = notiftemplateDescUpdatedAt.UpdateDefault.(func() uint32)
-	// notiftemplateDescDeletedAt is the schema descriptor for deleted_at field.
-	notiftemplateDescDeletedAt := notiftemplateMixinFields0[2].Descriptor()
-	// notiftemplate.DefaultDeletedAt holds the default value on creation for the deleted_at field.
-	notiftemplate.DefaultDeletedAt = notiftemplateDescDeletedAt.Default.(func() uint32)
-	// notiftemplateDescUsedFor is the schema descriptor for used_for field.
-	notiftemplateDescUsedFor := notiftemplateFields[3].Descriptor()
-	// notiftemplate.DefaultUsedFor holds the default value on creation for the used_for field.
-	notiftemplate.DefaultUsedFor = notiftemplateDescUsedFor.Default.(string)
-	// notiftemplateDescTitle is the schema descriptor for title field.
-	notiftemplateDescTitle := notiftemplateFields[4].Descriptor()
-	// notiftemplate.DefaultTitle holds the default value on creation for the title field.
-	notiftemplate.DefaultTitle = notiftemplateDescTitle.Default.(string)
-	// notiftemplateDescContent is the schema descriptor for content field.
-	notiftemplateDescContent := notiftemplateFields[5].Descriptor()
-	// notiftemplate.DefaultContent holds the default value on creation for the content field.
-	notiftemplate.DefaultContent = notiftemplateDescContent.Default.(string)
-	// notiftemplateDescSender is the schema descriptor for sender field.
-	notiftemplateDescSender := notiftemplateFields[6].Descriptor()
-	// notiftemplate.DefaultSender holds the default value on creation for the sender field.
-	notiftemplate.DefaultSender = notiftemplateDescSender.Default.(string)
-	// notiftemplateDescID is the schema descriptor for id field.
-	notiftemplateDescID := notiftemplateFields[0].Descriptor()
-	// notiftemplate.DefaultID holds the default value on creation for the id field.
-	notiftemplate.DefaultID = notiftemplateDescID.Default.(func() uuid.UUID)
+	frontendtemplateMixinFields0 := frontendtemplateMixin[0].Fields()
+	_ = frontendtemplateMixinFields0
+	frontendtemplateFields := schema.FrontendTemplate{}.Fields()
+	_ = frontendtemplateFields
+	// frontendtemplateDescCreatedAt is the schema descriptor for created_at field.
+	frontendtemplateDescCreatedAt := frontendtemplateMixinFields0[0].Descriptor()
+	// frontendtemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
+	frontendtemplate.DefaultCreatedAt = frontendtemplateDescCreatedAt.Default.(func() uint32)
+	// frontendtemplateDescUpdatedAt is the schema descriptor for updated_at field.
+	frontendtemplateDescUpdatedAt := frontendtemplateMixinFields0[1].Descriptor()
+	// frontendtemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	frontendtemplate.DefaultUpdatedAt = frontendtemplateDescUpdatedAt.Default.(func() uint32)
+	// frontendtemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	frontendtemplate.UpdateDefaultUpdatedAt = frontendtemplateDescUpdatedAt.UpdateDefault.(func() uint32)
+	// frontendtemplateDescDeletedAt is the schema descriptor for deleted_at field.
+	frontendtemplateDescDeletedAt := frontendtemplateMixinFields0[2].Descriptor()
+	// frontendtemplate.DefaultDeletedAt holds the default value on creation for the deleted_at field.
+	frontendtemplate.DefaultDeletedAt = frontendtemplateDescDeletedAt.Default.(func() uint32)
+	// frontendtemplateDescUsedFor is the schema descriptor for used_for field.
+	frontendtemplateDescUsedFor := frontendtemplateFields[3].Descriptor()
+	// frontendtemplate.DefaultUsedFor holds the default value on creation for the used_for field.
+	frontendtemplate.DefaultUsedFor = frontendtemplateDescUsedFor.Default.(string)
+	// frontendtemplateDescTitle is the schema descriptor for title field.
+	frontendtemplateDescTitle := frontendtemplateFields[4].Descriptor()
+	// frontendtemplate.DefaultTitle holds the default value on creation for the title field.
+	frontendtemplate.DefaultTitle = frontendtemplateDescTitle.Default.(string)
+	// frontendtemplateDescContent is the schema descriptor for content field.
+	frontendtemplateDescContent := frontendtemplateFields[5].Descriptor()
+	// frontendtemplate.DefaultContent holds the default value on creation for the content field.
+	frontendtemplate.DefaultContent = frontendtemplateDescContent.Default.(string)
+	// frontendtemplateDescSender is the schema descriptor for sender field.
+	frontendtemplateDescSender := frontendtemplateFields[6].Descriptor()
+	// frontendtemplate.DefaultSender holds the default value on creation for the sender field.
+	frontendtemplate.DefaultSender = frontendtemplateDescSender.Default.(string)
+	// frontendtemplateDescID is the schema descriptor for id field.
+	frontendtemplateDescID := frontendtemplateFields[0].Descriptor()
+	// frontendtemplate.DefaultID holds the default value on creation for the id field.
+	frontendtemplate.DefaultID = frontendtemplateDescID.Default.(func() uuid.UUID)
 	smstemplateMixin := schema.SMSTemplate{}.Mixin()
 	smstemplate.Policy = privacy.NewPolicies(smstemplateMixin[0], schema.SMSTemplate{})
 	smstemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {

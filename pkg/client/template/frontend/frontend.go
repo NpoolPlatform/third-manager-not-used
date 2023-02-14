@@ -1,5 +1,5 @@
 //nolint:nolintlint,dupl
-package notif
+package frontend
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	grpc2 "github.com/NpoolPlatform/go-service-framework/pkg/grpc"
 
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
-	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/notif"
+	npool "github.com/NpoolPlatform/message/npool/third/mgr/v1/template/frontend"
 
 	constant "github.com/NpoolPlatform/third-manager/pkg/message/const"
 )
@@ -33,9 +33,9 @@ func withCRUD(ctx context.Context, handler handler) (cruder.Any, error) {
 	return handler(_ctx, cli)
 }
 
-func CreateNotifTemplate(ctx context.Context, in *npool.NotifTemplateReq) (*npool.NotifTemplate, error) {
+func CreateFrontendTemplate(ctx context.Context, in *npool.FrontendTemplateReq) (*npool.FrontendTemplate, error) {
 	info, err := withCRUD(ctx, func(_ctx context.Context, cli npool.ManagerClient) (cruder.Any, error) {
-		resp, err := cli.CreateNotifTemplate(ctx, &npool.CreateNotifTemplateRequest{
+		resp, err := cli.CreateFrontendTemplate(ctx, &npool.CreateFrontendTemplateRequest{
 			Info: in,
 		})
 		if err != nil {
@@ -46,12 +46,12 @@ func CreateNotifTemplate(ctx context.Context, in *npool.NotifTemplateReq) (*npoo
 	if err != nil {
 		return nil, err
 	}
-	return info.(*npool.NotifTemplate), nil
+	return info.(*npool.FrontendTemplate), nil
 }
 
-func CreateNotifTemplates(ctx context.Context, in []*npool.NotifTemplateReq) ([]*npool.NotifTemplate, error) {
+func CreateFrontendTemplates(ctx context.Context, in []*npool.FrontendTemplateReq) ([]*npool.FrontendTemplate, error) {
 	infos, err := withCRUD(ctx, func(_ctx context.Context, cli npool.ManagerClient) (cruder.Any, error) {
-		resp, err := cli.CreateNotifTemplates(ctx, &npool.CreateNotifTemplatesRequest{
+		resp, err := cli.CreateFrontendTemplates(ctx, &npool.CreateFrontendTemplatesRequest{
 			Infos: in,
 		})
 		if err != nil {
@@ -62,12 +62,12 @@ func CreateNotifTemplates(ctx context.Context, in []*npool.NotifTemplateReq) ([]
 	if err != nil {
 		return nil, err
 	}
-	return infos.([]*npool.NotifTemplate), nil
+	return infos.([]*npool.FrontendTemplate), nil
 }
 
-func UpdateNotifTemplate(ctx context.Context, in *npool.NotifTemplateReq) (*npool.NotifTemplate, error) {
+func UpdateFrontendTemplate(ctx context.Context, in *npool.FrontendTemplateReq) (*npool.FrontendTemplate, error) {
 	info, err := withCRUD(ctx, func(_ctx context.Context, cli npool.ManagerClient) (cruder.Any, error) {
-		resp, err := cli.UpdateNotifTemplate(ctx, &npool.UpdateNotifTemplateRequest{
+		resp, err := cli.UpdateFrontendTemplate(ctx, &npool.UpdateFrontendTemplateRequest{
 			Info: in,
 		})
 		if err != nil {
@@ -78,12 +78,12 @@ func UpdateNotifTemplate(ctx context.Context, in *npool.NotifTemplateReq) (*npoo
 	if err != nil {
 		return nil, err
 	}
-	return info.(*npool.NotifTemplate), nil
+	return info.(*npool.FrontendTemplate), nil
 }
 
-func GetNotifTemplate(ctx context.Context, id string) (*npool.NotifTemplate, error) {
+func GetFrontendTemplate(ctx context.Context, id string) (*npool.FrontendTemplate, error) {
 	info, err := withCRUD(ctx, func(_ctx context.Context, cli npool.ManagerClient) (cruder.Any, error) {
-		resp, err := cli.GetNotifTemplate(ctx, &npool.GetNotifTemplateRequest{
+		resp, err := cli.GetFrontendTemplate(ctx, &npool.GetFrontendTemplateRequest{
 			ID: id,
 		})
 		if err != nil {
@@ -94,12 +94,12 @@ func GetNotifTemplate(ctx context.Context, id string) (*npool.NotifTemplate, err
 	if err != nil {
 		return nil, err
 	}
-	return info.(*npool.NotifTemplate), nil
+	return info.(*npool.FrontendTemplate), nil
 }
 
-func GetNotifTemplateOnly(ctx context.Context, conds *npool.Conds) (*npool.NotifTemplate, error) {
+func GetFrontendTemplateOnly(ctx context.Context, conds *npool.Conds) (*npool.FrontendTemplate, error) {
 	info, err := withCRUD(ctx, func(_ctx context.Context, cli npool.ManagerClient) (cruder.Any, error) {
-		resp, err := cli.GetNotifTemplateOnly(ctx, &npool.GetNotifTemplateOnlyRequest{
+		resp, err := cli.GetFrontendTemplateOnly(ctx, &npool.GetFrontendTemplateOnlyRequest{
 			Conds: conds,
 		})
 		if err != nil {
@@ -110,13 +110,13 @@ func GetNotifTemplateOnly(ctx context.Context, conds *npool.Conds) (*npool.Notif
 	if err != nil {
 		return nil, err
 	}
-	return info.(*npool.NotifTemplate), nil
+	return info.(*npool.FrontendTemplate), nil
 }
 
-func GetNotifTemplates(ctx context.Context, conds *npool.Conds, offset, limit int32) ([]*npool.NotifTemplate, uint32, error) {
+func GetFrontendTemplates(ctx context.Context, conds *npool.Conds, offset, limit int32) ([]*npool.FrontendTemplate, uint32, error) {
 	var total uint32
 	infos, err := withCRUD(ctx, func(_ctx context.Context, cli npool.ManagerClient) (cruder.Any, error) {
-		resp, err := cli.GetNotifTemplates(ctx, &npool.GetNotifTemplatesRequest{
+		resp, err := cli.GetFrontendTemplates(ctx, &npool.GetFrontendTemplatesRequest{
 			Conds:  conds,
 			Limit:  limit,
 			Offset: offset,
@@ -130,12 +130,12 @@ func GetNotifTemplates(ctx context.Context, conds *npool.Conds, offset, limit in
 	if err != nil {
 		return nil, 0, err
 	}
-	return infos.([]*npool.NotifTemplate), total, nil
+	return infos.([]*npool.FrontendTemplate), total, nil
 }
 
-func ExistNotifTemplate(ctx context.Context, id string) (bool, error) {
+func ExistFrontendTemplate(ctx context.Context, id string) (bool, error) {
 	info, err := withCRUD(ctx, func(_ctx context.Context, cli npool.ManagerClient) (cruder.Any, error) {
-		resp, err := cli.ExistNotifTemplate(ctx, &npool.ExistNotifTemplateRequest{
+		resp, err := cli.ExistFrontendTemplate(ctx, &npool.ExistFrontendTemplateRequest{
 			ID: id,
 		})
 		if err != nil {
@@ -149,9 +149,9 @@ func ExistNotifTemplate(ctx context.Context, id string) (bool, error) {
 	return info.(bool), nil
 }
 
-func ExistNotifTemplateConds(ctx context.Context, conds *npool.Conds) (bool, error) {
+func ExistFrontendTemplateConds(ctx context.Context, conds *npool.Conds) (bool, error) {
 	info, err := withCRUD(ctx, func(_ctx context.Context, cli npool.ManagerClient) (cruder.Any, error) {
-		resp, err := cli.ExistNotifTemplateConds(ctx, &npool.ExistNotifTemplateCondsRequest{
+		resp, err := cli.ExistFrontendTemplateConds(ctx, &npool.ExistFrontendTemplateCondsRequest{
 			Conds: conds,
 		})
 		if err != nil {
@@ -165,9 +165,9 @@ func ExistNotifTemplateConds(ctx context.Context, conds *npool.Conds) (bool, err
 	return info.(bool), nil
 }
 
-func DeleteNotifTemplate(ctx context.Context, id string) (*npool.NotifTemplate, error) {
+func DeleteFrontendTemplate(ctx context.Context, id string) (*npool.FrontendTemplate, error) {
 	info, err := withCRUD(ctx, func(_ctx context.Context, cli npool.ManagerClient) (cruder.Any, error) {
-		resp, err := cli.DeleteNotifTemplate(ctx, &npool.DeleteNotifTemplateRequest{
+		resp, err := cli.DeleteFrontendTemplate(ctx, &npool.DeleteFrontendTemplateRequest{
 			ID: id,
 		})
 		if err != nil {
@@ -178,5 +178,5 @@ func DeleteNotifTemplate(ctx context.Context, id string) (*npool.NotifTemplate, 
 	if err != nil {
 		return nil, err
 	}
-	return info.(*npool.NotifTemplate), nil
+	return info.(*npool.FrontendTemplate), nil
 }

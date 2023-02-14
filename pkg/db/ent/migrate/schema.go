@@ -48,24 +48,24 @@ var (
 		Columns:    EmailTemplatesColumns,
 		PrimaryKey: []*schema.Column{EmailTemplatesColumns[0]},
 	}
-	// NotifTemplatesColumns holds the columns for the "notif_templates" table.
-	NotifTemplatesColumns = []*schema.Column{
+	// FrontendTemplatesColumns holds the columns for the "frontend_templates" table.
+	FrontendTemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeUint32},
 		{Name: "updated_at", Type: field.TypeUint32},
 		{Name: "deleted_at", Type: field.TypeUint32},
 		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "lang_id", Type: field.TypeUUID},
-		{Name: "used_for", Type: field.TypeString, Nullable: true, Default: "DefaultEventType"},
+		{Name: "used_for", Type: field.TypeString, Nullable: true, Default: "DefaultUsedFor"},
 		{Name: "title", Type: field.TypeString, Nullable: true, Default: ""},
 		{Name: "content", Type: field.TypeString, Nullable: true, Size: 2147483647, Default: ""},
 		{Name: "sender", Type: field.TypeString, Nullable: true, Default: ""},
 	}
-	// NotifTemplatesTable holds the schema information for the "notif_templates" table.
-	NotifTemplatesTable = &schema.Table{
-		Name:       "notif_templates",
-		Columns:    NotifTemplatesColumns,
-		PrimaryKey: []*schema.Column{NotifTemplatesColumns[0]},
+	// FrontendTemplatesTable holds the schema information for the "frontend_templates" table.
+	FrontendTemplatesTable = &schema.Table{
+		Name:       "frontend_templates",
+		Columns:    FrontendTemplatesColumns,
+		PrimaryKey: []*schema.Column{FrontendTemplatesColumns[0]},
 	}
 	// SmsTemplatesColumns holds the columns for the "sms_templates" table.
 	SmsTemplatesColumns = []*schema.Column{
@@ -89,7 +89,7 @@ var (
 	Tables = []*schema.Table{
 		ContactsTable,
 		EmailTemplatesTable,
-		NotifTemplatesTable,
+		FrontendTemplatesTable,
 		SmsTemplatesTable,
 	}
 )
