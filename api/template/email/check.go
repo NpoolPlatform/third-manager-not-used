@@ -50,6 +50,12 @@ func validate(info *npool.EmailTemplateReq) error { //nolint
 	case usedfor.UsedFor_SetCommission:
 	case usedfor.UsedFor_SetTransferTargetUser:
 	case usedfor.UsedFor_Transfer:
+	case usedfor.UsedFor_WithdrawalRequest:
+	case usedfor.UsedFor_WithdrawalCompleted:
+	case usedfor.UsedFor_DepositReceived:
+	case usedfor.UsedFor_KYCApproved:
+	case usedfor.UsedFor_KYCRejected:
+	case usedfor.UsedFor_Announcement:
 	default:
 		return status.Error(codes.InvalidArgument, "Invalid UsedFor")
 	}
